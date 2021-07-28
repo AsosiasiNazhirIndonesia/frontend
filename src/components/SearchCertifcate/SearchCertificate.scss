@@ -1,0 +1,56 @@
+.search-certificate {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+.search-certificate h1 {
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 64px;
+    line-height: 97px;
+    /* identical to box height */
+
+
+    /* Text/primary */
+    color: #0B0038;
+    margin-bottom: 46px;
+}
+
+.search-certificate .search-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    padding: 48px;
+
+    width: 496px;
+    max-width: 80%;
+    height: 282px;
+
+    background: #FFFFFF;
+    /* basic shadow */
+    box-shadow: 0px 9px 52px rgba(53, 42, 96, 0.1);
+    border-radius: 8px;
+}
+
+.search-certificate .search-form span {
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 200%;
+    /* identical to box height, or 32px */
+
+
+    /* Text/primary */
+    color: #0B0038;
+    margin-bottom: 8px;
+}
+
+.search-certificate .search-form .input-span {
+    margin-bottom: 41px;
+}

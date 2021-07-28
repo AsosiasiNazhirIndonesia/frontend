@@ -1,0 +1,86 @@
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    background: #F5F2FF;
+}
+
+.first-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(180deg, #000000 0%, rgba(10, 0, 48, 0.91) 100%);
+    padding: 70px;
+}
+
+.first-section h1 {
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 73px;
+    text-align: center;
+
+    margin-bottom: 200px;
+    max-width: 856px;
+    color: #FFFFFF;
+}
+
+.first-section button.signin-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 60px;
+    width: 544px;
+    max-width: 80%;
+
+    background: #C4C4C4;
+    box-shadow: 0px 15px 30px rgba(91, 192, 222, 0.2);
+    border-radius: 8px;
+
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 200%;
+    /* identical to box height, or 32px */
+
+
+    /* Gray 1 */
+    color: #333333;
+    margin-bottom: 50px;
+}
+
+.first-section button.search-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 60px;
+    width: 544px;
+    max-width: 80%;
+
+    background: rgba(226, 219, 246, 0.47);
+    box-shadow: 0px 15px 30px rgba(91, 192, 222, 0.2);
+    border-radius: 8px;
+
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 200%;
+    /* identical to box height, or 32px */
+
+
+    /* Gray 5 */
+    color: #E0E0E0;
+}
+
+.second-section {
+    padding: 70px 24px 116px 24px;
+}
