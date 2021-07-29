@@ -6,7 +6,7 @@
     background: #0B0038;
     min-height: calc(100vh - 138px);
     width: 385px;
-    padding: 72px 32px;
+    padding: 72px 0px;
 }
 
 .sidebar .menu {
@@ -17,8 +17,13 @@
     text-align: left;
     width: 100%;
     margin-bottom: 14px;
+    padding: 5px 24px;
 
     cursor: pointer;
+}
+
+.sidebar .active {
+    background: #3F3957;
 }
 
 .sidebar .menu img {
@@ -37,7 +42,7 @@
 }
 
 .sidebar .sub {
-    padding-left: 25px;
+    padding-left: 50px;
 }
 
 .sidebar .sub img {
