@@ -1,0 +1,49 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background: #0B0038;
+    min-height: calc(100vh - 138px);
+    width: 385px;
+    padding: 72px 32px;
+}
+
+.sidebar .menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 14px;
+
+    cursor: pointer;
+}
+
+.sidebar .menu img {
+    width: 24px;
+    margin-right: 14px;
+}
+
+.sidebar .menu span {
+    font-family: "Palanquin";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 43px;
+
+    color: #FFFFFF;
+}
+
+.sidebar .sub {
+    padding-left: 25px;
+}
+
+.sidebar .sub img {
+    width: 20px;
+}
+
+.sidebar .sub span {
+    font-size: 20px;
+}
