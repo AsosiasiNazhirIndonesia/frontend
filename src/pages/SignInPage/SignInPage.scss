@@ -1,0 +1,72 @@
+.signin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    align-items: center;
+}
+
+.signin .signin-form {
+    display: flex;
+    flex-direction: column;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 100px;
+    max-width: 100%;
+    width: 700px;
+    height: 793px;
+
+    background: #FFFFFF;
+}
+
+.signin .signin-form .title {
+    display: flex;
+    flex-direction: column;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.signin .signin-form .title h2 {
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 54px;
+
+    /* Text/primary */
+
+    color: #0B0038;
+}
+
+
+.signin .signin-form .title hr {
+    width: 20%;
+    border: 2px solid black;
+}
+
+.signin .signin-form .title h5 {
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 200%;
+    /* or 48px */
+
+
+    /* Text/secondary */
+    color: #3F3957;
+}
+
+.signin .signin-form .button {
+    display: flex;
+    flex-direction: column;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.signin .signin-form .button button {
+    margin-bottom: 20px;
+}
