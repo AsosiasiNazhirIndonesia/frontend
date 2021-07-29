@@ -1,0 +1,85 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    align-items: center;
+    
+    width: 100%;
+    height: 138px;
+    padding: 19px 24px;
+}
+
+.header .header-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.header .header-left img {
+    margin-right: 32px;
+}
+
+.header .header-left .title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.header .header-left .title h4 {
+    font-family: "Palanquin";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 33px;
+    margin: 0 !important;
+
+    color: #000000;
+}
+
+.header .header-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 36px;
+}
+
+.header .header-right h5 {
+    font-family: "Nunito Sans";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 33px;
+    /* identical to box height */
+    text-align: right;
+
+    /* Text/primary */
+    color: #0B0038;
+}
+
+.header .header-right h5.to-login {
+    cursor: pointer;
+}
+
+.header .header-right span {
+    font-family: "Palanquin";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 33px;
+    /* identical to box height */
+
+    text-align: right;
+
+    /* Text/primary */
+
+    color: #0B0038;
+    margin-right: 16px;
+}
+
+.header .header-right img {
+    width: 70px;
+    border-radius: 50%;
+}

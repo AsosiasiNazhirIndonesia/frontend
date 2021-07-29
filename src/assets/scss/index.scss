@@ -55,3 +55,45 @@
     font-weight: bold;
     src: local('Noto Sans'), url('../fonts/NotoSerif-BoldItalic.ttf') format('truetype');
 }
+
+@font-face {
+    font-family: 'Palanquin';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Noto Sans'), url('../fonts/Palanquin-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Palanquin';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Noto Sans'), url('../fonts/Palanquin-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Noto Sans'), url('../fonts/NunitoSans-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Noto Sans'), url('../fonts/NunitoSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Noto Sans'), url('../fonts/Mulish-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Noto Sans'), url('../fonts/Mulish-Bold.ttf') format('truetype');
+}

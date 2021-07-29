@@ -4,7 +4,7 @@ import './SignInPage.scss';
 export default () => {
     return (
         <div className="signin">
-            <form className="signin-form">
+            <div className="signin-form">
                 <div className="title">
                     <h2>Login</h2>
                     <hr></hr>
@@ -14,7 +14,7 @@ export default () => {
                     <SubmitButton buttonText={"Login as Admin"}/>
                     <SubmitButton buttonText={"Login as User"}/>
                 </div>
-            </form>
+            </div>
         </div>
     );
 }

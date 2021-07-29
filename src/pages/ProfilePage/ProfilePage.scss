@@ -1,0 +1,158 @@
+.profile-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #E5E5E5;
+}
+
+.profile-page .title {
+    border-bottom: 2px solid rgba(11, 0, 56, 0.07);
+    padding: 24px 40px;
+    text-align: left;
+    width: 100%;
+}
+
+.profile-page .title h2 {
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 36px;
+    line-height: 75px;
+    margin: 0;
+
+    color: #000000;
+}
+
+.profile-page .details {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 50px 70px;
+    width: 100%;
+}
+
+.profile-page .details .user-data {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 93px;
+}
+
+.profile-page .details .user-data img {
+    width: 342px;
+    margin-right: 67px;
+}
+
+.profile-page .details .user-data .biodata {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 30px;
+    width: 897px;
+    height: 359px;
+    background-color: white;
+}
+
+.profile-page .details .user-data .biodata h3 {
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 36px;
+    /* identical to box height */
+
+
+    color: #000000;
+}
+
+.profile-page .details .user-data .biodata .biodata-details {
+    display: table;
+    border-collapse: separate;
+    border-spacing: 20px 40px;
+}
+
+.profile-page .details .user-data .biodata .biodata-details .table-row {
+    display: table-row;
+}
+
+.profile-page .details .user-data .biodata .biodata-details .colOne {
+    display: table-cell;
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 27px;
+
+    color: #000000;
+}
+
+.profile-page .details .user-data .biodata .biodata-details .colTwo {
+    display: table-cell;
+
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 27px;
+    /* identical to box height */
+
+
+    /* Gray 2 */
+
+    color: #4F4F4F;
+}
+
+.profile-page .details .history {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: left;
+    padding: 36px;
+
+    background-color: white;
+    width: 100%;
+}
+
+.profile-page .details .history .detail-history {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: left;
+
+    margin-bottom: 36px;
+}
+
+.profile-page .details .history .detail-history:last-child {
+    margin-bottom: 0px;
+}
+
+.profile-page .details .history .detail-history .title-history {
+    font-family: "Mulish";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 180%;
+    text-align: left;
+    color: #3F3957;
+    margin-bottom: 14px;
+}
+
+.profile-page .details .history .detail-history .title-value {
+    font-family: Mulish;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 200%;
+    /* identical to box height, or 32px */
+    text-align: left;
+    margin-left: 24px;
+
+    /* Text/primary */
+
+    color: #0B0038;
+}
