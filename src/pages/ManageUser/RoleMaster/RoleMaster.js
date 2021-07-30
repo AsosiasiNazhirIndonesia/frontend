@@ -1,7 +1,7 @@
 import { withRouter } from "react-router-dom";
 import Header from "../../../components/Header/Header";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-// import SubmitButton from "../../../components/elements/SubmitButton/SubmitButton";
+import SubmitButton from "../../../components/elements/SubmitButton/SubmitButton";
 import InputField from "../../../components/elements/InputField/InputField";
 import Table from "../../../components/Table/Table";
 import AddEditRole from "./AddEditRole";
@@ -27,8 +27,8 @@ const RoleMaster = (props) => {
           </div>
           <div className="bef-table">
             <div className="btn-add-role">
-              <button onClick={addRole}>Add Role</button>
-              {/* <SubmitButton buttonText={"Add Role"}></SubmitButton> */}
+              {/* <button onClick={addRole}>Add Role</button> */}
+              <SubmitButton buttonText={"Add Role"}></SubmitButton>
             </div>
             <div className="search-input">
               <InputField
