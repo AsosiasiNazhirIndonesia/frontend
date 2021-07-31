@@ -7,6 +7,7 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import SignInPage from "./pages/SignInPage/SignInPage";
 import RoleMaster from "./pages/ManageUser/RoleMaster/RoleMaster";
+import InstitutionMaster from "./pages/ManageUser/InstitutionMaster/InstitutionMaster";
 import { history } from "./store";
 
 export const Routes = () => (
@@ -16,5 +17,6 @@ export const Routes = () => (
     <Route path="/profile" exact component={ProfilePage} />
     <Route path="/dashboard" exact component={Dashboard} />
     <Route path="/role-master" exact component={RoleMaster} />
+    <Route path="/institution-master" exact component={InstitutionMaster} />
   </Router>
 );

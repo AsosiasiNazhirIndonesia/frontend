@@ -3,50 +3,49 @@ import Header from "../../../components/Header/Header";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import SubmitButton from "../../../components/elements/SubmitButton/SubmitButton";
 import InputField from "../../../components/elements/InputField/InputField";
-import TableRole from "../../../components/Table/TableRole";
-import AddEditRole from "./AddEditRole";
-import DeleteRole from "./DeleteRole";
-import "./RoleMaster.scss";
+import TableInstitution from "../../../components/Table/TableInstitution";
+import AddEditInstitution from "./AddEditInstitution";
+import DeleteInstitution from "./DeleteInstitution";
+import "./InstitutionMaster.scss";
 
-const RoleMaster = (props) => {
+const InstitutionMaster = (props) => {
   const menu = new URLSearchParams(props.location.search).get("token");
   const value = {};
   const openModal = () => {};
   const closeModal = () => {};
-  const addRole = () => {
-    console.log("Adding Role");
+  const addInstitution = () => {
+    console.log("Adding Institution");
   };
   return (
-    <div className="role-master">
+    <div className="institution-master">
       <Header />
-      <div className="role-body">
+      <div className="institution-body">
         <Sidebar menu={menu} />
-        <div className="role-content">
+        <div className="institution-content">
           <div className="breadcrumb">
-            <h1>Role Master</h1>
+            <h1>Institution Master</h1>
           </div>
           <div className="bef-table">
-            <div className="btn-add-role">
-              {/* <button onClick={addRole}>Add Role</button> */}
-              <SubmitButton buttonText={"Add Role"}></SubmitButton>
+            <div className="btn-add-institution">
+              <SubmitButton buttonText={"Add Institution"}></SubmitButton>
             </div>
             <div className="search-input">
               <InputField
                 type="text"
                 name="search-input"
-                placeholder="Search Role Name"
+                placeholder="Search Institution Name"
                 value={value}
               />
             </div>
           </div>
-          <TableRole />
+          <TableInstitution />
         </div>
         )
       </div>
-      <AddEditRole />
-      <DeleteRole />
+      <AddEditInstitution />
+      <DeleteInstitution />
     </div>
   );
 };
 
-export default withRouter(RoleMaster);
+export default withRouter(InstitutionMaster);

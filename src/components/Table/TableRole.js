@@ -1,7 +1,7 @@
 import { Component } from "react";
 import "./Table.scss";
 
-class Table extends Component {
+class TableRole extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,6 +57,47 @@ class Table extends Component {
           ),
         },
       ],
+      institutions: [
+        {
+          id: 1,
+          institutionName: "Politeknik Negeri Bandung",
+          email: "polban@polban.ac.id",
+          phoneNumber: "0222013789",
+          address:
+            "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
+          action: (
+            <div>
+              <button>Edit</button>,<button>Delete</button>
+            </div>
+          ),
+        },
+        {
+          id: 2,
+          institutionName: "Politeknik Negeri Bandung",
+          email: "polban2@polban.ac.id",
+          phoneNumber: "0222013789",
+          address:
+            "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
+          action: (
+            <div>
+              <button>Edit</button>,<button>Delete</button>
+            </div>
+          ),
+        },
+        {
+          id: 3,
+          institutionName: "Politeknik Negeri Bandung",
+          email: "polban3@polban.ac.id",
+          phoneNumber: "0222013789",
+          address:
+            "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
+          action: (
+            <div>
+              <button>Edit</button>,<button>Delete</button>
+            </div>
+          ),
+        },
+      ],
     };
   }
 
@@ -93,4 +134,4 @@ class Table extends Component {
   }
 }
 
-export default Table;
+export default TableRole;
