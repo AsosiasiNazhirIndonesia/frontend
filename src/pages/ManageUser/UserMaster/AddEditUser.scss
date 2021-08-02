@@ -1,0 +1,46 @@
+.add-edit-user-box {
+  width: 95%;
+  margin: 0 auto;
+  margin-top: 1.5rem;
+  text-align: left;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  .user-name,
+  .user-email,
+  .user-phoneNumber {
+    width: 50%;
+    margin-bottom: 1.5rem;
+  }
+  .upload-photo {
+    width: 25%;
+  }
+}
+
+.add-edit-user-detail-box {
+  width: 95%;
+  margin: 0 auto;
+  margin-top: 1.5rem;
+  text-align: left;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  select {
+    width: 100%;
+    height: 3rem;
+  }
+  .user-institution,
+  .user-role {
+    width: 30%;
+    margin-bottom: 1.5rem;
+  }
+  .user-startDate,
+  .user-endDate {
+    width: 50%;
+    margin-bottom: 1.5rem;
+  }
+  .dropdown-startDate,
+  .dropdown-endDate {
+    display: flex;
+  }
+}
