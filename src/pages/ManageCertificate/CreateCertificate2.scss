@@ -1,0 +1,40 @@
+.sign-progress {
+  height: 150px;
+  width: 95%;
+  margin: 0 auto 1rem auto;
+  border: solid 1px black;
+}
+
+.form-sendTo {
+  width: 95%;
+  background: #fff;
+  margin: 0 auto;
+  text-align: left;
+  padding: 1rem;
+  .sendTo-input {
+    width: 40%;
+  }
+}
+.form-assignTo {
+  width: 95%;
+  margin: 1rem auto;
+  background: #fff;
+  text-align: left;
+  padding: 1rem;
+  .assignTo-input {
+    width: 40%;
+  }
+  .btn-add-user {
+    margin-top: 2rem;
+    width: 25%;
+  }
+}
+
+.btn-back-next {
+  display: flex;
+  margin: 3rem 2rem 0 0;
+  justify-content: space-between;
+  .btn-next {
+    margin: 0;
+  }
+}

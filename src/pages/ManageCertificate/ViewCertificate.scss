@@ -1,0 +1,46 @@
+.certificate-content {
+  .form-document-status {
+    width: 95%;
+    background: #fff;
+    margin: 0 auto;
+    margin-bottom: 1rem;
+    padding: 2rem;
+    padding-bottom: 1rem;
+    .document-name,
+    .status {
+      width: 100%;
+      display: flex;
+      p {
+        width: 20%;
+        text-align: left;
+      }
+    }
+  }
+
+  .form-view-document {
+    width: 95%;
+    background: #fff;
+    margin: 0 auto;
+    text-align: left;
+    padding: 2rem;
+    .view-before-signing,
+    .view-after-signed {
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      p {
+        width: 30%;
+        margin: 0;
+      }
+    }
+    .btn-view,
+    .btn-download {
+      width: 20%;
+      margin-left: 1rem;
+    }
+  }
+  .btn-done {
+    width: 20%;
+    margin: 2rem;
+  }
+}

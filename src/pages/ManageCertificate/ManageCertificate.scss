@@ -1,0 +1,38 @@
+.certificate-master {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.certificate-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  min-height: 100%;
+}
+
+.certificate-content {
+  width: 100%;
+  .breadcrumb {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0 1rem 2rem;
+    border-bottom: 2px solid rgba(11, 0, 56, 0.2);
+  }
+  .bef-table {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .btn-add-certificate {
+      margin: 2rem;
+      width: fit-content;
+    }
+    .search-input {
+      margin: 0.5rem 2rem 0 0;
+      width: 30%;
+    }
+  }
+}

@@ -1,0 +1,63 @@
+.sign-progress {
+  height: 150px;
+  width: 95%;
+  margin: 0 auto 1rem auto;
+  border: solid 1px black;
+}
+.form-name-template {
+  width: 95%;
+  border-radius: 5px;
+  background: #fff;
+  margin: 1rem auto;
+  text-align: left;
+  .name-template {
+    padding: 1rem;
+    padding-bottom: 0;
+    width: 40%;
+  }
+  .submit-template {
+    padding: 1rem;
+    padding-top: 0;
+    width: 30%;
+  }
+}
+
+.form-group {
+  display: flex;
+  .form-detail-certificate {
+    width: 30%;
+    border-radius: 5px;
+    background: #fff;
+    margin: 0 2rem;
+    text-align: left;
+    padding: 1rem 0;
+    .name-user,
+    .no-certificate,
+    .title {
+      width: 90%;
+      margin: 0 auto;
+      margin-bottom: 1rem;
+    }
+    .btn-submit {
+      width: 90%;
+      margin: 0 auto;
+      padding-top: 2rem;
+    }
+  }
+  img {
+    width: 62%;
+  }
+}
+
+.btn-next {
+  width: 20%;
+  margin: 3rem 2rem 0 auto;
+}
+
+.sign-progress {
+  text-align: left;
+}
+
+p {
+  font-weight: bold;
+}
