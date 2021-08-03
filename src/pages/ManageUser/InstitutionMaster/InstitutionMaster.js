@@ -40,7 +40,6 @@ const InstitutionMaster = (props) => {
           </div>
           <TableInstitution />
         </div>
-        )
       </div>
       <AddEditInstitution />
       <DeleteInstitution />
