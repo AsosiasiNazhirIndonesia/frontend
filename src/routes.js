@@ -25,6 +25,10 @@ import ViewCertificate from "./pages/ManageCertificate/ViewCertificate";
 import MyCertificates from "./pages/Student/MyCertificates";
 import ViewDocument from "./pages/Student/ViewDocument";
 
+//Manage Rektor
+import RektorCertificate from "./pages/Rektor/RektorCertificate";
+import ViewDocumentRektor from "./pages/Rektor/ViewDocumentRektor";
+
 import { history } from "./store";
 
 export const Routes = () => (
@@ -72,26 +76,12 @@ export const Routes = () => (
       component={ViewDocument}
     />
 
-    {/* <Route
-      path="/user-master"
+    {/* Manage Rektor */}
+    <Route path="/rektor-certificates" exact component={RektorCertificate} />
+    <Route
+      path="/rektor-certificates/view-document"
       exact
-      component={UserMaster}
-      children={
-        ((
-          <Route
-            path="/user-master/add-edit-user"
-            exact
-            component={AddEditUser}
-          />
-        ),
-        (
-          <Route
-            path="/user-master/view-data-user"
-            exact
-            component={ViewDataUser}
-          />
-        ))
-      }
-    /> */}
+      component={ViewDocumentRektor}
+    />
   </Router>
 );
