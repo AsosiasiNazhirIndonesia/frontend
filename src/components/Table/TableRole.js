@@ -12,7 +12,7 @@ class TableRole extends Component {
           description: "-",
           action: (
             <div>
-              <button>Edit</button>,<button>Delete</button>
+              <button onClick={() => {props.setIsEdit(true)}}>Edit</button>,<button onClick={() => {props.setIsDelete(true)}}>Delete</button>
             </div>
           ),
         },
@@ -65,7 +65,6 @@ class TableRole extends Component {
       const { id, roleName, description, action } = student; //destructuring
       return (
         <tr key={id}>
-          <td>{id}</td>
           <td>{roleName}</td>
           <td>{description}</td>
           <td>{action}</td>
@@ -75,10 +74,13 @@ class TableRole extends Component {
   }
 
   renderTableHeader() {
-    let header = Object.keys(this.state.roles[0]);
-    return header.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>;
-    });
+    return (
+      <tr>
+        <th>ROLENAME</th>
+        <th>DESCRIPTION</th>
+        <th>ACTION</th>
+      </tr>
+    );
   }
 
   render() {

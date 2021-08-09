@@ -7,9 +7,13 @@ import TableRole from "../../../components/Table/TableRole";
 import AddEditRole from "./AddEditRole";
 import DeleteRole from "./DeleteRole";
 import "./RoleMaster.scss";
+import { useState } from "react";
 
 const RoleMaster = (props) => {
-  const menu = new URLSearchParams(props.location.search).get("token");
+  const [isAdd, setIsAdd] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+
   const value = {};
   const openModal = () => {};
   const closeModal = () => {};
@@ -24,7 +28,7 @@ const RoleMaster = (props) => {
       <div className="bef-table">
         <div className="btn-add-role">
           {/* <button onClick={addRole}>Add Role</button> */}
-          <SubmitButton buttonText={"Add Role"}></SubmitButton>
+          <SubmitButton buttonText={"Add Role"} onClick={() => setIsAdd(true)}></SubmitButton>
         </div>
         <div className="search-input">
           <InputField
@@ -35,7 +39,9 @@ const RoleMaster = (props) => {
           />
         </div>
       </div>
-      <TableRole />
+      <TableRole setIsEdit={setIsEdit} setIsDelete={setIsDelete}/>
+      <AddEditRole add={isAdd} edit={isEdit} setIsAdd={setIsAdd} setIsEdit={setIsEdit}/>
+      <DeleteRole delete={isDelete} setIsDelete={setIsDelete}/>
     </div>
   );
 };

@@ -2,18 +2,21 @@ import { withRouter } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import SearchCertificate from "../../components/SearchCertifcate/SearchCertificate";
 import Sidebar from "../../components/Sidebar/Sidebar";
+import ManageCertificate from "../ManageCertificate/ManageCertificate";
 import InstitutionMaster from "../ManageUser/InstitutionMaster/InstitutionMaster";
 import RoleMaster from "../ManageUser/RoleMaster/RoleMaster";
 import "./Dashboard.scss";
 
 const Dashboard = (props) => {
-  const menu = new URLSearchParams(props.location.search).get("section");
+  const menu = new URLSearchParams(props.location.search).get("menu");
   const resolveContent = () => {
     switch (menu) {
       case "role-master":
         return <RoleMaster />;
       case "institution-master":
         return <InstitutionMaster />;
+      case "manage-certificate":
+        return <ManageCertificate />;
       default:
         return <SearchCertificate />;
     }
