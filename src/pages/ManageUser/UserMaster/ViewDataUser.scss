@@ -1,0 +1,49 @@
+.form-base-information {
+  width: 95%;
+  border-radius: 5px;
+  background: #fff;
+  margin: 1rem auto;
+  text-align: left;
+  padding-bottom: 1rem;
+  div {
+    display: flex;
+    width: 100%;
+    padding: 1rem 0 0 1rem;
+    .title-name,
+    .title-email,
+    .title-phoneNumber,
+    .title-photo {
+      width: 20%;
+      font-weight: bold;
+    }
+    img {
+      width: 180px;
+      height: 200px;
+      border: solid 0.5px black;
+    }
+  }
+}
+
+.form-role-information,
+.form-institution-information {
+  width: 95%;
+  border-radius: 5px;
+  background: #fff;
+  margin: 1rem auto;
+  text-align: left;
+  div {
+    width: 100%;
+    padding: 1rem 0 0 1rem;
+    display: flex;
+    .title-role,
+    .title-institution {
+      width: 20%;
+      font-weight: bold;
+    }
+  }
+}
+
+.btn-back {
+  padding-left: 2rem;
+  width: 20%;
+}

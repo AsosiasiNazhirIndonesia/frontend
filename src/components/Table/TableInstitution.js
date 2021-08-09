@@ -76,7 +76,7 @@ class TableInstitution extends Component {
   render() {
     return (
       <div>
-        <table className="roles-table">
+        <table className="institutions-table">
           <thead>{this.renderTableHeader()}</thead>
           <tbody className="content-table">{this.renderTableData()}</tbody>
         </table>
