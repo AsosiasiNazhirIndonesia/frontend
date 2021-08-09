@@ -44,7 +44,7 @@ const RoleMaster = (props) => {
         )
       </div>
       <AddEditRole />
-      <DeleteRole />
+      <DeleteRole delete={true} />
     </div>
   );
 };
