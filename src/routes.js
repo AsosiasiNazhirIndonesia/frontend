@@ -11,6 +11,11 @@ import InstitutionMaster from "./pages/ManageUser/InstitutionMaster/InstitutionM
 import UserMaster from "./pages/ManageUser/UserMaster/UserMaster";
 import AddEditUser from "./pages/ManageUser/UserMaster/AddEditUser";
 import ViewDataUser from "./pages/ManageUser/UserMaster/ViewDataUser";
+import ManageCertificate from "./pages/ManageCertificate/ManageCertificate";
+import CreateCertificate1 from "./pages/ManageCertificate/CreateCertificate1";
+import CreateCertificate2 from "./pages/ManageCertificate/CreateCertificate2";
+import CreateCertificate3 from "./pages/ManageCertificate/CreateCertificate3";
+import ViewCertificate from "./pages/ManageCertificate/ViewCertificate";
 import { history } from "./store";
 
 export const Routes = () => (
@@ -21,6 +26,5 @@ export const Routes = () => (
     <Route path="/dashboard" exact component={Dashboard} />
     <Route path="/role-master" exact render={() => (<Dashboard section={"role-master"} />)} />
     <Route path="/institution-master" exact render={() => (<Dashboard section={"institution-master"} />)} />
-    <Route path="/role-master" exact component={RoleMaster} />
   </Router>
 );
