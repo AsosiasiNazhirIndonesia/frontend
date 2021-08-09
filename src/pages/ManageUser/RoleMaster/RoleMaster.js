@@ -17,34 +17,25 @@ const RoleMaster = (props) => {
     console.log("Adding Role");
   };
   return (
-    <div className="role-master">
-      <Header />
-      <div className="role-body">
-        <Sidebar menu={menu} />
-        <div className="role-content">
-          <div className="breadcrumb">
-            <h1>Role Master</h1>
-          </div>
-          <div className="bef-table">
-            <div className="btn-add-role">
-              {/* <button onClick={addRole}>Add Role</button> */}
-              <SubmitButton buttonText={"Add Role"}></SubmitButton>
-            </div>
-            <div className="search-input">
-              <InputField
-                type="text"
-                name="search-input"
-                placeholder="Search Role Name"
-                value={value}
-              />
-            </div>
-          </div>
-          <TableRole />
-        </div>
-        )
+    <div className="role-content">
+      <div className="breadcrumb">
+        <h1>Role Master</h1>
       </div>
-      <AddEditRole />
-      <DeleteRole delete={true} />
+      <div className="bef-table">
+        <div className="btn-add-role">
+          {/* <button onClick={addRole}>Add Role</button> */}
+          <SubmitButton buttonText={"Add Role"}></SubmitButton>
+        </div>
+        <div className="search-input">
+          <InputField
+            type="text"
+            name="search-input"
+            placeholder="Search Role Name"
+            value={value}
+          />
+        </div>
+      </div>
+      <TableRole />
     </div>
   );
 };

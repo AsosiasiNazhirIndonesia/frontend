@@ -16,7 +16,7 @@ export const Routes = () => (
     <Route path="/signin" exact component={SignInPage} />
     <Route path="/profile" exact component={ProfilePage} />
     <Route path="/dashboard" exact component={Dashboard} />
-    <Route path="/role-master" exact component={RoleMaster} />
-    <Route path="/institution-master" exact component={InstitutionMaster} />
+    <Route path="/role-master" exact render={() => (<Dashboard section={"role-master"} />)} />
+    <Route path="/institution-master" exact render={() => (<Dashboard section={"institution-master"} />)} />
   </Router>
 );
