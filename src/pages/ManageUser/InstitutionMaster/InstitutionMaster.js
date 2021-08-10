@@ -17,32 +17,24 @@ const InstitutionMaster = (props) => {
     console.log("Adding Institution");
   };
   return (
-    <div className="institution-master">
-      <Header />
-      <div className="institution-body">
-        <Sidebar menu={menu} />
-        <div className="institution-content">
-          <div className="breadcrumb">
-            <h1>Institution Master</h1>
-          </div>
-          <div className="bef-table">
-            <div className="btn-add-institution">
-              <SubmitButton buttonText={"Add Institution"}></SubmitButton>
-            </div>
-            <div className="search-input">
-              <InputField
-                type="text"
-                name="search-input"
-                placeholder="Search Institution Name"
-                value={value}
-              />
-            </div>
-          </div>
-          <TableInstitution />
+    <div className="institution-content">
+      <div className="breadcrumb">
+        <h1>Institution Master</h1>
+      </div>
+      <div className="bef-table">
+        <div className="btn-add-institution">
+          <SubmitButton buttonText={"Add Institution"}></SubmitButton>
+        </div>
+        <div className="search-input">
+          <InputField
+            type="text"
+            name="search-input"
+            placeholder="Search Institution Name"
+            value={value}
+          />
         </div>
       </div>
-      <AddEditInstitution />
-      <DeleteInstitution />
+      <TableInstitution />
     </div>
   );
 };

@@ -5,22 +5,9 @@ import InputField from "../../components/elements/InputField/InputField";
 import "./CreateCertificate2.scss";
 
 const CreateCertificate2 = (props) => {
-  const menu = new URLSearchParams(props.location.search).get("token");
   const value = {};
   return (
-    <div className="certificate-master">
-      <Header />
-      <div className="certificate-body">
-        <Sidebar menu={menu} />
-        <div className="certificate-content">
-          <div className="breadcrumb">
-            <h1>Manage Certificate</h1>
-            {/* breadcrumb path dibuat dinamic sesuai path yang diakses */}
-            <h6 className="breadcrumb-path">
-              Manage Certificate - Create Document
-            </h6>
-            {/*  */}
-          </div>
+    <div className="certificate-content">
           <div className="sign-progress">
             <h3>Progress Bar :</h3>
           </div>
@@ -64,8 +51,6 @@ const CreateCertificate2 = (props) => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
   );
 };
 
