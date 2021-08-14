@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Link } from "react-router-dom";
 import "./Table.scss";
 
 class TableInstitution extends Component {
@@ -13,11 +14,6 @@ class TableInstitution extends Component {
           phoneNumber: "0222013789",
           address:
             "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
-          action: (
-            <div>
-              <button>Edit</button>,<button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 2,
@@ -26,11 +22,6 @@ class TableInstitution extends Component {
           phoneNumber: "0222013789",
           address:
             "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
-          action: (
-            <div>
-              <button>Edit</button>,<button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 3,
@@ -39,11 +30,6 @@ class TableInstitution extends Component {
           phoneNumber: "0222013789",
           address:
             "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
-          action: (
-            <div>
-              <button>Edit</button>,<button>Delete</button>
-            </div>
-          ),
         },
       ],
     };
@@ -51,26 +37,51 @@ class TableInstitution extends Component {
 
   renderTableData() {
     return this.state.institutions.map((student, index) => {
-      const { id, institutionName, email, phoneNumber, address, action } =
-        student; //destructuring
+      const { id, institutionName, email, phoneNumber, address } = student; //destructuring
       return (
         <tr key={id}>
-          <td>{id}</td>
           <td>{institutionName}</td>
           <td>{email}</td>
           <td>{phoneNumber}</td>
           <td>{address}</td>
-          <td>{action}</td>
+          <td>
+            <Link
+              style={{ color: "black" }}
+              to=""
+              onClick={(e) => {
+                e.preventDefault();
+                this.props.setIsEdit(true);
+              }}
+            >
+              Edit
+            </Link>
+            ,{" "}
+            <Link
+              style={{ color: "red" }}
+              to=""
+              onClick={(e) => {
+                e.preventDefault();
+                this.props.setIsDelete(true);
+              }}
+            >
+              Delete
+            </Link>
+          </td>
         </tr>
       );
     });
   }
 
   renderTableHeader() {
-    let header = Object.keys(this.state.institutions[0]);
-    return header.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>;
-    });
+    return (
+      <tr>
+        <th>Institution Name</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Address</th>
+        <th>Action</th>
+      </tr>
+    );
   }
 
   render() {

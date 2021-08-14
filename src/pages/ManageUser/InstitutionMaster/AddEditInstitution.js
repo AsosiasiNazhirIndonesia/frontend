@@ -53,7 +53,12 @@ const AddEditInstitution = (props) => {
             />
           </div>
           <div className="btn-group">
-            <button className="btn-cancel">Cancel</button>
+            <button
+              className="btn-cancel"
+              onClick={() => props.setIsAdd(false)}
+            >
+              Cancel
+            </button>
             <button className="btn-save">Save</button>
           </div>
         </form>
@@ -109,7 +114,12 @@ const AddEditInstitution = (props) => {
             />
           </div>
           <div className="btn-group">
-            <button className="btn-cancel">Cancel</button>
+            <button
+              className="btn-cancel"
+              onClick={() => props.setIsEdit(false)}
+            >
+              Cancel
+            </button>
             <button className="btn-save">Save</button>
           </div>
         </form>

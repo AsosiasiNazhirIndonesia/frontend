@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Link } from "react-router-dom";
 import "./Table.scss";
 
 class TableUser extends Component {
@@ -13,12 +14,6 @@ class TableUser extends Component {
           email: "Nuranggie@gmail.co.id",
           phoneNumber: "08123456789",
           institution: "Politeknik Negeri Bandung",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 2,
@@ -27,12 +22,6 @@ class TableUser extends Component {
           email: "BambangS@gmail.co.id",
           phoneNumber: "08123123123",
           institution: "Politeknik Negeri Bandung",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 3,
@@ -41,38 +30,61 @@ class TableUser extends Component {
           email: "BambangSup@gmail.co.id",
           phoneNumber: "08123212321",
           institution: "Politeknik Negeri Bandung",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
       ],
     };
   }
   renderTableData() {
     return this.state.users.map((student, index) => {
-      const { id, role, name, email, phoneNumber, institution, action } =
-        student; //destructuring
+      const { id, role, name, email, phoneNumber, institution } = student; //destructuring
       return (
         <tr key={id}>
-          <td>{id}</td>
           <td>{role}</td>
           <td>{name}</td>
           <td>{email}</td>
           <td>{phoneNumber}</td>
           <td>{institution}</td>
-          <td>{action}</td>
+          <td>
+            <Link
+              style={{ color: "black" }}
+              to={"/dashboard?menu=user-master&view_user=true"}
+            >
+              View
+            </Link>
+            ,{" "}
+            <Link
+              style={{ color: "black" }}
+              to={"/dashboard?menu=user-master&edit_user=true"}
+            >
+              Edit
+            </Link>
+            ,{" "}
+            <Link
+              style={{ color: "red" }}
+              to=""
+              onClick={(e) => {
+                e.preventDefault();
+                this.props.setIsDelete(true);
+              }}
+            >
+              Delete
+            </Link>
+          </td>
         </tr>
       );
     });
   }
   renderTableHeader() {
-    let header = Object.keys(this.state.users[0]);
-    return header.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>;
-    });
+    return (
+      <tr>
+        <th>Role</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Institution</th>
+        <th>Action</th>
+      </tr>
+    );
   }
   render() {
     return (

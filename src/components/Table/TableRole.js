@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Link } from "react-router-dom";
 import "./Table.scss";
 
 class TableRole extends Component {
@@ -10,51 +11,26 @@ class TableRole extends Component {
           id: 1,
           roleName: "Student",
           description: "-",
-          action: (
-            <div>
-              <button onClick={() => {props.setIsEdit(true)}}>Edit</button>,<button onClick={() => {props.setIsDelete(true)}}>Delete</button>
-            </div>
-          ),
         },
         {
           id: 2,
           roleName: "Rektor",
           description: "-",
-          action: (
-            <div>
-              <button>Edit</button>,<button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 3,
           roleName: "Pembantu Bidang 1",
           description: "-",
-          action: (
-            <div>
-              <button>Edit</button>,<button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 4,
           roleName: "Pembantu Bidang 2",
           description: "-",
-          action: (
-            <div>
-              <button>Edit</button>,<button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 5,
           roleName: "Pembantu Bidang 3",
           description: "-",
-          action: (
-            <div>
-              <button>Edit</button>,<button>Delete</button>
-            </div>
-          ),
         },
       ],
     };
@@ -62,12 +38,34 @@ class TableRole extends Component {
 
   renderTableData() {
     return this.state.roles.map((student, index) => {
-      const { id, roleName, description, action } = student; //destructuring
+      const { id, roleName, description } = student; //destructuring
       return (
         <tr key={id}>
           <td>{roleName}</td>
           <td>{description}</td>
-          <td>{action}</td>
+          <td>
+            <Link
+              style={{ color: "black" }}
+              to=""
+              onClick={(e) => {
+                e.preventDefault();
+                this.props.setIsEdit(true);
+              }}
+            >
+              Edit
+            </Link>
+            ,{" "}
+            <Link
+              style={{ color: "red" }}
+              to=""
+              onClick={(e) => {
+                e.preventDefault();
+                this.props.setIsDelete(true);
+              }}
+            >
+              Delete
+            </Link>
+          </td>
         </tr>
       );
     });
@@ -76,9 +74,9 @@ class TableRole extends Component {
   renderTableHeader() {
     return (
       <tr>
-        <th>ROLENAME</th>
-        <th>DESCRIPTION</th>
-        <th>ACTION</th>
+        <th>Role Name</th>
+        <th>Description</th>
+        <th>Action</th>
       </tr>
     );
   }

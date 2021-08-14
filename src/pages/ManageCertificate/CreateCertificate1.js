@@ -1,5 +1,3 @@
-import Header from "../../components/Header/Header";
-import Sidebar from "../../components/Sidebar/Sidebar";
 import SubmitButton from "../../components/elements/SubmitButton/SubmitButton";
 import InputField from "../../components/elements/InputField/InputField";
 import template from "../../assets/images/CertificateTemplate.jpg";
@@ -65,7 +63,14 @@ const CreateCertificate1 = (props) => {
         <img src={template} alt="template certificate"></img>
       </div>
       <div className="btn-next">
-        <SubmitButton buttonText="Next" onClick={() => {history.push('/dashboard?menu=manage-certificate&create_certificate_step=2')}}></SubmitButton>
+        <SubmitButton
+          buttonText="Next"
+          onClick={() => {
+            history.push(
+              "/dashboard?menu=manage-certificate&create_certificate_step=2"
+            );
+          }}
+        ></SubmitButton>
       </div>
     </React.Fragment>
   );

@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Link } from "react-router-dom";
 import "./Table.scss";
 
 class TableStudentCertificate extends Component {
@@ -13,12 +14,6 @@ class TableStudentCertificate extends Component {
           sendTo: "Anggi Nur Dhamayanty",
           signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
           status: "On Progress",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 2,
@@ -27,12 +22,6 @@ class TableStudentCertificate extends Component {
           sendTo: "Anggi Nur Dhamayanty",
           signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
           status: "Done",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 3,
@@ -41,12 +30,6 @@ class TableStudentCertificate extends Component {
           sendTo: "Anggi Nur Dhamayanty",
           signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
           status: "Failed",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 4,
@@ -55,12 +38,6 @@ class TableStudentCertificate extends Component {
           sendTo: "Anggi Nur Dhamayanty",
           signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
           status: "Done",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 5,
@@ -69,12 +46,6 @@ class TableStudentCertificate extends Component {
           sendTo: "Anggi Nur Dhamayanty",
           signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
           status: "Done",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
       ],
     };
@@ -86,23 +57,30 @@ class TableStudentCertificate extends Component {
         student; //destructuring
       return (
         <tr key={id}>
-          <td>{id}</td>
           <td>{date}</td>
           <td>{documentName}</td>
           <td>{sendTo}</td>
           <td>{signaturedBy}</td>
           <td>{status}</td>
-          <td>{action}</td>
+          <td>
+            <Link>View</Link>, <Link>Edit</Link>, <Link>Delete</Link>
+          </td>
         </tr>
       );
     });
   }
 
   renderTableHeader() {
-    let header = Object.keys(this.state.certificates[0]);
-    return header.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>;
-    });
+    return (
+      <tr>
+        <th>Date</th>
+        <th>Document Name</th>
+        <th>Send To</th>
+        <th>Signatured By</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    );
   }
 
   render() {

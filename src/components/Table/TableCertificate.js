@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Link } from "react-router-dom";
 import "./Table.scss";
 
 class TableCertificate extends Component {
@@ -13,12 +14,6 @@ class TableCertificate extends Component {
           sendTo: "Anggi Nur Dhamayanty",
           signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
           status: "On Progress",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 2,
@@ -27,12 +22,6 @@ class TableCertificate extends Component {
           sendTo: "Anggi Nur Dhamayanty",
           signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
           status: "Done",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 3,
@@ -41,12 +30,6 @@ class TableCertificate extends Component {
           sendTo: "Anggi Nur Dhamayanty",
           signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
           status: "Failed",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 4,
@@ -55,12 +38,6 @@ class TableCertificate extends Component {
           sendTo: "Anggi Nur Dhamayanty",
           signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
           status: "Done",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
         {
           id: 5,
@@ -69,12 +46,6 @@ class TableCertificate extends Component {
           sendTo: "Anggi Nur Dhamayanty",
           signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
           status: "Done",
-          action: (
-            <div>
-              <button>View</button>,<button>Edit</button>,
-              <button>Delete</button>
-            </div>
-          ),
         },
       ],
     };
@@ -82,27 +53,49 @@ class TableCertificate extends Component {
 
   renderTableData() {
     return this.state.certificates.map((student, index) => {
-      const { id, date, documentName, sendTo, signaturedBy, status, action } =
-        student; //destructuring
+      const { id, date, documentName, sendTo, signaturedBy, status } = student; //destructuring
       return (
         <tr key={id}>
-          <td>{id}</td>
           <td>{date}</td>
           <td>{documentName}</td>
           <td>{sendTo}</td>
           <td>{signaturedBy}</td>
           <td>{status}</td>
-          <td>{action}</td>
+          <td>
+            <Link
+              style={{ color: "black" }}
+              to={"/dashboard?menu=manage-certificate&view_certificate=true"}
+            >
+              View
+            </Link>
+            , <Link style={{ color: "black" }}>Edit</Link>,{" "}
+            <Link
+              style={{ color: "red" }}
+              to=""
+              onClick={(e) => {
+                e.preventDefault();
+                this.props.setIsDelete(true);
+              }}
+            >
+              Delete
+            </Link>
+          </td>
         </tr>
       );
     });
   }
 
   renderTableHeader() {
-    let header = Object.keys(this.state.certificates[0]);
-    return header.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>;
-    });
+    return (
+      <tr>
+        <th>Date</th>
+        <th>Document Name</th>
+        <th>Send To</th>
+        <th>Signatured By</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    );
   }
 
   render() {
