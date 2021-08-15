@@ -35,6 +35,7 @@ const InstitutionMaster = (props) => {
         </div>
       </div>
       <TableInstitution />
+      <AddEditInstitution add={true}/>
     </div>
   );
 };
