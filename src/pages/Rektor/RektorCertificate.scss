@@ -1,0 +1,23 @@
+.rektor-body {
+  display: flex;
+  .rektor-content {
+    .breadcrumb {
+      padding: 1rem 0 1rem 2rem;
+      margin: 0;
+      border-bottom: 2px solid rgba(11, 0, 56, 0.2);
+    }
+    .search-input {
+      display: flex;
+      width: 30%;
+      margin: 3rem 2rem 1rem auto;
+      .faSearch {
+        margin: auto;
+        padding: 1rem;
+        width: 20%;
+        height: fit-content;
+        border: solid 1px #dfe1e6;
+        border-radius: 5px;
+      }
+    }
+  }
+}

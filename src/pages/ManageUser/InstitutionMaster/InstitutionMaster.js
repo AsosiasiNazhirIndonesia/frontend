@@ -1,21 +1,19 @@
 import { withRouter } from "react-router-dom";
-import Header from "../../../components/Header/Header";
-import Sidebar from "../../../components/Sidebar/Sidebar";
 import SubmitButton from "../../../components/elements/SubmitButton/SubmitButton";
 import InputField from "../../../components/elements/InputField/InputField";
 import TableInstitution from "../../../components/Table/TableInstitution";
 import AddEditInstitution from "./AddEditInstitution";
-import DeleteInstitution from "./DeleteInstitution";
+import Delete from "../../../components/Popup/Delete";
+import { useState } from "react";
 import "./InstitutionMaster.scss";
 
 const InstitutionMaster = (props) => {
-  const menu = new URLSearchParams(props.location.search).get("token");
   const value = {};
-  const openModal = () => {};
-  const closeModal = () => {};
-  const addInstitution = () => {
-    console.log("Adding Institution");
-  };
+
+  const [isAdd, setIsAdd] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+
   return (
     <div className="institution-content">
       <div className="breadcrumb">
@@ -23,7 +21,10 @@ const InstitutionMaster = (props) => {
       </div>
       <div className="bef-table">
         <div className="btn-add-institution">
-          <SubmitButton buttonText={"Add Institution"}></SubmitButton>
+          <SubmitButton
+            buttonText={"Add Institution"}
+            onClick={() => setIsAdd(true)}
+          ></SubmitButton>
         </div>
         <div className="search-input">
           <InputField
@@ -34,8 +35,14 @@ const InstitutionMaster = (props) => {
           />
         </div>
       </div>
-      <TableInstitution />
-      <AddEditInstitution add={true}/>
+      <TableInstitution setIsEdit={setIsEdit} setIsDelete={setIsDelete} />
+      <AddEditInstitution
+        add={isAdd}
+        edit={isEdit}
+        setIsAdd={setIsAdd}
+        setIsEdit={setIsEdit}
+      />
+      <Delete delete={isDelete} setIsDelete={setIsDelete} />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import ManageCertificate from "../ManageCertificate/ManageCertificate";
 import InstitutionMaster from "../ManageUser/InstitutionMaster/InstitutionMaster";
 import RoleMaster from "../ManageUser/RoleMaster/RoleMaster";
+import UserMaster from "../ManageUser/UserMaster/UserMaster";
 import "./Dashboard.scss";
 
 const Dashboard = (props) => {
@@ -15,6 +16,8 @@ const Dashboard = (props) => {
         return <RoleMaster />;
       case "institution-master":
         return <InstitutionMaster />;
+      case "user-master":
+        return <UserMaster />;
       case "manage-certificate":
         return <ManageCertificate />;
       default:

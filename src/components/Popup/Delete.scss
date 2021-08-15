@@ -10,7 +10,7 @@
 
 .modal-box-delete {
   width: 40%;
-  height: 50%;
+  height: fit-content;
   background: #fff;
   position: absolute;
   top: 20%;
@@ -24,6 +24,7 @@
   }
   p {
     margin-bottom: 4rem;
+    font-weight: normal;
   }
   .btn-group {
     width: 100%;
