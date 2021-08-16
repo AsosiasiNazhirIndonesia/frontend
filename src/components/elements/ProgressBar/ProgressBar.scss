@@ -1,0 +1,35 @@
+.progress-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.progress-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    width: 156px;
+}
+
+.progress-info img {
+    width: 30px;
+    margin-bottom: 8px;
+}
+
+.progress-info span {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 50px;
+    text-align: center;
+
+    color: #000000;
+}
+
+.progress-list .separator {
+    border-bottom: 2px solid black;
+    width: 134px;
+}

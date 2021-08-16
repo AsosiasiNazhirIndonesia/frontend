@@ -5,19 +5,25 @@ import React from "react";
 import { history } from "../../store";
 
 const CreateCertificate3 = (props) => {
+  const composeAssignToName = () => {
+    let result = '';
+    for(const assignToUser of props.assignToUsers) {
+      result += assignToUser.name + ', ';
+    }
+
+    return result.substr(0, result.length - 2);
+  }
+
   return (
     <React.Fragment>
-      <div className="sign-progress">
-        <h3>Progress Bar :</h3>
-      </div>
       <form className="form-sendTo-assignTo">
         <div className="sendTo-view">
           <p>Send to :</p>
-          <span>Anggi Nur Dhamayanty</span>
+          <span>{props.sendToUser.name}</span>
         </div>
         <div className="assignTo-view">
           <p>Assign to :</p>
-          <span>Bambang Ariyanto, Riana Maharani, Tari Saputri</span>
+          <span>{composeAssignToName()}</span>
         </div>
       </form>
       <form className="form-certificate">

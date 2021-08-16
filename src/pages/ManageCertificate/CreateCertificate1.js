@@ -1,41 +1,56 @@
 import SubmitButton from "../../components/elements/SubmitButton/SubmitButton";
 import InputField from "../../components/elements/InputField/InputField";
 import template from "../../assets/images/CertificateTemplate.jpg";
+import ProgressBar from "../../components/elements/ProgressBar/ProgressBar";
 import "./CreateCertificate1.scss";
 import React from "react";
 import { history } from "../../store";
+import { INPUT_STATUS } from "../../constants/component.constant";
 
 const CreateCertificate1 = (props) => {
-  const value = {};
+  const disabledButton = () => {
+    let disabled = false;
+    if (props.getInputValue("documentName").status !== INPUT_STATUS.VALID) {
+      disabled = true;
+    } else if (props.getInputValue("receiverName").status !== INPUT_STATUS.VALID) {
+      disabled = true;
+    } else if (props.getInputValue("certificateTitle").status !== INPUT_STATUS.VALID) {
+      disabled = true;
+    } else if (props.getInputValue("certificateNo").status !== INPUT_STATUS.VALID) {
+      disabled = true;
+    } else if (props.getInputValue("certificateDescription").status !== INPUT_STATUS.VALID) {
+      disabled = true;
+    } else if (props.getInputValue("certificateScore").status !== INPUT_STATUS.VALID) {
+      disabled = true;
+    } 
+
+    return disabled;
+  }
+
   return (
     <React.Fragment>
-      <div className="sign-progress">
-        <h3>Progress Bar :</h3>
-      </div>
-      <form className="form-name-template">
+      <div className="form-name-template">
         <div className="name-template">
           <p>Document Name</p>
           <InputField
             type="text"
             name="search-input"
-            placeholder="Search Document Name"
-            value={value}
+            placeholder="Document name"
+            value={props.getInputValue("documentName")}
+            onChange={(e) => { props.setInputValue("documentName", e.target.value) }}
           ></InputField>
         </div>
-        <div className="submit-template">
-          <p>Upload Template</p>
-          <SubmitButton buttonText="Browse Template"></SubmitButton>
-        </div>
-      </form>
+      </div>
       <div className="form-group">
-        <form className="form-detail-certificate">
+        <div className="form-detail-certificate">
           <div className="name-user">
-            <p>Name</p>
+            <p>Receiver Name</p>
             <InputField
               type="text"
               name="name-input"
-              placeholder=""
-              value={value}
+              placeholder="Certificate receiver"
+              value={props.getInputValue("receiverName")}
+              onChange={(e) => { props.setInputValue("receiverName", e.target.value) }}
             ></InputField>
           </div>
           <div className="no-certificate">
@@ -43,8 +58,9 @@ const CreateCertificate1 = (props) => {
             <InputField
               type="text"
               name="no-certificate-input"
-              placeholder=""
-              value={value}
+              placeholder="Certificate number"
+              value={props.getInputValue("certificateNo")}
+              onChange={(e) => { props.setInputValue("certificateNo", e.target.value) }}
             ></InputField>
           </div>
           <div className="title">
@@ -52,19 +68,38 @@ const CreateCertificate1 = (props) => {
             <InputField
               type="text"
               name="title-input"
-              placeholder=""
-              value={value}
+              placeholder="Certificate title"
+              value={props.getInputValue("certificateTitle")}
+              onChange={(e) => { props.setInputValue("certificateTitle", e.target.value) }}
             ></InputField>
           </div>
-          <div className="btn-submit">
-            <SubmitButton buttonText="Add"></SubmitButton>
+          <div className="title">
+            <p>Description</p>
+            <InputField
+              type="text"
+              name="title-input"
+              placeholder="Certificate description"
+              value={props.getInputValue("certificateDescription")}
+              onChange={(e) => { props.setInputValue("certificateDescription", e.target.value) }}
+            ></InputField>
           </div>
-        </form>
+          <div className="title">
+            <p>Score</p>
+            <InputField
+              type="text"
+              name="title-input"
+              placeholder="Certificate score"
+              value={props.getInputValue("certificateScore")}
+              onChange={(e) => { props.setInputValue("certificateScore", e.target.value) }}
+            ></InputField>
+          </div>
+        </div>
         <img src={template} alt="template certificate"></img>
       </div>
       <div className="btn-next">
         <SubmitButton
           buttonText="Next"
+          disabled={disabledButton()}
           onClick={() => {
             history.push(
               "/dashboard?menu=manage-certificate&create_certificate_step=2"

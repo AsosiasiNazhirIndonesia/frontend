@@ -10,9 +10,22 @@ import CreateCertificate3 from "./CreateCertificate3";
 import ViewCertificate from "./ViewCertificate";
 import "./ManageCertificate.scss";
 import Delete from "../../components/Popup/Delete";
+import ProgressBar from "../../components/elements/ProgressBar/ProgressBar";
+import { INPUT_STATUS } from "../../constants/component.constant";
+import API from "../../services/api";
 
 const ManageCertificate = (props) => {
   const [isDelete, setIsDelete] = useState(false);
+  const [documentName, setDocumentName] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
+  const [receiverName, setReceiverName] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
+  const [certificateNo, setCertificateNo] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
+  const [certificateTitle, setCertificateTitle] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
+  const [certificateDescription, setCertificateDescription] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
+  const [certificateScore, setCertificateScore] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
+  const [sendToPubKey, setSendToPubKey] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
+  const [sendToUser, setSendToUser] = useState({});
+  const [assignToPubKeys, setAssignToPubKeys] = useState([{status: INPUT_STATUS.INIT, value: '', errorMessage: ''}]);
+  const [assignToUsers, setAssignToUsers] = useState([{}]);
 
   const step = new URLSearchParams(props.location.search).get(
     "create_certificate_step"
@@ -20,7 +33,98 @@ const ManageCertificate = (props) => {
   const view = new URLSearchParams(props.location.search).get(
     "view_certificate"
   );
-  const value = {};
+  
+  const getInputValue = (key) => {
+    switch(key) {
+      case "documentName":
+        return documentName;
+      case "receiverName":
+        return receiverName;
+      case "certificateNo":
+        return certificateNo;
+      case "certificateTitle":
+        return certificateTitle;
+      case "certificateDescription":
+        return certificateDescription;
+      case "certificateScore":
+        return certificateScore;
+      case "sendToPubKey":
+        return sendToPubKey;
+    }
+  }
+
+  const loadSendToUser = async (publicKey) => {
+    const user = await API.getUserByPublicKey(publicKey);
+    setSendToUser(user ? user : {});
+    const status = user ? INPUT_STATUS.VALID : INPUT_STATUS.INVALID;
+    setSendToPubKey({
+      status,
+      value: publicKey,
+      errorMessage: status === INPUT_STATUS.INVALID ? !user ? 'user not found' : 'required field' : ''
+    });
+  }
+
+  const setInputValue = (key, value) => {
+    let status = value && value != '' ? INPUT_STATUS.VALID : INPUT_STATUS.INVALID;
+
+    switch(key) {
+      case "documentName":
+        setDocumentName({
+          status,
+          value: value,
+          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+        });
+        break;
+      case "receiverName":
+        setReceiverName({
+          status,
+          value: value,
+          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+        });
+        break;
+      case "certificateNo":
+        setCertificateNo({
+          status,
+          value: value,
+          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+        });
+        break;
+      case "certificateTitle":
+        setCertificateTitle({
+          status,
+          value: value,
+          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+        });
+        break;
+      case "certificateDescription":
+        setCertificateDescription({
+          status,
+          value: value,
+          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+        });
+        break;
+      case "certificateScore":
+        setCertificateScore({
+          status,
+          value: value,
+          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+        });
+        break;
+      case "sendToPubKey":
+        if (value.length === 42) {
+          loadSendToUser(value);
+        } else {
+          status = INPUT_STATUS.INVALID;
+          setSendToUser({});
+        }
+        setSendToPubKey({
+          status,
+          value: value,
+          errorMessage: status === INPUT_STATUS.INVALID ? 'public key length must be 42 characters' : ''
+        });
+        break;
+    }
+  }
 
   const resolveContent = () => {
     if (view) {
@@ -28,11 +132,18 @@ const ManageCertificate = (props) => {
     } else {
       switch (step) {
         case "1":
-          return <CreateCertificate1 />;
+          return <CreateCertificate1 getInputValue={getInputValue} setInputValue={setInputValue}/>;
         case "2":
-          return <CreateCertificate2 />;
+          return <CreateCertificate2 
+            getInputValue={getInputValue} 
+            setInputValue={setInputValue} 
+            sendToUser={sendToUser}
+            assignToPubKeys={assignToPubKeys}
+            setAssignToPubKeys={setAssignToPubKeys}
+            assignToUsers={assignToUsers}
+            setAssignToUsers={setAssignToUsers} />;
         case "3":
-          return <CreateCertificate3 />;
+          return <CreateCertificate3 sendToUser={sendToUser} assignToUsers={assignToUsers}/>;
         default:
           return (
             <React.Fragment>
@@ -46,14 +157,6 @@ const ManageCertificate = (props) => {
                       );
                     }}
                   ></SubmitButton>
-                </div>
-                <div className="search-input">
-                  <InputField
-                    type="text"
-                    name="search-input"
-                    placeholder="Search Document Name"
-                    value={value}
-                  />
                 </div>
               </div>
               <TableCertificate setIsDelete={setIsDelete} />
@@ -71,24 +174,12 @@ const ManageCertificate = (props) => {
     } else {
       switch (step) {
         case "1":
-          return (
-            <h6 className="breadcrumb-path">
-              {" "}
-              Manage Certificate - Create Document 1
-            </h6>
-          );
         case "2":
-          return (
-            <h6 className="breadcrumb-path">
-              {" "}
-              Manage Certificate - Create Document 2
-            </h6>
-          );
         case "3":
           return (
             <h6 className="breadcrumb-path">
               {" "}
-              Manage Certificate - Create Document 3
+              Manage Certificate - Create Document
             </h6>
           );
         default:
@@ -97,15 +188,35 @@ const ManageCertificate = (props) => {
     }
   };
 
-  const content = resolveContent();
-  const subTitle = resolveSubtitle();
+  const resolveProgressBarContent = () => {
+    if (!step) {
+      return [];
+    }
+
+    return [
+      {
+        success: Number(step) >= 1 ? true : false,
+        text: 'Add Document'
+      },
+      {
+        success: Number(step) >= 2 ? true : false,
+        text: 'Assign Document'
+      },
+      {
+        success: Number(step) >= 3 ? true : false,
+        text: 'Preview'
+      }
+    ];
+  }
+
   return (
     <div className="certificate-content">
       <div className="breadcrumb">
         <h1>Manage Certificate</h1>
-        {subTitle}
+        {resolveSubtitle()}
       </div>
-      {content}
+      <ProgressBar progress={resolveProgressBarContent()}/>
+      {resolveContent()}
       <Delete delete={isDelete} setIsDelete={setIsDelete} />
     </div>
   );

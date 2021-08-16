@@ -1,0 +1,5 @@
+export const ACTION_TYPE = {
+    SET_USER: 'SET_USER',
+    SET_ADMIN: 'SET_ADMIN',
+    SET_ACTOR_TYPE: 'SET_ACTOR_TYPE'
+}

@@ -14,6 +14,19 @@
   .sendTo-input {
     width: 40%;
   }
+  span {
+    font-family: Mulish;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 200%;
+    /* identical to box height, or 32px */
+
+
+    /* Gray 2 */
+    color: #4F4F4F;
+    padding: 8px;
+  } 
 }
 .form-assignTo {
   width: 95%;
@@ -24,9 +37,42 @@
   .assignTo-input {
     width: 40%;
   }
+  .assignTo-input-item {
+    margin-bottom: 24px;
+  }
+  span {
+    font-family: Mulish;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 200%;
+    /* identical to box height, or 32px */
+
+
+    /* Gray 2 */
+
+    color: #4F4F4F;
+  }
   .btn-add-user {
+    display: flex;
+    flex-direction: row;
     margin-top: 2rem;
-    width: 25%;
+    width: 50%;
+
+    .submit-btn {
+      margin-right: 6px;
+      padding: 0;
+      width: 50%;
+    }
+
+    .btn-delete-user {
+      width: 100%;
+    }
+
+    .btn-delete-user .submit-btn {
+      background: #EB5757;
+      padding: 0;
+    }
   }
 }
 

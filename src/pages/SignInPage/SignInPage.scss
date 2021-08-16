@@ -87,3 +87,26 @@
     transform: rotate(360deg);
   }
 }
+
+.signin .signin-form .error-flag {
+    background: #ff5656;
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 200%;
+    /* identical to box height, or 106% */
+    text-align: left;
+
+    /* Neutral (Light) / N0 */
+    color: #FFFFFF;
+    width: 100%;
+    padding: 8px 16px;
+
+    margin-bottom: 16px;
+    border-radius: 5px;
+}
+
+.signin .signin-form .error-flag .error-icon {
+    margin-right: 8px;
+}

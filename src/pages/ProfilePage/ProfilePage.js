@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
 import './ProfilePage.scss';
 import avatar from '../../assets/images/avatar.svg';
+import { withRouter } from 'react-router-dom';
+import { ACTOR } from '../../constants/component.constant';
+import API from '../../services/api';
 
-export default () => {
+const Profile = (props) => {
+    const [actor, setActor] = useState({});
+    const [histories, setHistories] = useState([]);
+    const actorType = new URLSearchParams(props.location.search).get("actor_type");
+    const actorPubKey = new URLSearchParams(props.location.search).get("actor_public_key");
+    
+    const getActor = async () => {
+        if (actorType === ACTOR.ADMIN) {
+            setActor(await API.getAdminByPublicKey(actorPubKey));
+        } else if (actorType === ACTOR.USER) {
+            setActor(await API.getUserByPublicKey(actorPubKey));
+        }
+    }
+
+    useEffect(() => {
+        getActor();
+    }, [])
+
     return (
         <React.Fragment>
             <Header/>
@@ -13,7 +33,7 @@ export default () => {
                 </div>
                 <div className="details">
                     <div className="user-data">
-                        <img src={avatar} />
+                        <img src={actor.photo ? '' : avatar} />
                         <div className="biodata">
                             <h3>Biodata</h3>
                             <div className="biodata-details">
@@ -22,7 +42,7 @@ export default () => {
                                         Nama:
                                     </div>
                                     <div className="colTwo">
-                                        Josep Mario
+                                        {actor.name}
                                     </div>
                                 </div>
                                 <div className="table-row">
@@ -30,7 +50,7 @@ export default () => {
                                         Phone Number:
                                     </div>
                                     <div className="colTwo">
-                                        08574******
+                                        {actor.phone_number}
                                     </div>
                                 </div>
                                 <div className="table-row">
@@ -38,7 +58,7 @@ export default () => {
                                         Email:
                                     </div>
                                     <div className="colTwo">
-                                        Am*****@gmail.com
+                                        {actor.email}
                                     </div>
                                 </div>
                             </div>
@@ -68,3 +88,5 @@ export default () => {
         
     );
 }
+
+export default React.memo(withRouter(Profile));
