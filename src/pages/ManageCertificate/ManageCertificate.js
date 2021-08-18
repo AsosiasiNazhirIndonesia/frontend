@@ -1,9 +1,8 @@
 import SubmitButton from "../../components/elements/SubmitButton/SubmitButton";
-import InputField from "../../components/elements/InputField/InputField";
 import TableCertificate from "../../components/Table/TableCertificate";
 import { withRouter } from "react-router-dom";
 import { history } from "../../store";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CreateCertificate1 from "./CreateCertificate1";
 import CreateCertificate2 from "./CreateCertificate2";
 import CreateCertificate3 from "./CreateCertificate3";
@@ -13,19 +12,95 @@ import Delete from "../../components/Popup/Delete";
 import ProgressBar from "../../components/elements/ProgressBar/ProgressBar";
 import { INPUT_STATUS } from "../../constants/component.constant";
 import API from "../../services/api";
+import Pagination from "../../components/elements/Pagination/Pagination";
 
 const ManageCertificate = (props) => {
   const [isDelete, setIsDelete] = useState(false);
-  const [documentName, setDocumentName] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [receiverName, setReceiverName] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [certificateNo, setCertificateNo] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [certificateTitle, setCertificateTitle] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [certificateDescription, setCertificateDescription] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [certificateScore, setCertificateScore] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [sendToPubKey, setSendToPubKey] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(2);
+  const [documentName, setDocumentName] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [receiverName, setReceiverName] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [certificateNo, setCertificateNo] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [certificateTitle, setCertificateTitle] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [certificateDescription, setCertificateDescription] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [certificateScore, setCertificateScore] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [sendToPubKey, setSendToPubKey] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
   const [sendToUser, setSendToUser] = useState({});
-  const [assignToPubKeys, setAssignToPubKeys] = useState([{status: INPUT_STATUS.INIT, value: '', errorMessage: ''}]);
+  const [assignToPubKeys, setAssignToPubKeys] = useState([
+    { status: INPUT_STATUS.INIT, value: "", errorMessage: "" },
+  ]);
   const [assignToUsers, setAssignToUsers] = useState([{}]);
+
+  const [certificates, setCertificates] = useState([
+    {
+      id: 1,
+      date: "10 Mei 2021",
+      documentName: "Ijasah D4 Politeknik Negeri Bandung",
+      sendTo: "Anggi Nur Dhamayanty",
+      signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
+      status: "On Progress",
+    },
+    {
+      id: 2,
+      date: "10 Mei 2021",
+      documentName: "Ijasah D4 Politeknik Negeri Bandung",
+      sendTo: "Anggi Nur Dhamayanty",
+      signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
+      status: "Done",
+    },
+    {
+      id: 3,
+      date: "10 Mei 2021",
+      documentName: "Ijasah D4 Politeknik Negeri Bandung",
+      sendTo: "Anggi Nur Dhamayanty",
+      signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
+      status: "Failed",
+    },
+    {
+      id: 4,
+      date: "10 Mei 2021",
+      documentName: "Ijasah D4 Politeknik Negeri Bandung",
+      sendTo: "Anggi Nur Dhamayanty",
+      signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
+      status: "Done",
+    },
+    {
+      id: 5,
+      date: "10 Mei 2021",
+      documentName: "Ijasah D4 Politeknik Negeri Bandung",
+      sendTo: "Anggi Nur Dhamayanty",
+      signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
+      status: "Done",
+    },
+  ]);
 
   const step = new URLSearchParams(props.location.search).get(
     "create_certificate_step"
@@ -33,9 +108,22 @@ const ManageCertificate = (props) => {
   const view = new URLSearchParams(props.location.search).get(
     "view_certificate"
   );
-  
+
+  useEffect(() => {
+    //console.log(this.prop);
+    // setItems();
+  });
+
+  const indexOfLastPost = currentPage * itemsPerPage;
+  const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+  const currentItems = certificates.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   const getInputValue = (key) => {
-    switch(key) {
+    switch (key) {
       case "documentName":
         return documentName;
       case "receiverName":
@@ -51,7 +139,7 @@ const ManageCertificate = (props) => {
       case "sendToPubKey":
         return sendToPubKey;
     }
-  }
+  };
 
   const loadSendToUser = async (publicKey) => {
     const user = await API.getUserByPublicKey(publicKey);
@@ -60,54 +148,60 @@ const ManageCertificate = (props) => {
     setSendToPubKey({
       status,
       value: publicKey,
-      errorMessage: status === INPUT_STATUS.INVALID ? !user ? 'user not found' : 'required field' : ''
+      errorMessage:
+        status === INPUT_STATUS.INVALID
+          ? !user
+            ? "user not found"
+            : "required field"
+          : "",
     });
-  }
+  };
 
   const setInputValue = (key, value) => {
-    let status = value && value != '' ? INPUT_STATUS.VALID : INPUT_STATUS.INVALID;
+    let status =
+      value && value != "" ? INPUT_STATUS.VALID : INPUT_STATUS.INVALID;
 
-    switch(key) {
+    switch (key) {
       case "documentName":
         setDocumentName({
           status,
           value: value,
-          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+          errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
         });
         break;
       case "receiverName":
         setReceiverName({
           status,
           value: value,
-          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+          errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
         });
         break;
       case "certificateNo":
         setCertificateNo({
           status,
           value: value,
-          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+          errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
         });
         break;
       case "certificateTitle":
         setCertificateTitle({
           status,
           value: value,
-          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+          errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
         });
         break;
       case "certificateDescription":
         setCertificateDescription({
           status,
           value: value,
-          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+          errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
         });
         break;
       case "certificateScore":
         setCertificateScore({
           status,
           value: value,
-          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+          errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
         });
         break;
       case "sendToPubKey":
@@ -120,11 +214,14 @@ const ManageCertificate = (props) => {
         setSendToPubKey({
           status,
           value: value,
-          errorMessage: status === INPUT_STATUS.INVALID ? 'public key length must be 42 characters' : ''
+          errorMessage:
+            status === INPUT_STATUS.INVALID
+              ? "public key length must be 42 characters"
+              : "",
         });
         break;
     }
-  }
+  };
 
   const resolveContent = () => {
     if (view) {
@@ -132,18 +229,31 @@ const ManageCertificate = (props) => {
     } else {
       switch (step) {
         case "1":
-          return <CreateCertificate1 getInputValue={getInputValue} setInputValue={setInputValue}/>;
+          return (
+            <CreateCertificate1
+              getInputValue={getInputValue}
+              setInputValue={setInputValue}
+            />
+          );
         case "2":
-          return <CreateCertificate2 
-            getInputValue={getInputValue} 
-            setInputValue={setInputValue} 
-            sendToUser={sendToUser}
-            assignToPubKeys={assignToPubKeys}
-            setAssignToPubKeys={setAssignToPubKeys}
-            assignToUsers={assignToUsers}
-            setAssignToUsers={setAssignToUsers} />;
+          return (
+            <CreateCertificate2
+              getInputValue={getInputValue}
+              setInputValue={setInputValue}
+              sendToUser={sendToUser}
+              assignToPubKeys={assignToPubKeys}
+              setAssignToPubKeys={setAssignToPubKeys}
+              assignToUsers={assignToUsers}
+              setAssignToUsers={setAssignToUsers}
+            />
+          );
         case "3":
-          return <CreateCertificate3 sendToUser={sendToUser} assignToUsers={assignToUsers}/>;
+          return (
+            <CreateCertificate3
+              sendToUser={sendToUser}
+              assignToUsers={assignToUsers}
+            />
+          );
         default:
           return (
             <React.Fragment>
@@ -159,7 +269,15 @@ const ManageCertificate = (props) => {
                   ></SubmitButton>
                 </div>
               </div>
-              <TableCertificate setIsDelete={setIsDelete} />
+              <TableCertificate
+                certificates={currentItems}
+                setIsDelete={setIsDelete}
+              />
+              <Pagination
+                itemsPerPage={itemsPerPage}
+                totalItem={certificates.length}
+                paginate={paginate}
+              />
             </React.Fragment>
           );
       }
@@ -196,18 +314,18 @@ const ManageCertificate = (props) => {
     return [
       {
         success: Number(step) >= 1 ? true : false,
-        text: 'Add Document'
+        text: "Add Document",
       },
       {
         success: Number(step) >= 2 ? true : false,
-        text: 'Assign Document'
+        text: "Assign Document",
       },
       {
         success: Number(step) >= 3 ? true : false,
-        text: 'Preview'
-      }
+        text: "Preview",
+      },
     ];
-  }
+  };
 
   return (
     <div className="certificate-content">
@@ -215,7 +333,7 @@ const ManageCertificate = (props) => {
         <h1>Manage Certificate</h1>
         {resolveSubtitle()}
       </div>
-      <ProgressBar progress={resolveProgressBarContent()}/>
+      <ProgressBar progress={resolveProgressBarContent()} />
       {resolveContent()}
       <Delete delete={isDelete} setIsDelete={setIsDelete} />
     </div>

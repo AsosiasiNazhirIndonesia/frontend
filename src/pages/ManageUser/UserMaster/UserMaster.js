@@ -8,9 +8,47 @@ import { history } from "../../../store";
 import AddEditUser from "./AddEditUser";
 import ViewDataUser from "./ViewDataUser";
 import Delete from "../../../components/Popup/Delete";
+import Pagination from "../../../components/elements/Pagination/Pagination";
 
 const UserMaster = (props) => {
   const [isDelete, setIsDelete] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(2);
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      role: "Student",
+      name: "Anggi Nur D",
+      email: "Nuranggie@gmail.co.id",
+      phoneNumber: "08123456789",
+      institution: "Politeknik Negeri Bandung",
+    },
+    {
+      id: 2,
+      role: "Rektor",
+      name: "Bambang Saputra",
+      email: "BambangS@gmail.co.id",
+      phoneNumber: "08123123123",
+      institution: "Politeknik Negeri Bandung",
+    },
+    {
+      id: 3,
+      role: "Pembantu Direktur 1",
+      name: "Bambang Supardi",
+      email: "BambangSup@gmail.co.id",
+      phoneNumber: "08123212321",
+      institution: "Politeknik Negeri Bandung",
+    },
+  ]);
+
+  const indexOfLastPost = currentPage * itemsPerPage;
+  const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+  const currentItems = users.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   const add = new URLSearchParams(props.location.search).get("add_user");
   const edit = new URLSearchParams(props.location.search).get("edit_user");
   const view = new URLSearchParams(props.location.search).get("view_user");
@@ -41,7 +79,12 @@ const UserMaster = (props) => {
               />
             </div>
           </div>
-          <TableUser setIsDelete={setIsDelete} />
+          <TableUser users={currentItems} setIsDelete={setIsDelete} />
+          <Pagination
+            itemsPerPage={itemsPerPage}
+            totalItem={users.length}
+            paginate={paginate}
+          />
         </React.Fragment>
       );
     }

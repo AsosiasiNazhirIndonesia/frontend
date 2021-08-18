@@ -4,6 +4,7 @@ import InputField from "../../../components/elements/InputField/InputField";
 import TableInstitution from "../../../components/Table/TableInstitution";
 import AddEditInstitution from "./AddEditInstitution";
 import Delete from "../../../components/Popup/Delete";
+import Pagination from "../../../components/elements/Pagination/Pagination";
 import { useState } from "react";
 import "./InstitutionMaster.scss";
 
@@ -13,6 +14,41 @@ const InstitutionMaster = (props) => {
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(2);
+  const [institutions, setInstitutions] = useState([
+    {
+      id: 1,
+      institutionName: "Politeknik Negeri Bandung",
+      email: "polban@polban.ac.id",
+      phoneNumber: "0222013789",
+      address:
+        "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
+    },
+    {
+      id: 2,
+      institutionName: "Politeknik Negeri Bandung",
+      email: "polban2@polban.ac.id",
+      phoneNumber: "0222013789",
+      address:
+        "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
+    },
+    {
+      id: 3,
+      institutionName: "Politeknik Negeri Bandung",
+      email: "polban3@polban.ac.id",
+      phoneNumber: "0222013789",
+      address:
+        "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
+    },
+  ]);
+  const indexOfLastPost = currentPage * itemsPerPage;
+  const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+  const currentItems = institutions.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="institution-content">
@@ -35,7 +71,16 @@ const InstitutionMaster = (props) => {
           />
         </div>
       </div>
-      <TableInstitution setIsEdit={setIsEdit} setIsDelete={setIsDelete} />
+      <TableInstitution
+        institutions={currentItems}
+        setIsEdit={setIsEdit}
+        setIsDelete={setIsDelete}
+      />
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        totalItem={institutions.length}
+        paginate={paginate}
+      />
       <AddEditInstitution
         add={isAdd}
         edit={isEdit}
