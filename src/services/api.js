@@ -53,6 +53,16 @@ API.adminLogin = async (request) => {
     }
 }
 
+API.addCertificate = async (request) => {
+    try {
+        const url = `${HOST}/api/certificates`;
+        const result = (await axios.post(url, request)).data;
+        return result.data;
+    } catch (e) {
+        throw getErrorMessage(e);
+    }
+}
+
 const getErrorMessage = (e) => {
     return e ? e.response ? e.response.data ? e.response.data.message ? e.response.data.message : e : e : e : e;
 }
