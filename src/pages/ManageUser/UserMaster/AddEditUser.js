@@ -5,8 +5,7 @@ import "./AddEditUser.scss";
 
 const AddEditUser = (props) => {
   const value = {};
-  // if condition untuk edit/add
-  // if(props.edit) / if(props.add)
+
   return (
     <React.Fragment>
       <form className="add-edit-user-box">
@@ -45,11 +44,16 @@ const AddEditUser = (props) => {
         </div>
         <div className="upload-photo">
           <p>Upload Photo</p>
+          <input
+            type="file"
+            className="custom-file-input"
+            id="inputGroupFile01"
+            aria-describedby="inputGroupFileAddon01"
+          />
           <SubmitButton buttonText={"Browse"} />
         </div>
       </form>
       <form className="add-edit-user-detail-box">
-        {/* blm nerapin component dropdown (sementara inputfield) */}
         <div className="user-institution">
           <p>
             Institution <font color="red">*</font>
@@ -78,13 +82,13 @@ const AddEditUser = (props) => {
             Tanggal Mulai <font color="red">*</font>
           </p>
           <div className="dropdown-startDate">
-            <select id="dropdown">
+            <select id="dropdown" className="month">
               <option value="1">Bulan</option>
               <option value="2">Januari</option>
               <option value="3">Februari</option>
               <option value="4">Maret</option>
             </select>
-            <select id="dropdown">
+            <select id="dropdown" className="year">
               <option value="1">2018</option>
               <option value="2">2019</option>
               <option value="3">2020</option>
@@ -97,13 +101,13 @@ const AddEditUser = (props) => {
             Tanggal Akhir <font color="red">*</font>
           </p>
           <div className="dropdown-endDate">
-            <select id="dropdown">
+            <select id="dropdown" className="month">
               <option value="1">Bulan</option>
               <option value="2">Januari</option>
               <option value="3">Februari</option>
               <option value="4">Maret</option>
             </select>
-            <select id="dropdown">
+            <select id="dropdown" className="year">
               <option value="1">Sekarang</option>
               <option value="2">2018</option>
               <option value="3">2019</option>
@@ -112,6 +116,12 @@ const AddEditUser = (props) => {
           </div>
         </div>
       </form>
+      <div className="btn-add">
+        <button className="btn-add-more">Add More</button>
+      </div>
+      <div className="save-btn">
+        <SubmitButton buttonText={"Save"} />
+      </div>
     </React.Fragment>
   );
 };

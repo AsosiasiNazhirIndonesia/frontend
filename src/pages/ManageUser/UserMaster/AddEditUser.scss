@@ -13,7 +13,7 @@
     margin-bottom: 1.5rem;
   }
   .upload-photo {
-    width: 25%;
+    width: 20%;
   }
 }
 
@@ -42,5 +42,30 @@
   .dropdown-startDate,
   .dropdown-endDate {
     display: flex;
+    .month {
+      margin-right: 1rem;
+    }
   }
+}
+
+.btn-add {
+  width: 95%;
+  height: 3.8rem;
+  margin: 1rem auto;
+  display: flex;
+  .btn-add-more {
+    background: #ff5c00;
+    height: inherit;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0 3rem;
+  }
+}
+
+.save-btn {
+  width: 20%;
+  margin: 0 2.5% 0 auto;
+  display: flex;
+  flex-direction: row-reverse;
 }
