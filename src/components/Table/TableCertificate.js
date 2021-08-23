@@ -1,32 +1,56 @@
-import { Component } from "react";
+import { Component, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { CERTIFICATE_STATUS } from "../../constants/component.constant";
+import DigiCertContract from "../../contracts/digital_certificate";
+import { setDeleteSelectedData } from "../../modules/actions/delete.action";
+import web3 from "../../services/web3";
 import "./Table.scss";
 
-class TableCertificate extends Component {
-  renderTableData(props) {
-    return props.certificates.map((student, index) => {
-      const { id, date, documentName, sendTo, signaturedBy, status } = student; //destructuring
+export default (props) => {
+  const [certificateStatus, setCertificateStatus] = useState({});
+  const dispatch = useDispatch();
+  
+  const getCertificateStatus = async () => {
+    const newCertificateStatus = { ...certificateStatus };
+    for (const {scAddress} of props.certificates) {
+      if (!web3.utils.isAddress(scAddress)) {
+        continue;
+      }
+      const digicertContract = DigiCertContract.getNewInstance(scAddress);
+      newCertificateStatus[scAddress] = CERTIFICATE_STATUS[await digicertContract.methods.status().call()];
+    }
+    setCertificateStatus(newCertificateStatus);
+  }
+
+  useEffect(() => {
+    getCertificateStatus();
+  }, [props.certificates] );
+
+  const renderTableData = (props) => {
+    return props.certificates.map((certificate, index) => {
+      const { id, date, documentName, sendTo, signaturedBy, status, scAddress } = certificate; //destructuring
       return (
         <tr key={id}>
           <td>{date}</td>
           <td>{documentName}</td>
           <td>{sendTo}</td>
           <td>{signaturedBy}</td>
-          <td>{status}</td>
+          <td>{certificateStatus[scAddress]}</td>
           <td>
             <Link
               style={{ color: "black" }}
-              to={"/dashboard?menu=manage-certificate&view_certificate=true"}
+              to={`/dashboard?menu=manage-certificate&view_certificate=true&certificate_id=${id}`}
             >
               View
-            </Link>
-            , <Link style={{ color: "black" }}>Edit</Link>,{" "}
+            </Link>, 
             <Link
               style={{ color: "red" }}
               to=""
               onClick={(e) => {
                 e.preventDefault();
-                this.props.setIsDelete(true);
+                props.setIsDelete(true);
+                dispatch(setDeleteSelectedData(certificate));
               }}
             >
               Delete
@@ -37,7 +61,7 @@ class TableCertificate extends Component {
     });
   }
 
-  renderTableHeader() {
+  const renderTableHeader = () => {
     return (
       <tr>
         <th>Date</th>
@@ -50,18 +74,14 @@ class TableCertificate extends Component {
     );
   }
 
-  render() {
-    return (
-      <div>
-        <table className="certificate-table">
-          <thead>{this.renderTableHeader()}</thead>
-          <tbody className="content-table">
-            {this.renderTableData(this.props)}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <table className="certificate-table">
+        <thead>{renderTableHeader()}</thead>
+        <tbody className="content-table">
+          {renderTableData(props)}
+        </tbody>
+      </table>
+    </div>
+  );
 }
-
-export default TableCertificate;

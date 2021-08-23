@@ -2,11 +2,7 @@ import SubmitButton from "../../components/elements/SubmitButton/SubmitButton";
 import TableCertificate from "../../components/Table/TableCertificate";
 import { withRouter } from "react-router-dom";
 import { history } from "../../store";
-<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
-=======
-import React, { useState, useEffect } from "react";
->>>>>>> remotes/origin/Improvement
 import CreateCertificate1 from "./CreateCertificate1";
 import CreateCertificate2 from "./CreateCertificate2";
 import CreateCertificate3 from "./CreateCertificate3";
@@ -21,63 +17,59 @@ import web3 from "../../services/web3";
 import { createNotification } from "../../components/Notification/Notification";
 import Pagination from "../../components/elements/Pagination/Pagination";
 import { connect } from "react-redux";
+import moment from "moment";
+import DigiCertContract from "../../contracts/digital_certificate";
 
 const ManageCertificate = (props) => {
   const [isDelete, setIsDelete] = useState(false);
-  const [documentName, setDocumentName] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [receiverName, setReceiverName] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [certificateNo, setCertificateNo] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [certificateTitle, setCertificateTitle] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [certificateDescription, setCertificateDescription] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [certificateScore, setCertificateScore] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [certificateDate, setCertificateDate] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [sendToPubKey, setSendToPubKey] = useState({status: INPUT_STATUS.INIT, value: '', errorMessage: ''});
-  const [isDelete, setIsDelete] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(2);
-  
-  const [certificates, setCertificates] = useState([
-    {
-      id: 1,
-      date: "10 Mei 2021",
-      documentName: "Ijasah D4 Politeknik Negeri Bandung",
-      sendTo: "Anggi Nur Dhamayanty",
-      signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
-      status: "On Progress",
-    },
-    {
-      id: 2,
-      date: "10 Mei 2021",
-      documentName: "Ijasah D4 Politeknik Negeri Bandung",
-      sendTo: "Anggi Nur Dhamayanty",
-      signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
-      status: "Done",
-    },
-    {
-      id: 3,
-      date: "10 Mei 2021",
-      documentName: "Ijasah D4 Politeknik Negeri Bandung",
-      sendTo: "Anggi Nur Dhamayanty",
-      signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
-      status: "Failed",
-    },
-    {
-      id: 4,
-      date: "10 Mei 2021",
-      documentName: "Ijasah D4 Politeknik Negeri Bandung",
-      sendTo: "Anggi Nur Dhamayanty",
-      signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
-      status: "Done",
-    },
-    {
-      id: 5,
-      date: "10 Mei 2021",
-      documentName: "Ijasah D4 Politeknik Negeri Bandung",
-      sendTo: "Anggi Nur Dhamayanty",
-      signaturedBy: "Bambang Arianto, Riana Maharani, Tari Saputri",
-      status: "Done",
-    },
+  const [itemsPerPage] = useState(5);
+  const [documentName, setDocumentName] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [receiverName, setReceiverName] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [certificateNo, setCertificateNo] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [certificateTitle, setCertificateTitle] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [certificateDescription, setCertificateDescription] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [certificateScore, setCertificateScore] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [certificateDate, setCertificateDate] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [sendToPubKey, setSendToPubKey] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [sendToUser, setSendToUser] = useState({});
+  const [assignToPubKeys, setAssignToPubKeys] = useState([
+    { status: INPUT_STATUS.INIT, value: "", errorMessage: "" },
   ]);
+  const [assignToUsers, setAssignToUsers] = useState([{}]);
+  const [certificates, setCertificates] = useState([]);
 
   const step = new URLSearchParams(props.location.search).get(
     "create_certificate_step"
@@ -86,10 +78,36 @@ const ManageCertificate = (props) => {
     "view_certificate"
   );
 
+  const getAllCertificates = async (offset, limit) => {
+    const results = await API.getAllCertificates(offset, limit);
+    const newCertificates = [];
+    const composeApprovers = (approvers) => {
+      let names = '';
+      for(const approver of approvers) {
+        names = names + ` ,${approver.User.name}`;
+      }
+
+      return names.substring(2, names.length);
+    }
+
+    for (const result of results) {
+      newCertificates.push({
+        id: result.certificate_id,
+        date: result.date,
+        documentName: result.name,
+        sendTo: result.User.name,
+        signaturedBy: composeApprovers(result.CertificateSigners),
+        status: "",
+        scAddress: result.sc_address
+      });
+    }
+
+    setCertificates(newCertificates);
+  }
+
   useEffect(() => {
-    //console.log(this.prop);
-    // setItems();
-  });
+    getAllCertificates(currentPage - 1, itemsPerPage);
+  }, [step]);
 
   const indexOfLastPost = currentPage * itemsPerPage;
   const indexOfFirstPost = indexOfLastPost - itemsPerPage;
@@ -213,7 +231,7 @@ const ManageCertificate = (props) => {
     const mergeCertificateData = receiverName.value + certificateNo.value + 
       certificateTitle.value + certificateDescription.value + certificateScore.value + certificateDate.value;
     const certificateHash = web3.utils.keccak256(mergeCertificateData);
-    console.log(certificateHash);
+
     let approvers = [];
     for (const assignToPubKey of assignToPubKeys) {
       approvers.push(assignToPubKey.value);
@@ -230,7 +248,18 @@ const ManageCertificate = (props) => {
         gas: 3000000,
         gasPrice: '100000000000'
       });
-      console.log(res);
+      
+
+      const certificate_signers = [];
+      let index = 0;
+      for (const assignToUser of assignToUsers) {
+        certificate_signers.push({
+          user_id: assignToUser.user_id,
+          priority: index
+        });
+        index++;
+      }
+
       API.addCertificate({
         admin_id: props.admin.admin_id,
         user_id: sendToUser.user_id,
@@ -240,7 +269,8 @@ const ManageCertificate = (props) => {
         description: certificateDescription.value,
         score: certificateScore.value,
         date: certificateDate.value,
-        sc_address: res._address
+        sc_address: res._address,
+        certificate_signers
       });
       
       createNotification({
@@ -254,8 +284,39 @@ const ManageCertificate = (props) => {
         type: "error",
         value: "Something went wrong"
       })
+    } 
+  }
+
+  const onDelete = async (data) => {
+    try {
+      if (!web3.utils.isAddress(data.scAddress)) {
+        throw "Certificate not exist on blockchain";
+      }
+  
+      const digicertContract = DigiCertContract.getNewInstance(data.scAddress);
+      const accounts = await web3.eth.getAccounts();
+      createNotification({
+        type: "info",
+        value: "Please check your metamask"
+      });
+      await digicertContract.methods.dropCertificate().send({
+        from: accounts[0],
+        gas: await digicertContract.methods.dropCertificate().estimateGas({from: accounts[0]}),
+        gasPrice: '100000000000'
+      });
+      createNotification({
+        type: "success",
+        value: `Drop certificate success`
+      });
+      getAllCertificates(currentPage - 1, itemsPerPage);
+    } catch (e) {
+      const message = typeof e === 'object' ? e.message : e;
+      createNotification({
+        type: "error",
+        value: message
+      });
+
     }
-    
   }
 
   const resolveContent = () => {
@@ -365,7 +426,7 @@ const ManageCertificate = (props) => {
       </div>
       <ProgressBar progress={resolveProgressBarContent()} />
       {resolveContent()}
-      <Delete delete={isDelete} setIsDelete={setIsDelete} />
+      <Delete delete={isDelete} setIsDelete={setIsDelete} onDelete={onDelete} />
     </div>
   );
 };

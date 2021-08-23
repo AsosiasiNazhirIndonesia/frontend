@@ -9,58 +9,55 @@ export function createNotification({ type, value }) {
         message: value,
         type: "info",
         insert: "top",
-        container: "top-right",
+        container: "top-left",
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],
         dismiss: {
-          duration: 60000,
+          duration: 30000,
           onScreen: true,
         },
       })
 
       break
     case "success":
-      console.log("trigger")
       store.addNotification({
         title: "Success",
         message: value,
         type: "success",
         insert: "top",
-        container: "top-right",
+        container: "top-left",
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],
         dismiss: {
-          duration: 60000,
+          duration: 30000,
           onScreen: true,
         },
       })
 
       break
     case "warning":
-      console.log("trigger")
       store.addNotification({
         title: "Warning!",
         message: value,
         type: "warning",
         insert: "top",
-        container: "top-right",
+        container: "top-left",
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],
         dismiss: {
-          duration: 60000,
+          duration: 30000,
           onScreen: true,
         },
       })
 
       break
     case "error":
-      console.log("trigger")
       store.addNotification({
         title: "Error!",
         message: value,
         type: "danger",
         insert: "top",
-        container: "top-right",
+        container: "top-left",
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],
         dismiss: {
