@@ -4,6 +4,7 @@ import InputField from "../../../components/elements/InputField/InputField";
 import TableRole from "../../../components/Table/TableRole";
 import AddEditRole from "./AddEditRole";
 import Delete from "../../../components/Popup/Delete";
+import Pagination from "../../../components/elements/Pagination/Pagination";
 import "./RoleMaster.scss";
 import { useState } from "react";
 
@@ -11,6 +12,43 @@ const RoleMaster = (props) => {
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(2);
+  const [roles, setRoles] = useState([
+    {
+      id: 1,
+      roleName: "Student",
+      description: "-",
+    },
+    {
+      id: 2,
+      roleName: "Rektor",
+      description: "-",
+    },
+    {
+      id: 3,
+      roleName: "Pembantu Bidang 1",
+      description: "-",
+    },
+    {
+      id: 4,
+      roleName: "Pembantu Bidang 2",
+      description: "-",
+    },
+    {
+      id: 5,
+      roleName: "Pembantu Bidang 3",
+      description: "-",
+    },
+  ]);
+
+  const indexOfLastPost = currentPage * itemsPerPage;
+  const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+  const currentItems = roles.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   const value = {};
   return (
@@ -35,7 +73,16 @@ const RoleMaster = (props) => {
           />
         </div>
       </div>
-      <TableRole setIsEdit={setIsEdit} setIsDelete={setIsDelete} />
+      <TableRole
+        roles={currentItems}
+        setIsEdit={setIsEdit}
+        setIsDelete={setIsDelete}
+      />
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        totalItem={roles.length}
+        paginate={paginate}
+      />
       <AddEditRole
         add={isAdd}
         edit={isEdit}

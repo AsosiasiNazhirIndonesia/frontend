@@ -1,0 +1,9 @@
+.pagination {
+  width: 95%;
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem auto 0 auto;
+  li {
+    width: fit-content;
+  }
+}

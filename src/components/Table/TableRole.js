@@ -3,41 +3,8 @@ import { Link } from "react-router-dom";
 import "./Table.scss";
 
 class TableRole extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      roles: [
-        {
-          id: 1,
-          roleName: "Student",
-          description: "-",
-        },
-        {
-          id: 2,
-          roleName: "Rektor",
-          description: "-",
-        },
-        {
-          id: 3,
-          roleName: "Pembantu Bidang 1",
-          description: "-",
-        },
-        {
-          id: 4,
-          roleName: "Pembantu Bidang 2",
-          description: "-",
-        },
-        {
-          id: 5,
-          roleName: "Pembantu Bidang 3",
-          description: "-",
-        },
-      ],
-    };
-  }
-
-  renderTableData() {
-    return this.state.roles.map((student, index) => {
+  renderTableData(props) {
+    return props.roles.map((student, index) => {
       const { id, roleName, description } = student; //destructuring
       return (
         <tr key={id}>
@@ -86,7 +53,9 @@ class TableRole extends Component {
       <div>
         <table className="roles-table">
           <thead>{this.renderTableHeader()}</thead>
-          <tbody className="content-table">{this.renderTableData()}</tbody>
+          <tbody className="content-table">
+            {this.renderTableData(this.props)}
+          </tbody>
         </table>
       </div>
     );
