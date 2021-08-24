@@ -1,10 +1,12 @@
 import SubmitButton from "../../components/elements/SubmitButton/SubmitButton";
 import template from "../../assets/images/CertificateTemplate.jpg";
 import "./CreateCertificate3.scss";
-import React from "react";
+import React, { useState } from "react";
 import { history } from "../../store";
 
 const CreateCertificate3 = (props) => {
+  const [isProcessing, setProcessing] = useState(false);
+
   const composeAssignToName = () => {
     let result = '';
     for(const assignToUser of props.assignToUsers) {
@@ -32,6 +34,7 @@ const CreateCertificate3 = (props) => {
       <div className="btn-back-next">
         <div className="btn-back">
           <SubmitButton
+            isProcessing={isProcessing}
             buttonText="Back"
             onClick={() => {
               history.push(
@@ -41,7 +44,14 @@ const CreateCertificate3 = (props) => {
           ></SubmitButton>
         </div>
         <div className="btn-send">
-          <SubmitButton buttonText="Send"></SubmitButton>
+          <SubmitButton 
+            isProcessing={isProcessing}
+            buttonText="Send"
+            onClick={async () => {
+              setProcessing(true);
+              await props.submit();
+              setProcessing(false);
+            }}></SubmitButton>
         </div>
       </div>
     </React.Fragment>

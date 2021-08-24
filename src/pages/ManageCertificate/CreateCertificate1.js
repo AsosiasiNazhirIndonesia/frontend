@@ -22,6 +22,8 @@ const CreateCertificate1 = (props) => {
       disabled = true;
     } else if (props.getInputValue("certificateScore").status !== INPUT_STATUS.VALID) {
       disabled = true;
+    } else if (props.getInputValue("certificateDate").status !== INPUT_STATUS.VALID) {
+      disabled = true;
     } 
 
     return disabled;
@@ -91,6 +93,16 @@ const CreateCertificate1 = (props) => {
               placeholder="Certificate score"
               value={props.getInputValue("certificateScore")}
               onChange={(e) => { props.setInputValue("certificateScore", e.target.value) }}
+            ></InputField>
+          </div>
+          <div className="title">
+            <p>Certificate Date</p>
+            <InputField
+              type="text"
+              name="title-input"
+              placeholder="Certificate date"
+              value={props.getInputValue("certificateDate")}
+              onChange={(e) => { props.setInputValue("certificateDate", e.target.value) }}
             ></InputField>
           </div>
         </div>
