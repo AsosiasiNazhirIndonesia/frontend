@@ -6,6 +6,10 @@ import "./AddEditUser.scss";
 const AddEditUser = (props) => {
   const value = {};
 
+  const onChange = (e) => {
+    let files = e.target.files;
+  };
+
   return (
     <React.Fragment>
       <form className="add-edit-user-box">
@@ -44,13 +48,33 @@ const AddEditUser = (props) => {
         </div>
         <div className="upload-photo">
           <p>Upload Photo</p>
-          <input
-            type="file"
-            className="custom-file-input"
-            id="inputGroupFile01"
-            aria-describedby="inputGroupFileAddon01"
-          />
-          <SubmitButton buttonText={"Browse"} />
+          <input type="file" className="custom-file-input" id="input" hidden />
+          <label for="input" className="browse-btn">
+            Browse
+          </label>
+          {/* <label for="input">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+            >
+              Upload
+            </button>
+          </label> */}
+          {/* <button
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <label for="input">Upload</label>
+          </button> */}
+          {/* <SubmitButton
+            buttonText={"Browse"}
+            onClick={(e) => {
+              e.preventDefault();
+              this.onChange(e);
+            }}
+          /> */}
         </div>
       </form>
       <form className="add-edit-user-detail-box">
