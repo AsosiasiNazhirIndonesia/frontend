@@ -10,7 +10,7 @@ import ViewCertificate from "./ViewCertificate";
 import "./ManageCertificate.scss";
 import Delete from "../../components/Popup/Delete";
 import ProgressBar from "../../components/elements/ProgressBar/ProgressBar";
-import { INPUT_STATUS } from "../../constants/component.constant";
+import { ACTOR, INPUT_STATUS } from "../../constants/component.constant";
 import API from "../../services/api";
 import DigitalCertificate from "../../contracts/digital_certificate";
 import web3 from "../../services/web3";
@@ -270,6 +270,7 @@ const ManageCertificate = (props) => {
         score: certificateScore.value,
         date: certificateDate.value,
         sc_address: res._address,
+        receiver_name: receiverName.value,
         certificate_signers
       });
       
@@ -352,6 +353,7 @@ const ManageCertificate = (props) => {
         default:
           return (
             <React.Fragment>
+              {props.actor === ACTOR.ADMIN ?
               <div className="bef-table">
                 <div className="btn-add-certificate">
                   <SubmitButton
@@ -363,10 +365,11 @@ const ManageCertificate = (props) => {
                     }}
                   ></SubmitButton>
                 </div>
-              </div>
+              </div> : <></>}
               <TableCertificate
                 certificates={currentItems}
                 setIsDelete={setIsDelete}
+                actor={props.type}
               />
               <Pagination
                 itemsPerPage={itemsPerPage}

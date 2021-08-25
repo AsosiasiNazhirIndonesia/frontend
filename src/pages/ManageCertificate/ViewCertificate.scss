@@ -2,9 +2,9 @@
   width: 95%;
   background: #fff;
   margin: 0 auto;
-  margin-bottom: 42px;
   padding: 2rem;
   padding-bottom: 1rem;
+  margin-bottom: 42px;
   .document-name,
   .status {
     width: 100%;
@@ -41,4 +41,46 @@
 .btn-done {
   width: 20%;
   margin: 2rem;
+}
+
+.view-action-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 95%;
+  background: #fff;
+  margin: 0 auto;
+  margin-bottom: 42px;
+  padding: 2rem;
+  padding-bottom: 1rem;
+
+  .submit-btn {
+    width: 200px;
+
+    margin-right: 24px;
+  }
+
+  .submit-btn:last-child {
+    width: 200px;
+    padding: 0;
+  }
+}
+
+.view-pdf {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  background: #fff;
+  margin: 0 auto;
+  margin-bottom: 42px;
+  padding: 2rem;
+  padding-bottom: 1rem;
+
+  .submit-btn {
+    width: 200px;
+    margin-top: 24px;
+  }
 }

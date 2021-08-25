@@ -1,7 +1,7 @@
 import { Component, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { CERTIFICATE_STATUS } from "../../constants/component.constant";
+import { ACTOR, CERTIFICATE_STATUS } from "../../constants/component.constant";
 import DigiCertContract from "../../contracts/digital_certificate";
 import { setDeleteSelectedData } from "../../modules/actions/delete.action";
 import web3 from "../../services/web3";
@@ -27,7 +27,7 @@ export default (props) => {
     getCertificateStatus();
   }, [props.certificates] );
 
-  const renderTableData = (props) => {
+  const renderTableData = () => {
     return props.certificates.map((certificate, index) => {
       const { id, date, documentName, sendTo, signaturedBy, status, scAddress } = certificate; //destructuring
       return (
@@ -40,10 +40,12 @@ export default (props) => {
           <td>
             <Link
               style={{ color: "black" }}
-              to={`/dashboard?menu=manage-certificate&view_certificate=true&certificate_id=${id}`}
+              to={`/dashboard/${props.actor}?menu=manage-certificate&view_certificate=true&certificate_id=${id}`}
             >
               View
-            </Link>, 
+            </Link>
+            {props.type === ACTOR.ADMIN ? ',' : ''}
+            {props.type === ACTOR.ADMIN ?
             <Link
               style={{ color: "red" }}
               to=""
@@ -54,7 +56,7 @@ export default (props) => {
               }}
             >
               Delete
-            </Link>
+            </Link> : <></>}
           </td>
         </tr>
       );

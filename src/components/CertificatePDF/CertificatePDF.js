@@ -64,7 +64,7 @@ export default (props) => {
       color: "black",
       fontSize: "14px",
       fontWeight: "bold",
-      marginBottom: "5px"
+      marginBottom: "25px"
     },
     footer: {
       display: "flex",
@@ -77,12 +77,13 @@ export default (props) => {
       marginRight: "24px"
     },
     scAddress: {
-      textAlign: "right"
+      textAlign: "center",
+      fontWeight: "bold",
     }
   });
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" orientation="landscape" style={styles.page}>
         <View style={styles.header}>
           <Text>{props.certificateTitle}</Text>
         </View>
@@ -92,10 +93,10 @@ export default (props) => {
           <Text style={styles.title}>{props.certificateNo}</Text>
           <Text style={styles.description}>{props.certificateDescription}</Text>
           <Text style={styles.score}>Score: {props.certificateScore}</Text>
+          <Text style={styles.scAddress}>Contract Address: {props.scAddress ? props.scAddress : '-'}</Text>
         </View>
         <View style={styles.footer}>
           <Text style={styles.date}>Date: {props.certificateDate}</Text>
-          <Text style={styles.scAddress}>Smart Contract Address: {props.scAddress ? props.scAddress : '-'}</Text>
         </View>
       </Page>
     </Document>

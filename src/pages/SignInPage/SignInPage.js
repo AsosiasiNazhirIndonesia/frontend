@@ -36,10 +36,10 @@ const SignInPage = (props) => {
             const result = await API.userLogin({user_id: user.user_id, signature});
             localStorage.setItem(ACTOR_TOKEN.DIGICERT_USER_TOKEN, result.token);
             props.setActorType(ACTOR.USER);
-            history.push('/dashboard');
+            history.push('/dashboard/USER');
         } catch (e) {
             setIsFailed(true);
-            setErrorMessage(e);
+            setErrorMessage(typeof e === 'string' ? e : e.message);
         }
         setIsProcessing(false);
     }
@@ -62,10 +62,10 @@ const SignInPage = (props) => {
             const result = await API.adminLogin({admin_id: admin.admin_id, signature});
             localStorage.setItem(ACTOR_TOKEN.DIGICERT_ADMIN_TOKEN, result.token);
             props.setActorType(ACTOR.ADMIN);
-            history.push('/dashboard');
+            history.push('/dashboard/ADMIN');
         } catch (e) {
             setIsFailed(true);
-            setErrorMessage(e);
+            setErrorMessage(typeof e === 'string' ? e : e.message);
         }
         setIsProcessing(false);
     }
