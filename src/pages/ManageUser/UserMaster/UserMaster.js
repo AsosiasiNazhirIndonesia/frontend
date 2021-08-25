@@ -66,7 +66,7 @@ const UserMaster = (props) => {
               <SubmitButton
                 buttonText={"Add User"}
                 onClick={() => {
-                  history.push("/dashboard?menu=user-master&add_user=true");
+                  history.push(`/dashboard/ADMIN?menu=user-master&add_user=true`);
                 }}
               ></SubmitButton>
             </div>

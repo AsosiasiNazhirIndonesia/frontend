@@ -1,6 +1,6 @@
 import SubmitButton from "../../components/elements/SubmitButton/SubmitButton";
 import TableCertificate from "../../components/Table/TableCertificate";
-import { withRouter } from "react-router-dom";
+import { useParams, withRouter } from "react-router-dom";
 import { history } from "../../store";
 import React, { useEffect, useState } from "react";
 import CreateCertificate1 from "./CreateCertificate1";
@@ -23,7 +23,7 @@ import DigiCertContract from "../../contracts/digital_certificate";
 const ManageCertificate = (props) => {
   const [isDelete, setIsDelete] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(10);
   const [documentName, setDocumentName] = useState({
     status: INPUT_STATUS.INIT,
     value: "",
@@ -77,6 +77,7 @@ const ManageCertificate = (props) => {
   const view = new URLSearchParams(props.location.search).get(
     "view_certificate"
   );
+  const actor = useParams().actor;
 
   const getAllCertificates = async (offset, limit) => {
     const results = await API.getAllCertificates(offset, limit);
@@ -89,7 +90,6 @@ const ManageCertificate = (props) => {
 
       return names.substring(2, names.length);
     }
-
     for (const result of results) {
       newCertificates.push({
         id: result.certificate_id,
@@ -101,8 +101,9 @@ const ManageCertificate = (props) => {
         scAddress: result.sc_address
       });
     }
-
-    setCertificates(newCertificates);
+    if (newCertificates.length > 0) {
+      setCertificates(newCertificates);
+    }
   }
 
   useEffect(() => {
@@ -112,10 +113,6 @@ const ManageCertificate = (props) => {
   const indexOfLastPost = currentPage * itemsPerPage;
   const indexOfFirstPost = indexOfLastPost - itemsPerPage;
   const currentItems = certificates.slice(indexOfFirstPost, indexOfLastPost);
-
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
 
   const getInputValue = (key) => {
     switch (key) {
@@ -227,10 +224,22 @@ const ManageCertificate = (props) => {
     }
   };
 
+  const getDataToSign = (certificate) => {
+    const { receiver_name, no, 
+      title, description, score, date} = certificate;
+    const mergeCertificateData = receiver_name + no + title + description + score + date;
+    return web3.utils.keccak256(mergeCertificateData)
+  }
+
   const submit = async () => {
-    const mergeCertificateData = receiverName.value + certificateNo.value + 
-      certificateTitle.value + certificateDescription.value + certificateScore.value + certificateDate.value;
-    const certificateHash = web3.utils.keccak256(mergeCertificateData);
+    const certificateHash = getDataToSign({
+      receiver_name: receiverName.value,
+      no: certificateNo.value, 
+      title: certificateTitle.value,
+      description: certificateDescription.value,
+      score: certificateScore.value,
+      date: certificateDate.value
+    });
 
     let approvers = [];
     for (const assignToPubKey of assignToPubKeys) {
@@ -278,7 +287,7 @@ const ManageCertificate = (props) => {
         type: "success", 
         value: "Your certificate already on blockchain"});
 
-        history.push('/dashboard?menu=manage-certificate');
+        history.push(`/dashboard/${actor}?menu=manage-certificate`);
     } catch(e) {
       console.log(e);
       createNotification({
@@ -286,6 +295,13 @@ const ManageCertificate = (props) => {
         value: "Something went wrong"
       })
     } 
+  }
+
+  const getSignature = async (certificate) => {
+    const certificateHash = getDataToSign(certificate);
+    const accounts = await web3.eth.getAccounts();
+    const signature = await web3.eth.personal.sign(certificateHash, accounts[0]);
+    return signature;
   }
 
   const onDelete = async (data) => {
@@ -322,7 +338,7 @@ const ManageCertificate = (props) => {
 
   const resolveContent = () => {
     if (view) {
-      return <ViewCertificate />;
+      return <ViewCertificate actor={actor} getSignature={getSignature}/>;
     } else {
       switch (step) {
         case "1":
@@ -353,28 +369,30 @@ const ManageCertificate = (props) => {
         default:
           return (
             <React.Fragment>
-              {props.actor === ACTOR.ADMIN ?
+              {actor === ACTOR.ADMIN ?
               <div className="bef-table">
                 <div className="btn-add-certificate">
                   <SubmitButton
                     buttonText={"Create Certificate"}
                     onClick={() => {
                       history.push(
-                        "/dashboard?menu=manage-certificate&create_certificate_step=1"
+                        `/dashboard/${actor}?menu=manage-certificate&create_certificate_step=1`
                       );
                     }}
                   ></SubmitButton>
                 </div>
               </div> : <></>}
               <TableCertificate
-                certificates={currentItems}
+                certificates={certificates}
                 setIsDelete={setIsDelete}
-                actor={props.type}
+                actor={actor}
               />
               <Pagination
+                currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
                 totalItem={certificates.length}
-                paginate={paginate}
+                setCurrentPage={setCurrentPage}
+                reloadFunction={getAllCertificates}
               />
             </React.Fragment>
           );

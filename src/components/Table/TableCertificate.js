@@ -44,8 +44,8 @@ export default (props) => {
             >
               View
             </Link>
-            {props.type === ACTOR.ADMIN ? ',' : ''}
-            {props.type === ACTOR.ADMIN ?
+            {props.actor === ACTOR.ADMIN ? ',' : ''}
+            {props.actor === ACTOR.ADMIN ?
             <Link
               style={{ color: "red" }}
               to=""

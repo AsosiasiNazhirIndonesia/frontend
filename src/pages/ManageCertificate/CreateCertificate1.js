@@ -114,7 +114,6 @@ const CreateCertificate1 = (props) => {
             certificateScore={props.getInputValue("certificateScore").value}
             certificateDate={props.getInputValue("certificateDate").value}/>
         </div>
-        {/* <img src={template} alt="template certificate"></img> */}
       </div>
       <div className="btn-next">
         <SubmitButton
@@ -122,7 +121,7 @@ const CreateCertificate1 = (props) => {
           disabled={disabledButton()}
           onClick={() => {
             history.push(
-              "/dashboard?menu=manage-certificate&create_certificate_step=2"
+              "/dashboard/ADMIN?menu=manage-certificate&create_certificate_step=2"
             );
           }}
         ></SubmitButton>

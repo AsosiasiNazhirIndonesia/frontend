@@ -127,7 +127,7 @@ const CreateCertificate2 = (props) => {
             buttonText="Back"
             onClick={() => {
               history.push(
-                "/dashboard?menu=manage-certificate&create_certificate_step=1"
+                "/dashboard/ADMIN?menu=manage-certificate&create_certificate_step=1"
               );
             }}
           ></SubmitButton>
@@ -138,7 +138,7 @@ const CreateCertificate2 = (props) => {
             disabled={disabledSumbitBtn()}
             onClick={() => {
               history.push(
-                "/dashboard?menu=manage-certificate&create_certificate_step=3"
+                "/dashboard/ADMIN?menu=manage-certificate&create_certificate_step=3"
               );
             }}
           ></SubmitButton>

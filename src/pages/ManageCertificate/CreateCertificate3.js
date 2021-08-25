@@ -45,7 +45,7 @@ const CreateCertificate3 = (props) => {
             buttonText="Back"
             onClick={() => {
               history.push(
-                "/dashboard?menu=manage-certificate&create_certificate_step=2"
+                `/dashboard/ADMIN?menu=manage-certificate&create_certificate_step=2`
               );
             }}
           ></SubmitButton>
