@@ -8,14 +8,14 @@ import ReactNotification from "react-notifications-component"
 
 ReactDOM.render(
   <React.StrictMode>
-      <ReactNotification
-        types={[
-          {
-            htmlClasses: ["notification__item--awesome"],
-            name: "awesome",
-          },
-        ]}
-      />
+    <ReactNotification
+      types={[
+        {
+          htmlClasses: ["notification__item--awesome"],
+          name: "awesome",
+        },
+      ]}
+    />
     <App />
   </React.StrictMode>,
   document.getElementById("root")

@@ -344,7 +344,11 @@ const ManageCertificate = (props) => {
             />
           );
         case "3":
-          return <CreateCertificate3 sendToUser={sendToUser} assignToUsers={assignToUsers} submit={submit}/>;
+          return <CreateCertificate3 
+          sendToUser={sendToUser} 
+          assignToUsers={assignToUsers} 
+          getInputValue={getInputValue}
+          submit={submit}/>;
         default:
           return (
             <React.Fragment>

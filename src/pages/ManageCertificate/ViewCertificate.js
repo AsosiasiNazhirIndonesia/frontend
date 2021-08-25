@@ -8,6 +8,7 @@ import web3 from "../../services/web3";
 import { history } from "../../store";
 import "./ViewCertificate.scss";
 import ProgressBar from "../../components/elements/ProgressBar/ProgressBar";
+import CertificatePDF from "../../components/CertificatePDF/CertificatePDF";
 
 const ViewCertificate = (props) => {
   const [certificate, setCertificate] = useState({});
@@ -75,26 +76,16 @@ const ViewCertificate = (props) => {
         </div>
       </form>
       <ProgressBar progress={progressBarContent} />
-      {/* <form className="form-view-document">
-        <div className="view-before-signing">
-          <p>View document before signing :</p>
-          <div className="btn-view">
-            <SubmitButton buttonText="View"></SubmitButton>
-          </div>
-          <div className="btn-download">
-            <SubmitButton buttonText="Download"></SubmitButton>
-          </div>
-        </div>
-        <div className="view-after-signed">
-          <p>View document after signed :</p>
-          <div className="btn-view">
-            <SubmitButton buttonText="View"></SubmitButton>
-          </div>
-          <div className="btn-download">
-            <SubmitButton buttonText="Download"></SubmitButton>
-          </div>
-        </div>
-      </form> */}
+      <div className="pdf">
+        <CertificatePDF 
+          certificateTitle={certificate.title} 
+          receiverName={certificate.User.name}
+          certificateNo={certificate.no}
+          certificateDescription={certificate.description}
+          certificateScore={certificate.score}
+          certificateDate={certificate.date}
+          scAddress={certificate.sc_address}/>
+      </div>
       <div className="btn-done">
         <SubmitButton
           buttonText="Back"
