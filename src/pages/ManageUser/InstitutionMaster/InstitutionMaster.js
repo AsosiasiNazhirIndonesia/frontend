@@ -5,8 +5,9 @@ import TableInstitution from "../../../components/Table/TableInstitution";
 import AddEditInstitution from "./AddEditInstitution";
 import Delete from "../../../components/Popup/Delete";
 import Pagination from "../../../components/elements/Pagination/Pagination";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./InstitutionMaster.scss";
+import API from "../../../services/api";
 
 const InstitutionMaster = (props) => {
   const value = {};
@@ -15,40 +16,29 @@ const InstitutionMaster = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(2);
-  const [institutions, setInstitutions] = useState([
-    {
-      id: 1,
-      institutionName: "Politeknik Negeri Bandung",
-      email: "polban@polban.ac.id",
-      phoneNumber: "0222013789",
-      address:
-        "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
-    },
-    {
-      id: 2,
-      institutionName: "Politeknik Negeri Bandung",
-      email: "polban2@polban.ac.id",
-      phoneNumber: "0222013789",
-      address:
-        "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
-    },
-    {
-      id: 3,
-      institutionName: "Politeknik Negeri Bandung",
-      email: "polban3@polban.ac.id",
-      phoneNumber: "0222013789",
-      address:
-        "Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong, Kabupaten Bandung Barat, Jawa Barat 40559",
-    },
-  ]);
-  const indexOfLastPost = currentPage * itemsPerPage;
-  const indexOfFirstPost = indexOfLastPost - itemsPerPage;
-  const currentItems = institutions.slice(indexOfFirstPost, indexOfLastPost);
+  const [itemsPerPage] = useState(10);
+  const [institutions, setInstitutions] = useState([]);
 
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const getAllInstitutions = async (offset, limit) => {
+    const results = await API.getAllInstitutions(offset, limit);
+    const newRoles = [];
+    for (const result of results) {
+      newRoles.push({
+        id: result.institution_id,
+        institutionName: result.name,
+        email: result.email,
+        phoneNumber: result.phone_number,
+        address: result.address,
+      });
+    }
+    if (newRoles.length > 0) {
+      setInstitutions(newRoles);
+    }
   };
+
+  useEffect(() => {
+    getAllInstitutions(currentPage - 1, itemsPerPage);
+  }, []);
 
   return (
     <div className="institution-content">
@@ -72,14 +62,16 @@ const InstitutionMaster = (props) => {
         </div>
       </div>
       <TableInstitution
-        institutions={currentItems}
+        institutions={institutions}
         setIsEdit={setIsEdit}
         setIsDelete={setIsDelete}
       />
       <Pagination
+        currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         totalItem={institutions.length}
-        paginate={paginate}
+        setCurrentPage={setCurrentPage}
+        reloadFunction={getAllInstitutions}
       />
       <AddEditInstitution
         add={isAdd}

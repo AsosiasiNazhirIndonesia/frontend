@@ -120,7 +120,14 @@ const AddEditInstitution = (props) => {
             >
               Cancel
             </button>
-            <button className="btn-save">Save</button>
+            <button
+              className="btn-save"
+              onClick={async () => {
+                await props.submit();
+              }}
+            >
+              Save
+            </button>
           </div>
         </form>
       </div>

@@ -48,7 +48,13 @@ const AddEditUser = (props) => {
         </div>
         <div className="upload-photo">
           <p>Upload Photo</p>
-          <input type="file" className="custom-file-input" id="input" hidden />
+          <input
+            type="file"
+            className="custom-file-input"
+            id="input"
+            accept="image/*"
+            hidden
+          />
           <label for="input" className="browse-btn">
             Browse
           </label>

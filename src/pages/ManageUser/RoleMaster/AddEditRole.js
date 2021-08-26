@@ -29,7 +29,12 @@ const AddEditRole = (props) => {
             />
           </div>
           <div className="btn-group">
-            <button className="btn-cancel" onClick={() => props.setIsAdd(false)}>Cancel</button>
+            <button
+              className="btn-cancel"
+              onClick={() => props.setIsAdd(false)}
+            >
+              Cancel
+            </button>
             <button className="btn-save">Save</button>
           </div>
         </form>
@@ -49,7 +54,7 @@ const AddEditRole = (props) => {
               type="text"
               name="role-name-input"
               placeholder="Masukan Nama Role"
-              value={value}
+              value={props.getInputValue("roleName")}
             />
           </div>
           <div className="role-description">
@@ -58,12 +63,24 @@ const AddEditRole = (props) => {
               type="text"
               name="role-description-input"
               placeholder="Masukan Deskripsi"
-              value={value}
+              value={props.getInputValue("description")}
             />
           </div>
           <div className="btn-group">
-            <button className="btn-cancel" onClick={() => props.setIsEdit(false)}>Cancel</button>
-            <button className="btn-save">Save</button>
+            <button
+              className="btn-cancel"
+              onClick={() => props.setIsEdit(false)}
+            >
+              Cancel
+            </button>
+            <button
+              className="btn-save"
+              onClick={async () => {
+                await props.submit();
+              }}
+            >
+              Save
+            </button>
           </div>
         </form>
       </div>
