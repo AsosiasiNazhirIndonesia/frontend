@@ -1,21 +1,40 @@
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Pagination.scss";
 
-export default ({ itemsPerPage, totalItem, paginate }) => {
-  const pageNumbers = [];
+export default ({ currentPage, itemsPerPage, totalItem, paginate, reloadFunction, setCurrentPage }) => {
+  const reload = async (type) => {
+    let newCurrentPage = currentPage;
+    switch(type) {
+      case 'prev':
+        if (currentPage - 1 >= 1) {
+          newCurrentPage = currentPage - 1;
+        }
+        break;
+      case 'next':
+        if (totalItem >= itemsPerPage) {
+          newCurrentPage = currentPage + 1;
+        }
+        break;
+    }
 
-  for (let i = 1; i <= Math.ceil(totalItem / itemsPerPage); i++) {
-    pageNumbers.push(i);
+    await reloadFunction(newCurrentPage - 1, itemsPerPage);
+    setCurrentPage(newCurrentPage);
   }
+
   return (
     <nav>
       <ul className="pagination">
-        {pageNumbers.map((number) => (
-          <li key={number} className="page-item">
-            <a onClick={() => paginate(number)} className="page-link">
-              {number}
-            </a>
-          </li>
-        ))}
+        <li className="page-item" onClick={() => reload('prev')}>
+          <div  className="page-link">
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </div>
+        </li>
+        <li className="page-item" onClick={() => reload('next')}>
+          <div  className="page-link">
+            <FontAwesomeIcon icon={faArrowRight} />
+          </div>
+        </li>
       </ul>
     </nav>
   );

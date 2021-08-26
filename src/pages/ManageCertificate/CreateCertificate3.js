@@ -3,6 +3,7 @@ import template from "../../assets/images/CertificateTemplate.jpg";
 import "./CreateCertificate3.scss";
 import React, { useState } from "react";
 import { history } from "../../store";
+import CertificatePDF from "../../components/CertificatePDF/CertificatePDF";
 
 const CreateCertificate3 = (props) => {
   const [isProcessing, setProcessing] = useState(false);
@@ -29,7 +30,13 @@ const CreateCertificate3 = (props) => {
         </div>
       </form>
       <form className="form-certificate">
-        <img src={template} alt="template certificate"></img>
+        <CertificatePDF 
+            certificateTitle={props.getInputValue("certificateTitle").value} 
+            receiverName={props.getInputValue("receiverName").value}
+            certificateNo={props.getInputValue("certificateNo").value}
+            certificateDescription={props.getInputValue("certificateDescription").value}
+            certificateScore={props.getInputValue("certificateScore").value}
+            certificateDate={props.getInputValue("certificateDate").value}/>
       </form>
       <div className="btn-back-next">
         <div className="btn-back">
@@ -38,7 +45,7 @@ const CreateCertificate3 = (props) => {
             buttonText="Back"
             onClick={() => {
               history.push(
-                "/dashboard?menu=manage-certificate&create_certificate_step=2"
+                `/dashboard/ADMIN?menu=manage-certificate&create_certificate_step=2`
               );
             }}
           ></SubmitButton>

@@ -26,14 +26,14 @@ export default (props) => {
       <React.Fragment>
         <div
           className={!props.menu ? "menu active" : "menu"}
-          onClick={() => history.push(`/dashboard`)}
+          onClick={() => history.push(`/dashboard/${props.actor}`)}
         >
           <img src={menuIcon} />
           <span>Dashboard</span>
         </div>
         <div
           className={props.menu === "manage-certificate" ? "menu active" : "menu"}
-          onClick={() => history.push(`/dashboard?menu=manage-certificate`)}
+          onClick={() => history.push(`/dashboard/${props.actor}?menu=manage-certificate`)}
         >
           <img src={menuIcon} />
           <span>Manage Certificates</span>
@@ -51,7 +51,7 @@ export default (props) => {
               className={
                 props.menu === "role-master" ? "menu sub active" : "menu sub"
               }
-              onClick={() => history.push(`/dashboard?menu=role-master`)}
+              onClick={() => history.push(`/dashboard/${props.actor}?menu=role-master`)}
             >
               <img src={menuIcon} />
               <span>Role Master</span>
@@ -62,7 +62,7 @@ export default (props) => {
                   ? "menu sub active"
                   : "menu sub"
               }
-              onClick={() => history.push(`/dashboard?menu=institution-master`)}
+              onClick={() => history.push(`/dashboard/${props.actor}?menu=institution-master`)}
             >
               <img src={menuIcon} />
               <span>Institution Master</span>
@@ -71,7 +71,7 @@ export default (props) => {
               className={
                 props.menu === "user-master" ? "menu sub active" : "menu sub"
               }
-              onClick={() => history.push(`/dashboard?menu=user-master`)}
+              onClick={() => history.push(`/dashboard/${props.actor}?menu=user-master`)}
             >
               <img src={menuIcon} />
               <span>User Master</span>
@@ -96,7 +96,7 @@ export default (props) => {
         </div>
         <div
           className={props.menu === "manage-certificate" ? "menu active" : "menu"}
-          onClick={() => history.push("/dashboard?menu=manage-certificate")}
+          onClick={() => history.push("/dashboard/USER?menu=manage-certificate")}
         >
           <img src={menuIcon} />
           <span>My Certificates</span>

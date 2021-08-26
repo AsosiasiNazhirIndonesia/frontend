@@ -100,14 +100,13 @@
 }
 
 .profile-options {
-    position: relative;
-    top: 0px;
-    left: -80px;
+    position: sticky;
 }
 
 .profile-options .menu {
     position: absolute;
     top: 0;
+    left: -30px;
     z-index: 10;
 
     background: white;

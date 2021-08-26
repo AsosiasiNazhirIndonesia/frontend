@@ -13,5 +13,6 @@ export const Routes = () => (
     <Route path="/signin" exact component={SignInPage} />
     <Route path="/profile" exact component={ProfilePage} />
     <Route path="/dashboard" exact component={Dashboard} />
+    <Route path="/dashboard/:actor" exact component={Dashboard} />
   </Router>
 );

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { Redirect, useParams, withRouter } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import SearchCertificate from "../../components/SearchCertifcate/SearchCertificate";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { ACTOR, ACTOR_TOKEN } from "../../constants/component.constant";
-import { setAdmin, setUser } from "../../modules/actions/actor.action";
+import { setActorType, setAdmin, setUser } from "../../modules/actions/actor.action";
 import ManageCertificate from "../ManageCertificate/ManageCertificate";
 import InstitutionMaster from "../ManageUser/InstitutionMaster/InstitutionMaster";
 import RoleMaster from "../ManageUser/RoleMaster/RoleMaster";
@@ -14,9 +14,10 @@ import API from "../../services/api";
 import jwt from "jsonwebtoken";
 import "./Dashboard.scss";
 import { history } from "../../store";
+import { ACTION_TYPE } from "../../constants/action.type";
 
 const Dashboard = (props) => {
-  const actor =  props.type;
+  const actor =  useParams().actor;
   const menu = new URLSearchParams(props.location.search).get("menu");
 
   const getToken = () => {
@@ -30,6 +31,11 @@ const Dashboard = (props) => {
 
   const getActorDetails = async () => {
     const token = getToken();
+    if (!token) {
+      history.push('/signin');
+      return;
+    }
+
     const decodedToken = jwt.decode(token);
     if (actor === ACTOR.ADMIN) {
       await props.getAdmin(decodedToken.public_key);
@@ -83,6 +89,10 @@ const Dashboard = (props) => {
     history.push('/signin');
   }
 
+  if (!actor) {
+    return <Redirect to="/dashboard/USER"/>;
+  }
+
   return (
     <div className="dashboard">
       <Header type={actor} actor={resolveActor()} logout={logout} />
@@ -104,6 +114,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     async getUser(publicKey) {
       try {
+        dispatch(setActorType(ACTOR.USER));
         dispatch(setUser(await API.getUserByPublicKey(publicKey)));
       } catch (e) {
           console.log(e);
@@ -112,6 +123,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     async getAdmin(publicKey) {
       try {
+        dispatch(setActorType(ACTOR.ADMIN));
         dispatch(setAdmin(await API.getAdminByPublicKey(publicKey)));
       } catch (e) {
           console.log(e);

@@ -16,14 +16,14 @@ class TableUser extends Component {
           <td>
             <Link
               style={{ color: "black" }}
-              to={"/dashboard?menu=user-master&view_user=true"}
+              to={"/dashboard/ADMIN?menu=user-master&view_user=true"}
             >
               View
             </Link>
             ,{" "}
             <Link
               style={{ color: "black" }}
-              to={"/dashboard?menu=user-master&edit_user=true"}
+              to={"/dashboard/ADMIN?menu=user-master&edit_user=true"}
             >
               Edit
             </Link>

@@ -39,7 +39,7 @@ const ViewDataUser = (props) => {
       <div className="btn-back">
         <SubmitButton
           buttonText="Back"
-          onClick={() => history.push("/dashboard?menu=user-master")}
+          onClick={() => history.push("/dashboard/ADMIN?menu=user-master")}
         />
       </div>
     </React.Fragment>

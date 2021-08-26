@@ -1,11 +1,10 @@
 import SubmitButton from "../../components/elements/SubmitButton/SubmitButton";
 import InputField from "../../components/elements/InputField/InputField";
-import template from "../../assets/images/CertificateTemplate.jpg";
-import ProgressBar from "../../components/elements/ProgressBar/ProgressBar";
 import "./CreateCertificate1.scss";
 import React from "react";
 import { history } from "../../store";
 import { INPUT_STATUS } from "../../constants/component.constant";
+import CertificatePDF from "../../components/CertificatePDF/CertificatePDF";
 
 const CreateCertificate1 = (props) => {
   const disabledButton = () => {
@@ -106,7 +105,15 @@ const CreateCertificate1 = (props) => {
             ></InputField>
           </div>
         </div>
-        <img src={template} alt="template certificate"></img>
+        <div className="pdf">
+          <CertificatePDF 
+            certificateTitle={props.getInputValue("certificateTitle").value} 
+            receiverName={props.getInputValue("receiverName").value}
+            certificateNo={props.getInputValue("certificateNo").value}
+            certificateDescription={props.getInputValue("certificateDescription").value}
+            certificateScore={props.getInputValue("certificateScore").value}
+            certificateDate={props.getInputValue("certificateDate").value}/>
+        </div>
       </div>
       <div className="btn-next">
         <SubmitButton
@@ -114,7 +121,7 @@ const CreateCertificate1 = (props) => {
           disabled={disabledButton()}
           onClick={() => {
             history.push(
-              "/dashboard?menu=manage-certificate&create_certificate_step=2"
+              "/dashboard/ADMIN?menu=manage-certificate&create_certificate_step=2"
             );
           }}
         ></SubmitButton>
