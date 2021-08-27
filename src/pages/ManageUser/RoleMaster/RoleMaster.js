@@ -1,4 +1,4 @@
-import { withRouter } from "react-router-dom";
+import { useParams, withRouter } from "react-router-dom";
 import SubmitButton from "../../../components/elements/SubmitButton/SubmitButton";
 import InputField from "../../../components/elements/InputField/InputField";
 import TableRole from "../../../components/Table/TableRole";
@@ -10,6 +10,7 @@ import { createNotification } from "../../../components/Notification/Notificatio
 import "./RoleMaster.scss";
 import { useState, useEffect } from "react";
 import { history } from "../../../store";
+import { INPUT_STATUS } from "../../../constants/component.constant";
 
 const RoleMaster = (props) => {
   const [isAdd, setIsAdd] = useState(false);
@@ -18,6 +19,20 @@ const RoleMaster = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [roles, setRoles] = useState([]);
+  const [roleId, setRoleId] = useState({
+    value: "",
+  });
+  const [roleName, setRoleName] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const [description, setDescription] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+  const actor = useParams().actor;
 
   const getAllRoles = async (offset, limit) => {
     const results = await API.getAllRoles(offset, limit);
@@ -38,77 +53,85 @@ const RoleMaster = (props) => {
     getAllRoles(currentPage - 1, itemsPerPage);
   }, []);
 
-  // const submit = async () => {
-  // const certificateHash = getDataToSign({
-  //   receiver_name: receiverName.value,
-  //   no: certificateNo.value,
-  //   title: certificateTitle.value,
-  //   description: certificateDescription.value,
-  //   score: certificateScore.value,
-  //   date: certificateDate.value
-  // });
+  const submit = async () => {
+    try {
+      API.addRole({
+        name: roleName.value,
+        description: description.value,
+      });
+      createNotification({
+        type: "success",
+        value: "Your roles already on blockchain",
+      });
+      history.push(`/dashboard/${actor}?menu=role-master`);
+    } catch (e) {
+      console.log(e);
+      createNotification({
+        type: "error",
+        value: "Something went wrong",
+      });
+    }
+  };
 
-  // let approvers = [];
-  // for (const assignToPubKey of assignToPubKeys) {
-  //   approvers.push(assignToPubKey.value);
-  // }
-
-  // const tx = DigitalCertificate.deploy(certificateHash, sendToPubKey.value, approvers);
-  // const accounts = await web3.eth.getAccounts();
-  // try {
-  //   createNotification({
-  //     type: "info",
-  //     value:
-  //       "Please check your metamask and stay on this page until certificate has been deployed to blockchain",
-  //   });
-  // const res = await tx.send({
-  //   from: accounts[0],
-  //   gas: 3000000,
-  //   gasPrice: '100000000000'
-  // });
-
-  // const certificate_signers = [];
-  // let index = 0;
-  // for (const assignToUser of assignToUsers) {
-  //   certificate_signers.push({
-  //     user_id: assignToUser.user_id,
-  //     priority: index
-  //   });
-  //   index++;
-  // }
-
-  //     API.addRole({
-  //       id: props.role_id,
-  //       roleName: props.name,
-  //       description: props.description,
-  //     });
-
-  //     createNotification({
-  //       type: "success",
-  //       value: "Your certificate already on blockchain",
-  //     });
-
-  //     history.push(`/dashboard/${actor}?menu=manage-certificate`);
-  //   } catch (e) {
-  //     console.log(e);
-  //     createNotification({
-  //       type: "error",
-  //       value: "Something went wrong",
-  //     });
-  //   }
-  // };
+  const update = async () => {
+    try {
+      API.updateRole({
+        role_id: roleId.value,
+        name: roleName.value,
+        description: description.value,
+      });
+      createNotification({
+        type: "success",
+        value: "Your roles updated on blockchain",
+      });
+      history.push(`/dashboard/${actor}?menu=role-master`);
+    } catch (e) {
+      console.log(e);
+      createNotification({
+        type: "error",
+        value: "Something went wrong",
+      });
+    }
+  };
   const value = {};
 
-  // const getInputValue = (key) => {
-  //   switch (key) {
-  //     case "roleId":
-  //       return roleId;
-  //     case "roleName":
-  //       return roleName;
-  //     case "description":
-  //       return description;
-  //   }
-  // };
+  const getInputValue = (key) => {
+    switch (key) {
+      case "roleId":
+        return roleId;
+      case "roleName":
+        return roleName;
+      case "description":
+        return description;
+    }
+  };
+
+  const setInputValue = (key, value) => {
+    let status =
+      value && value != "" ? INPUT_STATUS.VALID : INPUT_STATUS.INVALID;
+
+    switch (key) {
+      case "roleId":
+        setRoleId({
+          value: value,
+        });
+        break;
+      case "roleName":
+        setRoleName({
+          status,
+          value: value,
+          errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
+        });
+        break;
+      case "description":
+        setDescription({
+          status,
+          value: value,
+          errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
+        });
+        break;
+    }
+  };
 
   return (
     <div className="role-content">
@@ -117,7 +140,6 @@ const RoleMaster = (props) => {
       </div>
       <div className="bef-table">
         <div className="btn-add-role">
-          {/* <button onClick={addRole}>Add Role</button> */}
           <SubmitButton
             buttonText={"Add Role"}
             onClick={() => setIsAdd(true)}
@@ -133,6 +155,7 @@ const RoleMaster = (props) => {
         </div>
       </div>
       <TableRole
+        setInputValue={setInputValue}
         roles={roles}
         setIsEdit={setIsEdit}
         setIsDelete={setIsDelete}
@@ -145,11 +168,14 @@ const RoleMaster = (props) => {
         reloadFunction={getAllRoles}
       />
       <AddEditRole
+        getInputValue={getInputValue}
+        setInputValue={setInputValue}
         add={isAdd}
         edit={isEdit}
         setIsAdd={setIsAdd}
         setIsEdit={setIsEdit}
-        // getInputValue={getInputValue}
+        submit={submit}
+        update={update}
       />
       <Delete delete={isDelete} setIsDelete={setIsDelete} />
     </div>

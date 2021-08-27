@@ -16,6 +16,9 @@ class TableRole extends Component {
               to=""
               onClick={(e) => {
                 e.preventDefault();
+                this.props.setInputValue("roleId", id);
+                this.props.setInputValue("roleName", roleName);
+                this.props.setInputValue("description", description);
                 this.props.setIsEdit(true);
               }}
             >

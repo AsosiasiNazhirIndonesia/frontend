@@ -16,7 +16,10 @@ const AddEditInstitution = (props) => {
               type="text"
               name="institution-name-input"
               placeholder="Masukan Nama Institusi"
-              value={value}
+              value={props.getInputValue("institutionName")}
+              onChange={(e) =>
+                props.setInputValue("institutionName", e.target.value)
+              }
             />
           </div>
           <div className="institution-email">
@@ -27,7 +30,8 @@ const AddEditInstitution = (props) => {
               type="text"
               name="institution-email-input"
               placeholder="Masukan Email Institusi"
-              value={value}
+              value={props.getInputValue("email")}
+              onChange={(e) => props.setInputValue("email", e.target.value)}
             />
           </div>
           <div className="institution-phoneNumber">
@@ -38,7 +42,10 @@ const AddEditInstitution = (props) => {
               type="text"
               name="institution-phoneNumber-input"
               placeholder="Masukan Nomor Telepon Institusi"
-              value={value}
+              value={props.getInputValue("phoneNumber")}
+              onChange={(e) =>
+                props.setInputValue("phoneNumber", e.target.value)
+              }
             />
           </div>
           <div className="institution-address">
@@ -49,7 +56,8 @@ const AddEditInstitution = (props) => {
               type="text"
               name="institution-address"
               placeholder="Masukan Alamat Institusi"
-              value={value}
+              value={props.getInputValue("address")}
+              onChange={(e) => props.setInputValue("address", e.target.value)}
             />
           </div>
           <div className="btn-group">
@@ -59,7 +67,15 @@ const AddEditInstitution = (props) => {
             >
               Cancel
             </button>
-            <button className="btn-save">Save</button>
+            <button
+              className="btn-save"
+              onClick={async () => {
+                await props.submit();
+                props.setIsAdd(false);
+              }}
+            >
+              Save
+            </button>
           </div>
         </form>
       </div>
@@ -77,7 +93,10 @@ const AddEditInstitution = (props) => {
               type="text"
               name="institution-name-input"
               placeholder="Masukan Nama Institusi"
-              value={value}
+              value={props.getInputValue("institutionName")}
+              onChange={(e) =>
+                props.setInputValue("institutionName", e.target.value)
+              }
             />
           </div>
           <div className="institution-description">
@@ -88,7 +107,8 @@ const AddEditInstitution = (props) => {
               type="text"
               name="institution-email-input"
               placeholder="Masukan Email Institusi"
-              value={value}
+              value={props.getInputValue("email")}
+              onChange={(e) => props.setInputValue("email", e.target.value)}
             />
           </div>
           <div className="institution-phoneNumber">
@@ -99,7 +119,10 @@ const AddEditInstitution = (props) => {
               type="text"
               name="institution-phoneNumber-input"
               placeholder="Masukan Nomor Telepon Institusi"
-              value={value}
+              value={props.getInputValue("phoneNumber")}
+              onChange={(e) =>
+                props.setInputValue("phoneNumber", e.target.value)
+              }
             />
           </div>
           <div className="institution-address">
@@ -110,7 +133,8 @@ const AddEditInstitution = (props) => {
               type="text"
               name="institution-address"
               placeholder="Masukan Alamat Institusi"
-              value={value}
+              value={props.getInputValue("address")}
+              onChange={(e) => props.setInputValue("address", e.target.value)}
             />
           </div>
           <div className="btn-group">
@@ -123,7 +147,8 @@ const AddEditInstitution = (props) => {
             <button
               className="btn-save"
               onClick={async () => {
-                await props.submit();
+                await props.update();
+                props.setIsEdit(false);
               }}
             >
               Save

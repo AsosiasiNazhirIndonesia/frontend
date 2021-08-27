@@ -87,7 +87,7 @@ API.getCertificateById = async (certificateId) => {
 //role
 API.addRole = async (request) => {
   try {
-    const url = `${HOST}/api/role`;
+    const url = `${HOST}/api/roles`;
     const result = (await axios.post(url, request)).data;
     return result.data;
   } catch (e) {
@@ -105,20 +105,30 @@ API.getAllRoles = async (offset, limit) => {
   }
 };
 
-API.getRoleById = async (roleId) => {
+API.updateRole = async (request) => {
   try {
-    const url = `${HOST}/api/roles/${roleId}`;
-    const result = (await axios.get(url)).data;
+    const url = `${HOST}/api/roles`;
+    const result = (await axios.put(url, request)).data;
     return result.data;
   } catch (e) {
     throw getErrorMessage(e);
   }
 };
 
+// API.deleteRole = async (request) => {
+//   try {
+//     const url = `${HOST}/api/roles`;
+//     const result = (await axios.delete(url, request)).data;
+//     return result.data;
+//   } catch (e) {
+//     throw getErrorMessage(e);
+//   }
+// };
+
 //institution
 API.addInstitution = async (request) => {
   try {
-    const url = `${HOST}/api/institution`;
+    const url = `${HOST}/api/institutions`;
     const result = (await axios.post(url, request)).data;
     return result.data;
   } catch (e) {
@@ -136,10 +146,10 @@ API.getAllInstitutions = async (offset, limit) => {
   }
 };
 
-API.getInstitutionById = async (institutionId) => {
+API.updateInstitution = async (request) => {
   try {
-    const url = `${HOST}/api/institutions/${institutionId}`;
-    const result = (await axios.get(url)).data;
+    const url = `${HOST}/api/institutions`;
+    const result = (await axios.put(url, request)).data;
     return result.data;
   } catch (e) {
     throw getErrorMessage(e);

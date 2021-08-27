@@ -18,6 +18,11 @@ class TableInstitution extends Component {
               to=""
               onClick={(e) => {
                 e.preventDefault();
+                this.props.setInputValue("institutionId", id);
+                this.props.setInputValue("institutionName", institutionName);
+                this.props.setInputValue("email", email);
+                this.props.setInputValue("phoneNumber", phoneNumber);
+                this.props.setInputValue("address", address);
                 this.props.setIsEdit(true);
               }}
             >
