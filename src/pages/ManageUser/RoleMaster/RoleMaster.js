@@ -42,6 +42,7 @@ const RoleMaster = (props) => {
         id: result.role_id,
         roleName: result.name,
         description: result.description,
+        deletedDate: result.deleted_date,
       });
     }
     if (newRoles.length > 0) {
@@ -83,6 +84,26 @@ const RoleMaster = (props) => {
       createNotification({
         type: "success",
         value: "Your roles updated on blockchain",
+      });
+      history.push(`/dashboard/${actor}?menu=role-master`);
+    } catch (e) {
+      console.log(e);
+      createNotification({
+        type: "error",
+        value: "Something went wrong",
+      });
+    }
+  };
+
+  const del = async () => {
+    try {
+      //console.log(roleId.value);
+      API.deleteRole({
+        role_id: roleId.value,
+      });
+      createNotification({
+        type: "success",
+        value: "Your roles deleted on blockchain",
       });
       history.push(`/dashboard/${actor}?menu=role-master`);
     } catch (e) {
@@ -177,7 +198,7 @@ const RoleMaster = (props) => {
         submit={submit}
         update={update}
       />
-      <Delete delete={isDelete} setIsDelete={setIsDelete} />
+      <Delete delete={isDelete} setIsDelete={setIsDelete} del={del} />
     </div>
   );
 };

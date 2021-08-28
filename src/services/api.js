@@ -115,15 +115,16 @@ API.updateRole = async (request) => {
   }
 };
 
-// API.deleteRole = async (request) => {
-//   try {
-//     const url = `${HOST}/api/roles`;
-//     const result = (await axios.delete(url, request)).data;
-//     return result.data;
-//   } catch (e) {
-//     throw getErrorMessage(e);
-//   }
-// };
+API.deleteRole = async (params) => {
+  try {
+    const url = `${HOST}/api/roles`;
+    const result = (await axios.delete(url, { data: params })).data;
+    console.log(result.data);
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
 
 //institution
 API.addInstitution = async (request) => {
@@ -150,6 +151,17 @@ API.updateInstitution = async (request) => {
   try {
     const url = `${HOST}/api/institutions`;
     const result = (await axios.put(url, request)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.deleteInstitution = async (params) => {
+  try {
+    const url = `${HOST}/api/institutions`;
+    const result = (await axios.delete(url, { data: params })).data;
+    console.log(result.data);
     return result.data;
   } catch (e) {
     throw getErrorMessage(e);

@@ -60,6 +60,18 @@ const AddEditInstitution = (props) => {
               onChange={(e) => props.setInputValue("address", e.target.value)}
             />
           </div>
+          <div className="institution-type">
+            <p>
+              Institution Address <font color="red">*</font>
+            </p>
+            <InputField
+              type="text"
+              name="institution-type"
+              placeholder="Masukan Tipe Institusi"
+              value={props.getInputValue("type")}
+              onChange={(e) => props.setInputValue("type", e.target.value)}
+            />
+          </div>
           <div className="btn-group">
             <button
               className="btn-cancel"
@@ -99,7 +111,7 @@ const AddEditInstitution = (props) => {
               }
             />
           </div>
-          <div className="institution-description">
+          <div className="institution-email">
             <p>
               Institution Email <font color="red">*</font>
             </p>
@@ -135,6 +147,18 @@ const AddEditInstitution = (props) => {
               placeholder="Masukan Alamat Institusi"
               value={props.getInputValue("address")}
               onChange={(e) => props.setInputValue("address", e.target.value)}
+            />
+          </div>
+          <div className="institution-type">
+            <p>
+              Institution Address <font color="red">*</font>
+            </p>
+            <InputField
+              type="text"
+              name="institution-type"
+              placeholder="Masukan Tipe Institusi"
+              value={props.getInputValue("type")}
+              onChange={(e) => props.setInputValue("type", e.target.value)}
             />
           </div>
           <div className="btn-group">

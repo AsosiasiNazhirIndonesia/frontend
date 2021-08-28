@@ -44,6 +44,11 @@ const InstitutionMaster = (props) => {
     value: "",
     errorMessage: "",
   });
+  const [type, setType] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
   const actor = useParams().actor;
 
   const getAllInstitutions = async (offset, limit) => {
@@ -56,6 +61,8 @@ const InstitutionMaster = (props) => {
         email: result.email,
         phoneNumber: result.phone_number,
         address: result.address,
+        type: result.type,
+        deletedDate: result.deleted_date,
       });
     }
     if (newInstitutions.length > 0) {
@@ -70,7 +77,7 @@ const InstitutionMaster = (props) => {
         email: email.value,
         phone_number: phoneNumber.value,
         address: address.value,
-        type: "UNIVERSITY",
+        type: type.value,
       });
       createNotification({
         type: "success",
@@ -94,11 +101,30 @@ const InstitutionMaster = (props) => {
         email: email.value,
         phone_number: phoneNumber.value,
         address: address.value,
-        type: "UNIVERSITY",
+        type: type.value,
       });
       createNotification({
         type: "success",
         value: "Your institution updated on blockchain",
+      });
+      history.push(`/dashboard/${actor}?menu=institution-master`);
+    } catch (e) {
+      console.log(e);
+      createNotification({
+        type: "error",
+        value: "Something went wrong",
+      });
+    }
+  };
+
+  const del = async () => {
+    try {
+      API.deleteInstitution({
+        institution_id: institutionId.value,
+      });
+      createNotification({
+        type: "success",
+        value: "Your institution deleted on blockchain",
       });
       history.push(`/dashboard/${actor}?menu=institution-master`);
     } catch (e) {
@@ -126,6 +152,8 @@ const InstitutionMaster = (props) => {
         return phoneNumber;
       case "address":
         return address;
+      case "type":
+        return type;
     }
   };
 
@@ -162,6 +190,13 @@ const InstitutionMaster = (props) => {
         break;
       case "address":
         setAddress({
+          status,
+          value: value,
+          errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
+        });
+        break;
+      case "type":
+        setType({
           status,
           value: value,
           errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
@@ -214,7 +249,7 @@ const InstitutionMaster = (props) => {
         getInputValue={getInputValue}
         setInputValue={setInputValue}
       />
-      <Delete delete={isDelete} setIsDelete={setIsDelete} />
+      <Delete delete={isDelete} setIsDelete={setIsDelete} del={del} />
     </div>
   );
 };
