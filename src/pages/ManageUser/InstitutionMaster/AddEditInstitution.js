@@ -1,3 +1,4 @@
+import { toUpperCase } from "js-convert-case";
 import InputField from "../../../components/elements/InputField/InputField";
 import "./AddEditInstitution.scss";
 
@@ -69,7 +70,9 @@ const AddEditInstitution = (props) => {
               name="institution-type"
               placeholder="Masukan Tipe Institusi"
               value={props.getInputValue("type")}
-              onChange={(e) => props.setInputValue("type", e.target.value)}
+              onChange={(e) =>
+                props.setInputValue("type", toUpperCase(e.target.value))
+              }
             />
           </div>
           <div className="btn-group">
@@ -158,7 +161,9 @@ const AddEditInstitution = (props) => {
               name="institution-type"
               placeholder="Masukan Tipe Institusi"
               value={props.getInputValue("type")}
-              onChange={(e) => props.setInputValue("type", e.target.value)}
+              onChange={(e) =>
+                props.setInputValue("type", toUpperCase(e.target.value))
+              }
             />
           </div>
           <div className="btn-group">
