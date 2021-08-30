@@ -29,6 +29,10 @@
   }
   .institution-type {
     padding-bottom: 3rem;
+    select {
+      width: 50%;
+      height: 3rem;
+    }
   }
   .btn-group {
     width: 100%;

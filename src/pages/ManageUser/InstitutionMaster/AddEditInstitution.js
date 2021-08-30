@@ -1,4 +1,4 @@
-import { toUpperCase } from "js-convert-case";
+import { useState } from "react";
 import InputField from "../../../components/elements/InputField/InputField";
 import "./AddEditInstitution.scss";
 
@@ -65,15 +65,14 @@ const AddEditInstitution = (props) => {
             <p>
               Institution Type <font color="red">*</font>
             </p>
-            <InputField
-              type="text"
-              name="institution-type"
-              placeholder="Masukan Tipe Institusi"
-              value={props.getInputValue("type")}
-              onChange={(e) =>
-                props.setInputValue("type", toUpperCase(e.target.value))
-              }
-            />
+            <select
+              id="dropdown"
+              value={props.getInputValue("address").value}
+              onChange={(e) => props.setInputValue("address", e.target.value)}
+            >
+              <option value="COMPANY">COMPANY</option>
+              <option value="UNIVERSITY">UNIVERSITY</option>
+            </select>
           </div>
           <div className="btn-group">
             <button
@@ -156,15 +155,14 @@ const AddEditInstitution = (props) => {
             <p>
               Institution Type <font color="red">*</font>
             </p>
-            <InputField
-              type="text"
-              name="institution-type"
-              placeholder="Masukan Tipe Institusi"
-              value={props.getInputValue("type")}
-              onChange={(e) =>
-                props.setInputValue("type", toUpperCase(e.target.value))
-              }
-            />
+            <select
+              id="dropdown"
+              value={props.getInputValue("address").value}
+              onChange={(e) => props.setInputValue("address", e.target.value)}
+            >
+              <option value="COMPANY">COMPANY</option>
+              <option value="UNIVERSITY">UNIVERSITY</option>
+            </select>
           </div>
           <div className="btn-group">
             <button
