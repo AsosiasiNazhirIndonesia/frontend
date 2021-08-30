@@ -62,7 +62,7 @@ const AddEditInstitution = (props) => {
           </div>
           <div className="institution-type">
             <p>
-              Institution Address <font color="red">*</font>
+              Institution Type <font color="red">*</font>
             </p>
             <InputField
               type="text"
@@ -151,7 +151,7 @@ const AddEditInstitution = (props) => {
           </div>
           <div className="institution-type">
             <p>
-              Institution Address <font color="red">*</font>
+              Institution Type <font color="red">*</font>
             </p>
             <InputField
               type="text"
