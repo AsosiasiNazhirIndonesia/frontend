@@ -1,6 +1,32 @@
 .inputField {
   width: auto;
   width: 100%;
+
+  .Dropdown-root {
+    width: 100%;
+    .Dropdown-control {
+      background-color: inherit !important;
+      border: none;
+      padding: 0;
+      margin: 0;
+
+      height: 64px;
+      padding: 16px 32px;
+      font-size: 16px;
+      text-align: left;
+
+      display: flex;
+      align-items: center;
+    }
+
+    .Dropdown-option {
+      text-align: left;
+    }
+    
+    .Dropdown-arrow {
+      top: 30px
+    }
+  }
 }
 
 .inputField .input-span .text-input {
@@ -74,15 +100,16 @@
   flex-flow: row wrap;
   align-items: center;
   border: none;
-  font-family: "Inter-Regular";
-  font-size: 16px;
-  font-weight: 500;
-  color: #172b4d;
   background: transparent;
   padding: 11px 8px;
   width: 100%;
   margin: 0;
   text-align: left;
+
+  .react-date-picker__wrapper {
+    border: none;
+    font-family: inherit !important;
+  }
 }
 
 .small-error {

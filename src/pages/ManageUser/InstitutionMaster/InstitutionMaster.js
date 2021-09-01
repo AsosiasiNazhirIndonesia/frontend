@@ -46,7 +46,7 @@ const InstitutionMaster = (props) => {
   });
   const [type, setType] = useState({
     status: INPUT_STATUS.INIT,
-    value: "",
+    value: "UNIVERSITY",
     errorMessage: "",
   });
   const actor = useParams().actor;
@@ -72,7 +72,7 @@ const InstitutionMaster = (props) => {
 
   const submit = async () => {
     try {
-      API.addInstitution({
+      await API.addInstitution({
         name: institutionName.value,
         email: email.value,
         phone_number: phoneNumber.value,
@@ -81,9 +81,9 @@ const InstitutionMaster = (props) => {
       });
       createNotification({
         type: "success",
-        value: "Your institution already on blockchain",
+        value: "Create institution success",
       });
-      history.push(`/dashboard/${actor}?menu=institution-master`);
+      getAllInstitutions(currentPage - 1, itemsPerPage);
     } catch (e) {
       console.log(e);
       createNotification({
@@ -95,7 +95,7 @@ const InstitutionMaster = (props) => {
 
   const update = async () => {
     try {
-      API.updateInstitution({
+      await API.updateInstitution({
         institution_id: institutionId.value,
         name: institutionName.value,
         email: email.value,
@@ -105,9 +105,9 @@ const InstitutionMaster = (props) => {
       });
       createNotification({
         type: "success",
-        value: "Your institution updated on blockchain",
+        value: "Update institution success",
       });
-      history.push(`/dashboard/${actor}?menu=institution-master`);
+      getAllInstitutions(currentPage - 1, itemsPerPage);
     } catch (e) {
       console.log(e);
       createNotification({
@@ -119,14 +119,14 @@ const InstitutionMaster = (props) => {
 
   const del = async () => {
     try {
-      API.deleteInstitution({
+      await API.deleteInstitution({
         institution_id: institutionId.value,
       });
       createNotification({
         type: "success",
-        value: "Your institution deleted on blockchain",
+        value: "Delete institution success",
       });
-      history.push(`/dashboard/${actor}?menu=institution-master`);
+      getAllInstitutions(currentPage - 1, itemsPerPage);
     } catch (e) {
       console.log(e);
       createNotification({
@@ -157,9 +157,9 @@ const InstitutionMaster = (props) => {
     }
   };
 
-  const setInputValue = (key, value) => {
+  const setInputValue = (key, value, setStatus) => {
     let status =
-      value && value != "" ? INPUT_STATUS.VALID : INPUT_STATUS.INVALID;
+      !setStatus ? value && value != "" ? INPUT_STATUS.VALID : INPUT_STATUS.INVALID : setStatus;
 
     switch (key) {
       case "institutionId":
@@ -205,6 +205,16 @@ const InstitutionMaster = (props) => {
     }
   };
 
+  const openAddModal = () => {
+    setInputValue("institutionId", '', INPUT_STATUS.INIT);
+    setInputValue("institutionName", '', INPUT_STATUS.INIT);
+    setInputValue("email", '', INPUT_STATUS.INIT);
+    setInputValue("phoneNumber", '', INPUT_STATUS.INIT);
+    setInputValue("address", '', INPUT_STATUS.INIT);
+    setInputValue("type", 'UNIVERSITY', INPUT_STATUS.INIT);
+    setIsAdd(true);
+  }
+
   return (
     <div className="institution-content">
       <div className="breadcrumb">
@@ -214,16 +224,8 @@ const InstitutionMaster = (props) => {
         <div className="btn-add-institution">
           <SubmitButton
             buttonText={"Add Institution"}
-            onClick={() => setIsAdd(true)}
+            onClick={() => openAddModal()}
           ></SubmitButton>
-        </div>
-        <div className="search-input">
-          <InputField
-            type="text"
-            name="search-input"
-            placeholder="Search Institution Name"
-            value={value}
-          />
         </div>
       </div>
       <TableInstitution

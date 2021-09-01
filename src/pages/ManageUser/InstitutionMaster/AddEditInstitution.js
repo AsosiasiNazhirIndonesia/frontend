@@ -3,11 +3,10 @@ import InputField from "../../../components/elements/InputField/InputField";
 import "./AddEditInstitution.scss";
 
 const AddEditInstitution = (props) => {
-  const value = {};
   if (props.add) {
     return (
       <div className="modal-container">
-        <form className="modal-box">
+        <div className="modal-box">
           <h1>Add Institution</h1>
           <div className="institution-name">
             <p>
@@ -65,14 +64,11 @@ const AddEditInstitution = (props) => {
             <p>
               Institution Type <font color="red">*</font>
             </p>
-            <select
-              id="dropdown"
-              value={props.getInputValue("address").value}
-              onChange={(e) => props.setInputValue("address", e.target.value)}
-            >
-              <option value="COMPANY">COMPANY</option>
-              <option value="UNIVERSITY">UNIVERSITY</option>
-            </select>
+            <InputField 
+              value={props.getInputValue("type")}
+              type="dropdown" 
+              onChange={(value) => props.setInputValue("type", value.value)} 
+              options={['UNIVERSITY','COMPANY']} />
           </div>
           <div className="btn-group">
             <button
@@ -91,13 +87,13 @@ const AddEditInstitution = (props) => {
               Save
             </button>
           </div>
-        </form>
+        </div>
       </div>
     );
   } else if (props.edit) {
     return (
       <div className="modal-container">
-        <form className="modal-box">
+        <div className="modal-box">
           <h1>Edit Institution</h1>
           <div className="institution-name">
             <p>
@@ -155,14 +151,11 @@ const AddEditInstitution = (props) => {
             <p>
               Institution Type <font color="red">*</font>
             </p>
-            <select
-              id="dropdown"
-              value={props.getInputValue("address").value}
-              onChange={(e) => props.setInputValue("address", e.target.value)}
-            >
-              <option value="COMPANY">COMPANY</option>
-              <option value="UNIVERSITY">UNIVERSITY</option>
-            </select>
+            <InputField 
+              value={props.getInputValue("type")}
+              type="dropdown" 
+              onChange={(value) => props.setInputValue("type", value.value)} 
+              options={['UNIVERSITY','COMPANY']} />
           </div>
           <div className="btn-group">
             <button
@@ -181,7 +174,7 @@ const AddEditInstitution = (props) => {
               Save
             </button>
           </div>
-        </form>
+        </div>
       </div>
     );
   } else return null;

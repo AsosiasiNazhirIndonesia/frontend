@@ -7,7 +7,6 @@ const Delete = (props) => {
   const onDelete = (e) => {
     e.preventDefault();
     props.del();
-    //props.onDelete(props.selectedData);
     props.setIsDelete(false);
   };
 

@@ -77,6 +77,9 @@ const ManageCertificate = (props) => {
   const view = new URLSearchParams(props.location.search).get(
     "view_certificate"
   );
+  const certificateId = new URLSearchParams(props.location.search).get(
+    "certificate_id"
+  );
   const actor = useParams().actor;
 
   const getAllCertificates = async (offset, limit) => {
@@ -338,7 +341,7 @@ const ManageCertificate = (props) => {
 
   const resolveContent = () => {
     if (view) {
-      return <ViewCertificate actor={actor} getSignature={getSignature}/>;
+      return <ViewCertificate actor={actor} getSignature={getSignature} certificateId={certificateId}/>;
     } else {
       switch (step) {
         case "1":

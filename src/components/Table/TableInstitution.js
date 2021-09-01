@@ -14,15 +14,16 @@ class TableInstitution extends Component {
         type,
         deletedDate,
       } = student; //destructuring
-      if (!deletedDate) {
         return (
           <tr key={id}>
-            <td>{institutionName}</td>
-            <td>{email}</td>
-            <td>{phoneNumber}</td>
-            <td>{address}</td>
-            <td>{type}</td>
-            <td>
+            <td className={deletedDate ? "deleted" : ""}>{institutionName}</td>
+            <td className={deletedDate ? "deleted" : ""}>{email}</td>
+            <td className={deletedDate ? "deleted" : ""}>{phoneNumber}</td>
+            <td className={deletedDate ? "deleted" : ""}>{address}</td>
+            <td className={deletedDate ? "deleted" : ""}>{type}</td>
+            <td className={deletedDate ? "deleted" : ""}>
+              {!deletedDate ?
+              <>
               <Link
                 style={{ color: "black" }}
                 to=""
@@ -50,11 +51,10 @@ class TableInstitution extends Component {
                 }}
               >
                 Delete
-              </Link>
+              </Link></> : <></>}
             </td>
           </tr>
         );
-      }
     });
   }
 

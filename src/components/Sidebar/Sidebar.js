@@ -4,9 +4,11 @@ import { history } from "../../store";
 import { useEffect, useState } from "react";
 import React from "react";
 import { ACTOR, ACTOR_TOKEN } from "../../constants/component.constant";
+import { useSelector } from "react-redux";
 
 export default (props) => {
   const [isManageUser, setIsManageUser] = useState(false);
+  const admin = useSelector(state => state.getIn(['actor', 'admin']).toJS());
 
   useEffect(() => {
     if (
@@ -21,7 +23,54 @@ export default (props) => {
     }
   }, []);
 
-  const adminMenu = () => {
+  const mainAdminMenu = () => {
+    return (
+      <React.Fragment>
+        <div
+          className={!props.menu ? "menu active" : "menu"}
+          onClick={() => history.push(`/dashboard/${props.actor}`)}
+        >
+          <img src={menuIcon} />
+          <span>Dashboard</span>
+        </div>
+        <div
+          className={props.menu === "manage_user" ? "menu active" : "menu"}
+          onClick={() => setIsManageUser(!isManageUser)}
+        >
+          <img src={menuIcon} />
+          <span>Manage Admin</span>
+        </div>
+        {isManageUser ? (
+          <React.Fragment>
+            <div
+              className={
+                props.menu === "institution-master"
+                  ? "menu sub active"
+                  : "menu sub"
+              }
+              onClick={() => history.push(`/dashboard/${props.actor}?menu=institution-master`)}
+            >
+              <img src={menuIcon} />
+              <span>Institution Master</span>
+            </div>
+            <div
+              className={
+                props.menu === "admin-master" ? "menu sub active" : "menu sub"
+              }
+              onClick={() => history.push(`/dashboard/${props.actor}?menu=admin-master`)}
+            >
+              <img src={menuIcon} />
+              <span>Admin Master</span>
+            </div>
+          </React.Fragment>
+        ) : (
+          <div></div>
+        )}
+      </React.Fragment>
+    );
+  }
+
+  const institutionAdminMenu = () => {
     return (
       <React.Fragment>
         <div
@@ -58,17 +107,6 @@ export default (props) => {
             </div>
             <div
               className={
-                props.menu === "institution-master"
-                  ? "menu sub active"
-                  : "menu sub"
-              }
-              onClick={() => history.push(`/dashboard/${props.actor}?menu=institution-master`)}
-            >
-              <img src={menuIcon} />
-              <span>Institution Master</span>
-            </div>
-            <div
-              className={
                 props.menu === "user-master" ? "menu sub active" : "menu sub"
               }
               onClick={() => history.push(`/dashboard/${props.actor}?menu=user-master`)}
@@ -82,6 +120,14 @@ export default (props) => {
         )}
       </React.Fragment>
     );
+  }
+
+  const adminMenu = () => {
+    if (admin && admin.admin_role === 'MAIN') {
+      return mainAdminMenu();
+    }
+
+    return institutionAdminMenu();
   }
 
   const userMenu = () => {

@@ -24,9 +24,7 @@ const ViewCertificate = (props) => {
   const [isProcessing, setProcessing] = useState(false);
   const [allowToSigning, setAllowToSigning] = useState(false);
   const user = useSelector(state => state.getIn(['actor', 'user']).toJS());
-  const certificateId = new URLSearchParams(props.location.search).get(
-    "certificate_id"
-  );
+  const certificateId = props.certificateId;
 
   const decideSigner = () => {
     if (!(Object.keys(certificate) <= 0 
@@ -116,8 +114,10 @@ const ViewCertificate = (props) => {
     if (Object.keys(certificate) <= 0) {
       getCertificate();
     }
-    decideSigner();
-  }, [certificateId, certificate, certificateStatus, progressBarContent])
+    if (user) {
+      decideSigner();
+    }
+  }, [props.certificateId, certificate, certificateStatus, progressBarContent])
 
   const LazyDownloadPDFButton = async () => {
     const doc = <CertificatePDF 
@@ -215,6 +215,7 @@ const ViewCertificate = (props) => {
             }}
           ></SubmitButton> : <></>}
       </div>
+      {props.actor ? 
       <div className="btn-done">
         <SubmitButton
           buttonText="Back"
@@ -222,7 +223,7 @@ const ViewCertificate = (props) => {
             history.push(`/dashboard/${props.actor}?menu=manage-certificate`);
           }}
         ></SubmitButton>
-      </div>
+      </div> : <></>}
     </React.Fragment>
   );
 };

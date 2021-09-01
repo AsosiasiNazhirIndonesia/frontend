@@ -32,7 +32,6 @@ const RoleMaster = (props) => {
     value: "",
     errorMessage: "",
   });
-  const actor = useParams().actor;
 
   const getAllRoles = async (offset, limit) => {
     const results = await API.getAllRoles(offset, limit);
@@ -56,15 +55,15 @@ const RoleMaster = (props) => {
 
   const submit = async () => {
     try {
-      API.addRole({
+      await API.addRole({
         name: roleName.value,
         description: description.value,
       });
       createNotification({
         type: "success",
-        value: "Your roles already on blockchain",
+        value: "Create role success",
       });
-      history.push(`/dashboard/${actor}?menu=role-master`);
+      getAllRoles(currentPage - 1, itemsPerPage);
     } catch (e) {
       console.log(e);
       createNotification({
@@ -76,16 +75,16 @@ const RoleMaster = (props) => {
 
   const update = async () => {
     try {
-      API.updateRole({
+      await API.updateRole({
         role_id: roleId.value,
         name: roleName.value,
         description: description.value,
       });
       createNotification({
         type: "success",
-        value: "Your roles updated on blockchain",
+        value: "Update role success",
       });
-      history.push(`/dashboard/${actor}?menu=role-master`);
+      getAllRoles(currentPage - 1, itemsPerPage);
     } catch (e) {
       console.log(e);
       createNotification({
@@ -97,15 +96,14 @@ const RoleMaster = (props) => {
 
   const del = async () => {
     try {
-      //console.log(roleId.value);
-      API.deleteRole({
+      await API.deleteRole({
         role_id: roleId.value,
       });
       createNotification({
         type: "success",
-        value: "Your roles deleted on blockchain",
+        value: "Delete role success",
       });
-      history.push(`/dashboard/${actor}?menu=role-master`);
+      getAllRoles(currentPage - 1, itemsPerPage);
     } catch (e) {
       console.log(e);
       createNotification({
@@ -165,14 +163,6 @@ const RoleMaster = (props) => {
             buttonText={"Add Role"}
             onClick={() => setIsAdd(true)}
           ></SubmitButton>
-        </div>
-        <div className="search-input">
-          <InputField
-            type="text"
-            name="search-input"
-            placeholder="Search Role Name"
-            value={value}
-          />
         </div>
       </div>
       <TableRole

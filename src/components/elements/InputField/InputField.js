@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./InputField.scss"
 import { INPUT_STATUS } from '../../../constants/component.constant';
 import DatePicker from "react-date-picker";
+import Dropdown from 'react-dropdown';
 
 export default (props) => {
     let input;
@@ -14,7 +15,10 @@ export default (props) => {
             input = <input className="text-input" disabled={props.disabled ? props.disabled : false} type={props.type ? props.type : "text"} value={props.value.value} name={props.name} placeholder={props.placeholder} onChange={(e) => props.onChange ? props.onChange(e) : ''} autoComplete="off"/>;
             break;
         case "date":
-            input = <DatePicker value={props.value.value} name={props.name} onChange={(e) => console.log(e.target.value)} />;
+            input = <DatePicker value={props.value.value} name={props.name} onChange={(e) => props.onChange(e)} />;
+            break;
+        case "dropdown":
+            input = <Dropdown name={props.name} options={props.options} onChange={(e) => props.onChange ? props.onChange(e) : ''} value={props.value.value} />
             break;
     }
 

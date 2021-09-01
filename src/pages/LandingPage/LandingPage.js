@@ -1,13 +1,13 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Footer from '../../components/Footer/Footer';
 import SearchCertificate from '../../components/SearchCertifcate/SearchCertificate';
 import { history } from '../../store';
+import ViewCertificate from '../ManageCertificate/ViewCertificate';
 import './LandingPage.scss';
 
 export default () => {
     const myRef = useRef(null);
     const executeScroll = () => myRef.current.scrollIntoView();
-    
 
     return (
         <div className="landing-page">

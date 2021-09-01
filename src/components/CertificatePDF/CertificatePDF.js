@@ -1,6 +1,12 @@
 import { Document, Image, Link, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { useRef } from "react";
+import ReactToPdf from "react-to-pdf";
+import certiBg from "../../assets/images/CertificateTemplate.jpg";
+import jsPDF from "jspdf";
+import DomToImage from "dom-to-image";
 
 export default (props) => {
+  const ref = useRef();
   const styles = StyleSheet.create({
     page: {
       display: 'flex',
@@ -79,26 +85,40 @@ export default (props) => {
     scAddress: {
       textAlign: "center",
       fontWeight: "bold",
+    },
+    image: {
+      height: "1000px"
     }
   });
+  const options = {
+    orientation: 'landscape',
+    unit: 'in',
+    format: [4,2]
+  };
+  const takeShot = () => {
+    console.log('hay');
+    const pdf = new jsPDF();
+    if (pdf) {
+      console.log(ref);
+      const input = document.getElementById('divToOfferInfo');
+      DomToImage.toPng(input)
+        .then(imgData => {
+          pdf.addImage(imgData, 'PNG', 10, 10);
+          pdf.save('download.pdf');
+        });
+    }
+  }
   return (
-    <Document>
-      <Page size="A4" orientation="landscape" style={styles.page}>
-        <View style={styles.header}>
-          <Text>{props.certificateTitle}</Text>
-        </View>
-        <View style={styles.section}>
-          <Text style={styles.presentTo}>PROUDLY PRESENT TO:</Text>
-          <Text style={styles.name}>{props.receiverName}</Text>
-          <Text style={styles.title}>{props.certificateNo}</Text>
-          <Text style={styles.description}>{props.certificateDescription}</Text>
-          <Text style={styles.score}>Score: {props.certificateScore}</Text>
-          <Text style={styles.scAddress}>Contract Address: {props.scAddress ? props.scAddress : '-'}</Text>
-        </View>
-        <View style={styles.footer}>
-          <Text style={styles.date}>Date: {props.certificateDate}</Text>
-        </View>
-      </Page>
-    </Document>
+    <div>
+      {/* <ReactToPdf targetRef={ref} filename="div-blue.pdf" options={options} x={.5} y={.5} scale={0.8}>
+          {({toPdf}) => (
+              <button onClick={toPdf}>Generate pdf</button>
+          )}
+      </ReactToPdf> */}
+      <button onClick={() => {takeShot()}}/>
+      <div style={{width: 500, height: 500}} ref={ref} id="divToOfferInfo">
+        <img src={'https://api-membership.ibf.exchange/api/files/a5dad870-059d-11ec-aead-2368f7aed165.png'} style={{width: "100%"}}/>
+      </div>
+  </div>
   );
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const HOST = "http://103.31.39.134:3000";
+export const HOST = "http://localhost:3001";
 const API = {};
 
 API.getUserByPublicKey = async (publicKey) => {
@@ -33,9 +33,29 @@ API.userLogin = async (request) => {
   }
 };
 
+API.getAllUsers = async (offset, limit) => {
+  try {
+    const url = `${HOST}/api/users?order_by=name&order_type=asc&offset=${offset}&limit=${limit}`;
+    const result = (await axios.get(url)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
 API.getAdminByPublicKey = async (publicKey) => {
   try {
     const url = `${HOST}/api/admins/public_key/${publicKey}`;
+    const result = (await axios.get(url)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.getAllAdmins = async (offset, limit) => {
+  try {
+    const url = `${HOST}/api/admins?order_by=name&order_type=asc&offset=${offset}&limit=${limit}`;
     const result = (await axios.get(url)).data;
     return result.data;
   } catch (e) {
@@ -83,6 +103,16 @@ API.getCertificateById = async (certificateId) => {
     throw getErrorMessage(e);
   }
 };
+
+API.getCertificateByScAddress = async (scAddress) => {
+  try {
+    const url = `${HOST}/api/certificates/sc_address/${scAddress}`;
+    const result = (await axios.get(url)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+}
 
 //role
 API.addRole = async (request) => {
@@ -160,6 +190,48 @@ API.updateInstitution = async (request) => {
 API.deleteInstitution = async (params) => {
   try {
     const url = `${HOST}/api/institutions`;
+    const result = (await axios.delete(url, { data: params })).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.uploadFile = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file, file.name);
+    const url = `${HOST}/api/files`;
+    const result = (await axios.post(url, formData)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+}
+
+API.addAdmin = async (request) => {
+  try {
+    const url = `${HOST}/api/admins`;
+    const result = (await axios.post(url, request)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+}
+
+API.editAdmin = async (request) => {
+  try {
+    const url = `${HOST}/api/admins`;
+    const result = (await axios.put(url, request)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+}
+
+API.deleteRole = async (params) => {
+  try {
+    const url = `${HOST}/api/roles`;
     const result = (await axios.delete(url, { data: params })).data;
     console.log(result.data);
     return result.data;

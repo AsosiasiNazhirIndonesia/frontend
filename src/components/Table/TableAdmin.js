@@ -3,23 +3,25 @@ import { Link } from "react-router-dom";
 import { history } from "../../store";
 import "./Table.scss";
 
-class TableUser extends Component {
+class TableAdmin extends Component {
   renderTableData(props) {
-    return props.users.map((user, index) => {
-      const { user_id, name, email, phone_number, public_key } = user; //destructuring
+    return props.admins.map((admin, index) => {
+      const { admin_id, admin_role, name, email, phone_number, Institution } = admin; //destructuring
       return (
-        <tr key={user_id}>
+        <tr key={admin_id}>
+          <td>{admin_role}</td>
           <td>{name}</td>
           <td>{email}</td>
           <td>{phone_number}</td>
-          <td>{public_key}</td>
+          <td>{Institution ? Institution.name : ''}</td>
           <td>
             <Link
               style={{ color: "black" }}
               to=""
               onClick={(e) => {
                 e.preventDefault();
-                window.open(`/profile?actor_type=USER&actor_public_key=${public_key}`, "_blank");
+                props.setSelectedAdmin(admin);
+                history.push("/dashboard/ADMIN?menu=admin-master&view_user=true");
               }}
             >
               View
@@ -30,23 +32,11 @@ class TableUser extends Component {
               to=""
               onClick={(e) => {
                 e.preventDefault();
-                this.props.setSelectedUser(user);
-                history.push("/dashboard/ADMIN?menu=user-master&edit_user=true");
+                props.setSelectedAdmin(admin);
+                history.push("/dashboard/ADMIN?menu=admin-master&edit_user=true");
               }}
             >
               Edit
-            </Link>
-            ,{" "}
-            <Link
-              style={{ color: "red" }}
-              to=""
-              onClick={(e) => {
-                e.preventDefault();
-                this.props.setSelectedUser(user);
-                this.props.setIsDelete(true);
-              }}
-            >
-              Delete
             </Link>
           </td>
         </tr>
@@ -56,10 +46,11 @@ class TableUser extends Component {
   renderTableHeader() {
     return (
       <tr>
+        <th>Admin Role</th>
         <th>Name</th>
         <th>Email</th>
         <th>Phone Number</th>
-        <th>Public Key</th>
+        <th>Institution</th>
         <th>Action</th>
       </tr>
     );
@@ -78,4 +69,4 @@ class TableUser extends Component {
   }
 }
 
-export default TableUser;
+export default TableAdmin;

@@ -65,7 +65,7 @@ const AddEditRole = (props) => {
               name="role-name-input"
               value={props.getInputValue("roleName")}
               onChange={(e) =>
-                props.setInputValue("description", e.target.value)
+                props.setInputValue("roleName", e.target.value)
               }
             />
           </div>

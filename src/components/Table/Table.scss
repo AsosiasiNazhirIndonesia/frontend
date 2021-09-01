@@ -25,4 +25,9 @@ table {
   tr td:last-child {
     border-right: none;
   }
+
+  td.deleted {
+    background-color: rgb(189, 189, 189);
+    color: rgb(231, 231, 231);
+  }
 }

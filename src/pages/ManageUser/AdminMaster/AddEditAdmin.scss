@@ -6,9 +6,9 @@
   background: #fff;
   padding: 1rem;
   border-radius: 5px;
-  .user-name,
-  .user-email,
-  .user-phoneNumber {
+  .admin-name,
+  .admin-email,
+  .admin-phoneNumber {
     width: 50%;
     margin-bottom: 1.5rem;
   }
@@ -48,13 +48,13 @@
     width: 100%;
     height: 3rem;
   }
-  .user-institution,
-  .user-role {
+  .admin-institution,
+  .admin-role {
     width: 30%;
     margin-bottom: 1.5rem;
   }
-  .user-startDate,
-  .user-endDate {
+  .admin-startDate,
+  .admin-endDate {
     width: 50%;
     margin-bottom: 1.5rem;
   }
@@ -63,30 +63,6 @@
     display: flex;
     .month {
       margin-right: 1rem;
-    }
-  }
-  .delete-btn {
-    position: sticky;
-
-    .fa-times-circle {
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      font-size: 28px;
-      color: #ff5c00;
-
-      cursor: pointer;
-    }
-  }
-  .check-box {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 1rem;
-
-    input {
-      margin-right: 8px;
     }
   }
 }
@@ -108,7 +84,7 @@
 
 .save-btn {
   width: 20%;
-  margin: 0 2.5% 0 auto;
+  margin: 2.5% 2.5% 0 auto;
   display: flex;
   flex-direction: row-reverse;
 }

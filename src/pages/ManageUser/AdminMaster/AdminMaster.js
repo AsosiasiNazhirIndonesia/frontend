@@ -1,68 +1,66 @@
 import { withRouter } from "react-router-dom";
 import SubmitButton from "../../../components/elements/SubmitButton/SubmitButton";
-import InputField from "../../../components/elements/InputField/InputField";
-import TableUser from "../../../components/Table/TableUser";
-import "./UserMaster.scss";
+import "./AdminMaster.scss";
 import React, { useEffect, useState } from "react";
 import { history } from "../../../store";
-import AddEditUser from "./AddEditUser";
-import ViewDataUser from "./ViewDataUser";
 import Delete from "../../../components/Popup/Delete";
 import Pagination from "../../../components/elements/Pagination/Pagination";
+import TableAdmin from "../../../components/Table/TableAdmin";
 import API from "../../../services/api";
+import ViewDataAdmin from "./ViewDataAdmin";
+import AddEditAdmin from "./AddEditAdmin";
+import { createNotification } from "../../../components/Notification/Notification";
 
-const UserMaster = (props) => {
+const AdminMaster = (props) => {
   const [isDelete, setIsDelete] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState({});
+  const [admins, setAdmins] = useState([]);
+  const [selectedAdmin, setSelectedAdmin] = useState({});
 
-  const getAllUsers = async (offset, limit) => {
-    setUsers(await API.getAllUsers(offset, limit));
-  }
-
-  useEffect(() => {
-    getAllUsers(currentPage - 1, itemsPerPage);
-  }, []);
-
-  const del = async () => {
-
+  const getAllAdmins = async (offset, limit) => {
+    const results = await API.getAllAdmins(offset, limit);
+    if (results.length > 0) {
+      setAdmins(results);
+    }
   }
 
   const add = new URLSearchParams(props.location.search).get("add_user");
   const edit = new URLSearchParams(props.location.search).get("edit_user");
   const view = new URLSearchParams(props.location.search).get("view_user");
 
+  useEffect(() => {
+    getAllAdmins(currentPage - 1, itemsPerPage);
+  }, [add, edit, view]);
+
   const resolveContent = () => {
     if (add || edit) {
-      return <AddEditUser />;
+      return <AddEditAdmin selectedAdmin={selectedAdmin} add={add} edit={edit} />;
     } else if (view) {
-      return <ViewDataUser />;
+      return <ViewDataAdmin selectedAdmin={selectedAdmin} />;
     } else {
       return (
         <React.Fragment>
           <div className="bef-table">
             <div className="btn-add-user">
               <SubmitButton
-                buttonText={"Add User"}
+                buttonText={"Add Admin"}
                 onClick={() => {
-                  history.push(`/dashboard/ADMIN?menu=user-master&add_user=true`);
+                  history.push(`/dashboard/ADMIN?menu=admin-master&add_user=true`);
                 }}
               ></SubmitButton>
             </div>
           </div>
-          <TableUser 
-            users={users}
-            setSelectedUser={setSelectedUser} 
+          <TableAdmin 
+            admins={admins} 
             setIsDelete={setIsDelete} 
-          />
+            setSelectedAdmin={setSelectedAdmin}/>
           <Pagination
-            itemsPerPage={itemsPerPage}
-            totalItem={users.length}
             currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            totalItem={admins.length}
             setCurrentPage={setCurrentPage}
-            reloadFunction={getAllUsers}
+            reloadFunction={getAllAdmins}
           />
         </React.Fragment>
       );
@@ -71,11 +69,11 @@ const UserMaster = (props) => {
 
   const resolveSubtitle = () => {
     if (add) {
-      return <h6 className="breadcrumb-path"> User Master - Add User</h6>;
+      return <h6 className="breadcrumb-path"> Admin Master - Add Admin</h6>;
     } else if (edit) {
-      return <h6 className="breadcrumb-path"> User Master - Edit User</h6>;
+      return <h6 className="breadcrumb-path"> Admin Master - Edit Admin</h6>;
     } else if (view) {
-      return <h6 className="breadcrumb-path"> User Master - View User</h6>;
+      return <h6 className="breadcrumb-path"> Admin Master - View Admin</h6>;
     } else return <div></div>;
   };
 
@@ -84,13 +82,12 @@ const UserMaster = (props) => {
   return (
     <div className="user-content">
       <div className="breadcrumb">
-        <h1>User Master</h1>
+        <h1>Admin Master</h1>
         {subtitle}
       </div>
       {content}
-      <Delete delete={isDelete} setIsDelete={setIsDelete} />
     </div>
   );
 };
 
-export default withRouter(UserMaster);
+export default withRouter(AdminMaster);

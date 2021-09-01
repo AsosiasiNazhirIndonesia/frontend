@@ -7,10 +7,11 @@ import { useState } from 'react';
 import { history } from '../../store';
 import { ACTOR } from '../../constants/component.constant';
 import SubmitButton from '../elements/SubmitButton/SubmitButton';
+import { HOST } from '../../services/api';
 
 export default (props) => {
     const [menuVisible, setMenuVisible] = useState(false);
-    const profilePhoto = props.actor && props.actor.photo ? props.actor.photo : avatar;
+    const profilePhoto = props.actor && props.actor.photo ? `${HOST}/api/files/${props.actor.photo}` : avatar;
     const profileName = props.actor && props.actor.name ? props.actor.name : 'User';
     const actorPubKey = props.actor ? props.type === ACTOR.ADMIN ? props.actor.public_key : props.actor.public_key : undefined;
 
