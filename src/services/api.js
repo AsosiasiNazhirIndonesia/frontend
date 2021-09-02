@@ -33,6 +33,26 @@ API.userLogin = async (request) => {
   }
 };
 
+API.createUser = async (request) => {
+  try {
+    const url = `${HOST}/api/users`;
+    const result = (await axios.post(url, request)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.updateUser = async (request) => {
+  try {
+    const url = `${HOST}/api/users`;
+    const result = (await axios.put(url, request)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
 API.getAllUsers = async (offset, limit) => {
   try {
     const url = `${HOST}/api/users?order_by=name&order_type=asc&offset=${offset}&limit=${limit}`;
@@ -234,6 +254,46 @@ API.deleteRole = async (params) => {
     const url = `${HOST}/api/roles`;
     const result = (await axios.delete(url, { data: params })).data;
     console.log(result.data);
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.createUserHistory = async (request) => {
+  try {
+    const url = `${HOST}/api/user_history`;
+    const result = (await axios.post(url, request)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.updateUserHistory = async (request) => {
+  try {
+    const url = `${HOST}/api/user_history`;
+    const result = (await axios.put(url, request)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.getUserHistoriesByUser = async (userId) => {
+  try {
+    const url = `${HOST}/api/user_history/user_id/${userId}`;
+    const result = (await axios.get(url)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.deleteUserHistory = async (params) => {
+  try {
+    const url = `${HOST}/api/user_history`;
+    const result = (await axios.delete(url, { data: params })).data;
     return result.data;
   } catch (e) {
     throw getErrorMessage(e);

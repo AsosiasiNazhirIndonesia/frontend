@@ -44,6 +44,8 @@
 
 .profile-page .details .user-data img {
     width: 342px;
+    height: 342px;
+    object-fit: cover;
     margin-right: 67px;
 }
 
@@ -116,6 +118,7 @@
 
     background-color: white;
     width: 100%;
+    margin-bottom: 2rem;
 }
 
 .profile-page .details .history .detail-history {

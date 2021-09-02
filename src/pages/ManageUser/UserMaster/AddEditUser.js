@@ -1,12 +1,15 @@
 import { faExclamationCircle, faSpinner, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import InputField from "../../../components/elements/InputField/InputField";
 import SubmitButton from "../../../components/elements/SubmitButton/SubmitButton";
+import { createNotification } from "../../../components/Notification/Notification";
 import { INPUT_STATUS } from "../../../constants/component.constant";
 import API from "../../../services/api";
 import web3 from "../../../services/web3";
+import { history } from "../../../store";
 import "./AddEditUser.scss";
 
 const AddEditUser = (props) => {
@@ -63,6 +66,7 @@ const AddEditUser = (props) => {
   const [inputFilled, setInputFilled] = useState(false);
   const [institutions, setInstitutions] = useState([]);
   const [roles, setRoles] = useState([]);
+  const [deletedHistories, setDeletedHistories] = useState([]);
 
   const getAllInstitutions = async () => {
     if (institutions.length <= 0) {
@@ -76,22 +80,68 @@ const AddEditUser = (props) => {
     }
   }
 
-  useEffect(() => {
-    getAllInstitutions();
-    getAllRoles();
-  }, []);
-
   const fillInput = () => {
     if (inputFilled) {
       return;
     }
 
-    setName({status: INPUT_STATUS.VALID, value: props.selectedAdmin.name});
-    setEmail({status: INPUT_STATUS.VALID, value: props.selectedAdmin.email});
-    setPhoneNumber({status: INPUT_STATUS.VALID, value: props.selectedAdmin.phone_number});
-    setPublicKey({status: INPUT_STATUS.VALID, value: props.selectedAdmin.public_key});
-    setInputFilled(true);
+    setName({
+      status: INPUT_STATUS.VALID,
+      value: props.selectedUser.name
+    });
+    setEmail({
+      status: INPUT_STATUS.VALID,
+      value: props.selectedUser.email
+    });
+    setPhoneNumber({
+      status: INPUT_STATUS.VALID,
+      value: props.selectedUser.phone_number
+    });
+    setPublicKey({
+      status: INPUT_STATUS.VALID,
+      value: props.selectedUser.public_key
+    });
+    const histories = props.selectedUser.UserHistories;
+    const newUserHistories = [];
+    for (const history of histories) {
+      newUserHistories.push({
+        user_history_id: history.user_history_id,
+        institution: history.Institution,
+        institutionInput: {
+          status: INPUT_STATUS.VALID,
+          errorMessage: "",
+          value: history.Institution.name,
+        },
+        role: history.Role,
+        roleInput: {
+          status: INPUT_STATUS.VALID,
+          errorMessage: "",
+          value: history.Role.name,
+        },
+        startDate: {
+          status: INPUT_STATUS.VALID,
+          value: moment(history.start_date).format('YYYY-MM-DD'),
+          errorMessage: "",
+        },
+        endDate: {
+          status: history.end_date ? INPUT_STATUS.VALID : INPUT_STATUS.INIT,
+          value: history.end_date ? moment(history.end_date).format('YYYY-MM-DD') : '',
+          errorMessage: "",
+        },
+        isStillWorking: !history.end_date
+      });
+    }
+    setUserHistories(newUserHistories);
   }
+
+  useEffect(() => {
+    getAllInstitutions();
+    getAllRoles();
+
+    if (props.edit) {
+      fillInput();
+    }
+  }, [props.selectedUser]);
 
   const onChange = (e) => {
     const inputName = e.target.name;
@@ -223,6 +273,9 @@ const AddEditUser = (props) => {
     for(var index = 0; index < userHistories.length; index++) {
       if (index !== key) {
         newUserHistories.push(userHistories[index]);
+      } else if (userHistories[index].user_history_id) {
+        deletedHistories.push(userHistories[index].user_history_id);
+        setDeletedHistories([...deletedHistories]);
       }
     }
     setUserHistories(newUserHistories);
@@ -332,24 +385,104 @@ const AddEditUser = (props) => {
     })
   }
 
-  // const add = () => {
-  //   const request = {
-  //     name: name.value,
-  //     email: email.value,
-  //     phone_number: phoneNumber.value,
-  //     public_key: publicKey.value,
-  //     photo: photo
-  //   }
-  //   const user = await API.createUser(request);
+  const onAdd = async () => {
+    setProcessing(true);
+    try {
+      let request = {
+        name: name.value,
+        email: email.value,
+        phone_number: phoneNumber.value,
+        public_key: publicKey.value,
+        photo: photo
+      }
+      const user = await API.createUser(request);
+  
+      for (const userHistory of userHistories) {
+        let request = {
+          user_id: user.user_id,
+          institution_id: userHistory.institution.institution_id,
+          role_id: userHistory.role.role_id,
+          start_date: moment(userHistory.startDate.value).format("YYYY-MM-DD"),
+          end_date: userHistory.isStillWorking ? null : moment(userHistory.endDate.value).format("YYYY-MM-DD")
+        }
+  
+        await API.createUserHistory(request);
+      }
 
+      createNotification({
+        type: 'success',
+        value: 'Add user success'
+      });
+      history.push('/dashboard/ADMIN?menu=user-master');
+    } catch (e) {
+      console.log(e);
+      createNotification({
+        type: 'error',
+        value: typeof e === 'string' ? e : 'Add user failed'
+      });
+    }
+    
+    setProcessing(true);
+  }
 
-  // }
+  const onEdit = async () => {
+    setProcessing(true);
+    try {
+      let request = {
+        user_id: props.selectedUser.user_id,
+        name: name.value,
+        email: email.value,
+        phone_number: phoneNumber.value,
+        public_key: publicKey.value,
+        photo: photo ? photo : props.selectedUser.photo
+      }
+      const user = await API.updateUser(request);
+  
+      for (const userHistory of userHistories) {
+        let request = {
+          user_id: props.selectedUser.user_id,
+          institution_id: userHistory.institution.institution_id,
+          role_id: userHistory.role.role_id,
+          start_date: moment(userHistory.startDate.value).format("YYYY-MM-DD"),
+          end_date: userHistory.isStillWorking ? null : moment(userHistory.endDate.value).format("YYYY-MM-DD")
+        }
+        
+        if (!userHistory.user_history_id) {
+          await API.createUserHistory(request);
+        } else {
+          console.log(request);
+          request.user_history_id = userHistory.user_history_id;
+          await API.updateUserHistory(request);
+        }
+      }
 
-  // const onSubmit = () {
-  //   if (props.add) {
+      for (const deletedUserHistoryId of deletedHistories) {
+        await API.deleteUserHistory({user_history_id: deletedUserHistoryId});
+      }
 
-  //   }
-  // }
+      createNotification({
+        type: 'success',
+        value: 'Update user success'
+      });
+      history.push('/dashboard/ADMIN?menu=user-master');
+    } catch (e) {
+      console.log(e);
+      createNotification({
+        type: 'error',
+        value: typeof e === 'string' ? e : 'Update user failed'
+      });
+    }
+    
+    setProcessing(true);
+  }
+
+  const onSubmit = () => {
+    if (props.add) {
+      onAdd();
+    } else {
+      onEdit();
+    }
+  }
 
   return (
     <React.Fragment>
@@ -426,7 +559,7 @@ const AddEditUser = (props) => {
         <button className="btn-add-more" onClick={addInputUserHistories}>Add More</button>
       </div>
       <div className="save-btn">
-        <SubmitButton disabled={isDisabled()} buttonText={"Save"} />
+        <SubmitButton isProcessing={isProcessing} disabled={isDisabled()} buttonText={"Save"} onClick={onSubmit}/>
       </div>
     </React.Fragment>
   );

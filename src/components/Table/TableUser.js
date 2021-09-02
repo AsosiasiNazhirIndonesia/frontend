@@ -36,18 +36,6 @@ class TableUser extends Component {
             >
               Edit
             </Link>
-            ,{" "}
-            <Link
-              style={{ color: "red" }}
-              to=""
-              onClick={(e) => {
-                e.preventDefault();
-                this.props.setSelectedUser(user);
-                this.props.setIsDelete(true);
-              }}
-            >
-              Delete
-            </Link>
           </td>
         </tr>
       );

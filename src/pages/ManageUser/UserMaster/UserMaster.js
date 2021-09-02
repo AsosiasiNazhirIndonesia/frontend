@@ -22,21 +22,17 @@ const UserMaster = (props) => {
     setUsers(await API.getAllUsers(offset, limit));
   }
 
-  useEffect(() => {
-    getAllUsers(currentPage - 1, itemsPerPage);
-  }, []);
-
-  const del = async () => {
-
-  }
-
   const add = new URLSearchParams(props.location.search).get("add_user");
   const edit = new URLSearchParams(props.location.search).get("edit_user");
   const view = new URLSearchParams(props.location.search).get("view_user");
 
+  useEffect(() => {
+    getAllUsers(currentPage - 1, itemsPerPage);
+  }, [add, edit]);
+
   const resolveContent = () => {
     if (add || edit) {
-      return <AddEditUser />;
+      return <AddEditUser add={add} edit={edit} selectedUser={selectedUser} />;
     } else if (view) {
       return <ViewDataUser />;
     } else {
@@ -88,7 +84,6 @@ const UserMaster = (props) => {
         {subtitle}
       </div>
       {content}
-      <Delete delete={isDelete} setIsDelete={setIsDelete} />
     </div>
   );
 };
