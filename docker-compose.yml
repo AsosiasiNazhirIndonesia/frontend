@@ -1,0 +1,10 @@
+version: '3'
+services:
+  ibf-wallet-web:
+    container_name: digital-certificate-fe
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '80:80'
