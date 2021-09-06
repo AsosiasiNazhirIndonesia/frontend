@@ -9,8 +9,8 @@ import { history } from "../../store";
 import "./ViewCertificate.scss";
 import ProgressBar from "../../components/elements/ProgressBar/ProgressBar";
 import CertificatePDF from "../../components/CertificatePDF/CertificatePDF";
-import { pdf } from "@react-pdf/renderer";
-import { saveAs } from 'file-saver';
+import jsPDF from "jspdf";
+import DomToImage from "dom-to-image";
 import { useSelector } from "react-redux";
 import { createNotification } from "../../components/Notification/Notification";
 
@@ -120,17 +120,14 @@ const ViewCertificate = (props) => {
   }, [props.certificateId, certificate, certificateStatus, progressBarContent])
 
   const LazyDownloadPDFButton = async () => {
-    const doc = <CertificatePDF 
-      certificateTitle={certificate.title} 
-      receiverName={certificate.receiver_name}
-      certificateNo={certificate.no}
-      certificateDescription={certificate.description}
-      certificateScore={certificate.score}
-      certificateDate={certificate.date}
-      scAddress={certificate.sc_address}/>
-    const asPdf = pdf(doc);
-    const blob = await asPdf.toBlob();
-    saveAs(blob, `${certificate.name}.pdf`);
+    const pdf = new jsPDF("l", "px", [595, 842]);
+    if (pdf) {
+      const input = document.getElementById("certificateImage");
+      DomToImage.toPng(input).then((imgData) => {
+        pdf.addImage(imgData, "PNG", 0, 0, 842, 595);
+        pdf.save("digital-certificate.pdf");
+      });
+    }
   }
 
   const onSign = async () => {
@@ -204,12 +201,14 @@ const ViewCertificate = (props) => {
           certificateDescription={certificate.description}
           certificateScore={certificate.score}
           certificateDate={certificate.date}
-          scAddress={certificate.sc_address}/>
+          scAddress={certificate.sc_address}
+          certificateLogo={certificate.logo}
+          certificateSigners={certificate.CertificateSigners}/>
           {isSigner ? 
           <SubmitButton
             isProcessing={isProcessing}
             disabled={!allowToSigning}
-            buttonText={isSigned ? "Signed" : "Sign"}
+            buttonText={isSigned ? "Signed" : isReceiver ? "Accept" : "Sign"}
             onClick={() => {
               onSign();
             }}

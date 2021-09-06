@@ -16,14 +16,16 @@ import DigitalCertificate from "../../contracts/digital_certificate";
 import web3 from "../../services/web3";
 import { createNotification } from "../../components/Notification/Notification";
 import Pagination from "../../components/elements/Pagination/Pagination";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import moment from "moment";
 import DigiCertContract from "../../contracts/digital_certificate";
+import htmlToText from "html-to-text";
 
 const ManageCertificate = (props) => {
   const [isDelete, setIsDelete] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [certificateLogo, setCertificateLogo] = useState("");
   const [documentName, setDocumentName] = useState({
     status: INPUT_STATUS.INIT,
     value: "",
@@ -81,6 +83,7 @@ const ManageCertificate = (props) => {
     "certificate_id"
   );
   const actor = useParams().actor;
+  const deleteSelectedData = useSelector((state) => state.getIn(["delete", "selectedData"]).toJS())
 
   const getAllCertificates = async (offset, limit) => {
     const results = await API.getAllCertificates(offset, limit);
@@ -93,6 +96,7 @@ const ManageCertificate = (props) => {
 
       return names.substring(2, names.length);
     }
+    
     for (const result of results) {
       newCertificates.push({
         id: result.certificate_id,
@@ -135,6 +139,8 @@ const ManageCertificate = (props) => {
         return certificateDate;
       case "sendToPubKey":
         return sendToPubKey;
+      case "certificateLogo":
+        return certificateLogo;
     }
   };
 
@@ -188,6 +194,8 @@ const ManageCertificate = (props) => {
         });
         break;
       case "certificateDescription":
+        const text = htmlToText.fromString(value).replace(/(\r\n|\n|\r)/gm, "");
+        status = text ? status : INPUT_STATUS.INVALID;
         setCertificateDescription({
           status,
           value: value,
@@ -207,6 +215,9 @@ const ManageCertificate = (props) => {
           value: value,
           errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
         });
+        break;
+      case "certificateLogo":
+        setCertificateLogo(value);
         break;
       case "sendToPubKey":
         if (value.length === 42) {
@@ -230,7 +241,8 @@ const ManageCertificate = (props) => {
   const getDataToSign = (certificate) => {
     const { receiver_name, no, 
       title, description, score, date} = certificate;
-    const mergeCertificateData = receiver_name + no + title + description + score + date;
+    const descriptionText = htmlToText.fromString(description).replace(/(\r\n|\n|\r)/gm, "");
+    const mergeCertificateData = receiver_name + no + title + descriptionText + score + date;
     return web3.utils.keccak256(mergeCertificateData)
   }
 
@@ -275,6 +287,7 @@ const ManageCertificate = (props) => {
       API.addCertificate({
         admin_id: props.admin.admin_id,
         user_id: sendToUser.user_id,
+        logo: certificateLogo,
         name: documentName.value,
         title: certificateTitle.value,
         no: certificateNo.value,
@@ -307,13 +320,13 @@ const ManageCertificate = (props) => {
     return signature;
   }
 
-  const onDelete = async (data) => {
+  const onDelete = async () => {
     try {
-      if (!web3.utils.isAddress(data.scAddress)) {
+      if (!web3.utils.isAddress(deleteSelectedData.scAddress)) {
         throw "Certificate not exist on blockchain";
       }
   
-      const digicertContract = DigiCertContract.getNewInstance(data.scAddress);
+      const digicertContract = DigiCertContract.getNewInstance(deleteSelectedData.scAddress);
       const accounts = await web3.eth.getAccounts();
       createNotification({
         type: "info",
@@ -454,7 +467,7 @@ const ManageCertificate = (props) => {
       </div>
       <ProgressBar progress={resolveProgressBarContent()} />
       {resolveContent()}
-      <Delete delete={isDelete} setIsDelete={setIsDelete} onDelete={onDelete} />
+      <Delete delete={isDelete} setIsDelete={setIsDelete} del={onDelete} />
     </div>
   );
 };

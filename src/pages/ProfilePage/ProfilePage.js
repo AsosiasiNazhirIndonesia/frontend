@@ -18,21 +18,24 @@ const Profile = (props) => {
 
   const getActor = async () => {
     let newActor;
+    console.log(actorType);
     if (actorType === ACTOR.ADMIN) {
       newActor = await API.getAdminByPublicKey(actorPubKey);
     } else if (actorType === ACTOR.USER) {
       newActor = await API.getUserByPublicKey(actorPubKey);
     }
+    console.log(newActor);
     setActor(newActor);
-    setHistories(await API.getUserHistoriesByUser(newActor.user_id));
+    if (newActor) {
+      setHistories(await API.getUserHistoriesByUser(newActor.user_id));
+    }
   };
 
   useEffect(() => {
     getActor();
-  }, []);
+  }, [actorPubKey]);
 
   const renderHistories = () => {
-    console.log(histories);
     return histories.map((history) => {
       return (
         <div className="history">
@@ -69,26 +72,26 @@ const Profile = (props) => {
         <div className="details">
           <div className="user-data">
             <img
-              src={actor.photo ? `${HOST}/api/files/${actor.photo}` : avatar}
+              src={actor && actor.photo ? `${HOST}/api/files/${actor.photo}` : avatar}
             />
             <div className="biodata">
               <h3>Biodata</h3>
               <div className="biodata-details">
                 <div className="table-row">
                   <div className="colOne">Nama:</div>
-                  <div className="colTwo">{actor.name}</div>
+                  <div className="colTwo">{actor ? actor.name : ''}</div>
                 </div>
                 <div className="table-row">
                   <div className="colOne">Public Key:</div>
-                  <div className="colTwo">{actor.public_key}</div>
+                  <div className="colTwo">{actor ? actor.public_key : ''}</div>
                 </div>
                 <div className="table-row">
                   <div className="colOne">Phone Number:</div>
-                  <div className="colTwo">{actor.phone_number}</div>
+                  <div className="colTwo">{actor ? actor.phone_number : ''}</div>
                 </div>
                 <div className="table-row">
                   <div className="colOne">Email:</div>
-                  <div className="colTwo">{actor.email}</div>
+                  <div className="colTwo">{actor ? actor.email : ''}</div>
                 </div>
               </div>
             </div>

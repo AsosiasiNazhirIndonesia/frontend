@@ -36,7 +36,9 @@ const CreateCertificate3 = (props) => {
             certificateNo={props.getInputValue("certificateNo").value}
             certificateDescription={props.getInputValue("certificateDescription").value}
             certificateScore={props.getInputValue("certificateScore").value}
-            certificateDate={props.getInputValue("certificateDate").value}/>
+            certificateDate={props.getInputValue("certificateDate").value}
+            certificateLogo={props.getInputValue("certificateLogo")}
+            certificateSigners={props.assignToUsers}/>
       </form>
       <div className="btn-back-next">
         <div className="btn-back">

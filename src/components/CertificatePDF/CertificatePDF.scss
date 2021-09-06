@@ -1,0 +1,113 @@
+.template {
+    position: relative;
+    height: 595px;
+    width: 842px;
+}
+
+.template-body {
+    position: sticky;
+    background: #fffac9;
+    width: 100%;
+    height: 100%;
+
+    display: 'flex';
+    flex-direction: 'column';
+    justify-content: 'flex-start';
+    border: 10px solid #FFD700;
+    padding: 0;
+    margin: 0;
+
+    .template-header {
+        height: 20%;
+        color: black;
+        font-size: 28px;
+        font-weight: 600px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 10px solid #FFD700;
+    }
+
+    .template-content {
+        flex-grow: 1;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding: 25px;
+        height: 60%;
+
+        .present-to {
+            color: #00254d;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px
+        }
+
+        .name {
+            color: #00254d;
+            font-size: 28px;
+            font-style: italic;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .certificate-no {
+            margin-bottom: 24px;
+        }
+
+        .description {
+            color: #808080;
+            font-size: 14px;
+            font-weight: normal;
+            margin-bottom: 5px
+        }
+
+        .score {
+            color: black;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .sc-address {
+            text-align: center;
+            font-weight: bold;
+        }
+    }
+
+    .template-footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        padding: 25px;
+        height: 20%;
+
+        .certificate-date {
+            margin-right: 24px;
+        }
+
+        .certificate-signers {
+            max-width: 200px;
+        }
+    }
+
+    p {
+        margin-bottom: 6px !important;
+    }
+}
+
+.certificate-logo {
+    position: absolute;
+    width: 100px !important;
+    height: 100px !important;
+    object-fit: contain;
+    top: 5px; 
+    left: 8px;
+    z-index: 0;
+}

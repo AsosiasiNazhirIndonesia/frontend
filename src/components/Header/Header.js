@@ -1,5 +1,6 @@
 import './Header.scss';
 import logo from '../../assets/images/logo.svg';
+import telkomLogo from '../../assets/images/telkom-logo.png';
 import avatar from '../../assets/images/avatar.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
@@ -20,8 +21,9 @@ export default (props) => {
             <div className="header">
                 <div className="header-left">
                     <img src={logo}></img>
+                    <img src={telkomLogo}></img>
                     <div className="title">
-                        <h4>Blockchain-Based</h4>
+                        <h4>Telkom Blockchain-Based</h4>
                         <h4>Digital Certifiates</h4>
                     </div>
                 </div>
@@ -35,7 +37,7 @@ export default (props) => {
                     {menuVisible ?
                         <div className="profile-options">
                             <div className="menu">
-                                <div className="sub-menu" onClick={() => {if (props.logout) { history.push(`/profile?actor=${props.type}&actor_public_key=${actorPubKey}`) }}}>
+                                <div className="sub-menu" onClick={() => {if (props.logout) { history.push(`/profile?actor_type=${props.type}&actor_public_key=${actorPubKey}`) }}}>
                                     <span>Details</span><FontAwesomeIcon icon={faSignOutAlt} />
                                 </div>
                                 <div className="sub-menu" onClick={() => {if (props.logout) { props.logout() }}}>

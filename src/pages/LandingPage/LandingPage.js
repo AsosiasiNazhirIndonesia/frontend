@@ -12,7 +12,7 @@ export default () => {
     return (
         <div className="landing-page">
             <div className="first-section">
-                <h1>BLOCKCHAIN - BASED EDUCATIONAL CERTIFICATES</h1>
+                <h1>TELKOM BLOCKCHAIN - BASED EDUCATIONAL CERTIFICATES</h1>
                 <button className="signin-btn" onClick={() => history.push("/signin")}>Sign In</button>
                 <button className="search-btn" onClick={() => executeScroll()}>Search Certificate</button>
             </div>
