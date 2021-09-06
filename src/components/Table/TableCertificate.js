@@ -69,7 +69,7 @@ export default (props) => {
         <th>Date</th>
         <th>Document Name</th>
         <th>Send To</th>
-        <th>Signatured By</th>
+        <th>Signed By</th>
         <th>Status</th>
         <th>Action</th>
       </tr>

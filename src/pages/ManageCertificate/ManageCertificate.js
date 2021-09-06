@@ -86,7 +86,13 @@ const ManageCertificate = (props) => {
   const deleteSelectedData = useSelector((state) => state.getIn(["delete", "selectedData"]).toJS())
 
   const getAllCertificates = async (offset, limit) => {
-    const results = await API.getAllCertificates(offset, limit);
+    let results = [];
+    if (props.user) {
+      results = await API.getCertificatesByUser(props.user.user_id, offset, limit);
+    } else if (props.admin) {
+      results = await API.getCertificatesByAdmin(props.user.admin_id, offset, limit);
+    }
+    
     const newCertificates = [];
     const composeApprovers = (approvers) => {
       let names = '';
@@ -474,6 +480,7 @@ const ManageCertificate = (props) => {
 
 const mapStateToProps = (state) => ({
   admin:  state.getIn(['actor', 'admin']).toJS(),
+  user:  state.getIn(['actor', 'user']).toJS(),
   type: state.getIn(['actor', 'type'])
 });
 

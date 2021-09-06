@@ -5,6 +5,7 @@ import avatar from "../../assets/images/avatar.svg";
 import { withRouter } from "react-router-dom";
 import { ACTOR } from "../../constants/component.constant";
 import API, { HOST } from "../../services/api";
+import TableCertificate from "../../components/Table/TableCertificate";
 
 const Profile = (props) => {
   const [actor, setActor] = useState({});
@@ -15,19 +16,54 @@ const Profile = (props) => {
   const actorPubKey = new URLSearchParams(props.location.search).get(
     "actor_public_key"
   );
+  const [certificates, setCertificates] = useState([]);
+
+  const getAllCertificates = async (actor, offset, limit) => {
+    let results = [];
+    if (actorType == ACTOR.USER) {
+      results = await API.getCertificatesByUser(actor.user_id, offset, limit);
+    } else if (actorType === ACTOR.ADMIN) {
+      results = await API.getCertificatesByAdmin(actor.admin_id, offset, limit);
+    }
+    
+    const newCertificates = [];
+    const composeApprovers = (approvers) => {
+      let names = '';
+      for(const approver of approvers) {
+        names = names + ` ,${approver.User.name}`;
+      }
+
+      return names.substring(2, names.length);
+    }
+    
+    for (const result of results) {
+      newCertificates.push({
+        id: result.certificate_id,
+        date: result.date,
+        documentName: result.name,
+        sendTo: result.User.name,
+        signaturedBy: composeApprovers(result.CertificateSigners),
+        status: "",
+        scAddress: result.sc_address
+      });
+    }
+    if (newCertificates.length > 0) {
+      setCertificates(newCertificates);
+    }
+  }
 
   const getActor = async () => {
     let newActor;
-    console.log(actorType);
     if (actorType === ACTOR.ADMIN) {
       newActor = await API.getAdminByPublicKey(actorPubKey);
     } else if (actorType === ACTOR.USER) {
       newActor = await API.getUserByPublicKey(actorPubKey);
     }
-    console.log(newActor);
+
     setActor(newActor);
     if (newActor) {
       setHistories(await API.getUserHistoriesByUser(newActor.user_id));
+      getAllCertificates(newActor, 0, 20);
     }
   };
 
@@ -96,6 +132,13 @@ const Profile = (props) => {
               </div>
             </div>
           </div>
+          {certificates.length > 0 ?
+          <div className="certificates-user">
+            <TableCertificate
+              certificates={certificates}
+              actor={actor}
+            />
+          </div> : <></>}
           {renderHistories()}
         </div>
       </div>

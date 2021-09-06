@@ -39,7 +39,7 @@
     width: 100%;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 93px;
+    margin-bottom: 36px;
 }
 
 .profile-page .details .user-data img {
@@ -158,4 +158,14 @@
     /* Text/primary */
 
     color: #0B0038;
+}
+
+.certificates-user {
+    width: 100%;
+    margin-bottom: 24px;
+
+    table {
+        margin: 0 !important;
+        width: 100% !important;
+    }
 }

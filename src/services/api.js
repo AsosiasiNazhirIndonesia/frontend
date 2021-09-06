@@ -114,6 +114,26 @@ API.getAllCertificates = async (offset, limit) => {
   }
 };
 
+API.getCertificatesByUser = async (userId, offset, limit) => {
+  try {
+    const url = `${HOST}/api/certificates/user_id/${userId}?order_by=created_date&offset=${offset}&limit=${limit}`;
+    const result = (await axios.get(url)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.getCertificatesByAdmin = async (adminId, offset, limit) => {
+  try {
+    const url = `${HOST}/api/certificates/admin_id/${adminId}?order_by=created_date&offset=${offset}&limit=${limit}`;
+    const result = (await axios.get(url)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
 API.getCertificateById = async (certificateId) => {
   try {
     const url = `${HOST}/api/certificates/${certificateId}`;
