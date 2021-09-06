@@ -146,12 +146,15 @@ const ViewCertificate = (props) => {
       } else {
         method = digicertContract.methods.approverSigning(signature);
       }
-      console.log(signature);
       await method.send({
         from: accounts[0],
         gasLimit: await method.estimateGas({from: accounts[0]}),
         gasPrice: '100000000000'
       });
+      if (!isReceiver) {
+        API.signingCertificate({user_id: user.user_id, certificate_id: certificate.certificate_id})
+      }
+
       getCertificate();
       createNotification({
         type: "success",

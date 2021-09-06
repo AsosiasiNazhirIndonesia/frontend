@@ -104,6 +104,16 @@ API.addCertificate = async (request) => {
   }
 };
 
+API.signingCertificate = async (request) => {
+  try {
+    const url = `${HOST}/api/certificates/signing`;
+    const result = (await axios.post(url, request)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
 API.getAllCertificates = async (offset, limit) => {
   try {
     const url = `${HOST}/api/certificates?order_by=created_date&offset=${offset}&limit=${limit}`;
