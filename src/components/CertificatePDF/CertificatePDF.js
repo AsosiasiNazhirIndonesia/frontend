@@ -9,7 +9,7 @@ export default (props) => {
       return;
     }
     let certificateSigners = props.certificateSigners;
-    if (certificateSigners[0].priority !== undefined || certificateSigners[0].priority !== null) {
+    if (certificateSigners[0].priority !== undefined && certificateSigners[0].priority !== null) {
       const sortedSigners = props.certificateSigners.sort((a, b) => {
         return a.priority - b.priority;
       });
