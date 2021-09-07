@@ -87,9 +87,9 @@ const ManageCertificate = (props) => {
 
   const getAllCertificates = async (offset, limit) => {
     let results = [];
-    if (props.user) {
+    if (props.type === ACTOR.USER && props.user) {
       results = await API.getCertificatesByUser(props.user.user_id, offset, limit);
-    } else if (props.admin) {
+    } else if (props.type === ACTOR.ADMIN && props.admin) {
       results = await API.getCertificatesByAdmin(props.user.admin_id, offset, limit);
     }
     
