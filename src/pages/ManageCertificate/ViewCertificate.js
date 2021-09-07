@@ -13,6 +13,7 @@ import jsPDF from "jspdf";
 import DomToImage from "dom-to-image";
 import { useSelector } from "react-redux";
 import { createNotification } from "../../components/Notification/Notification";
+import htmlToText from "html-to-text";
 
 const ViewCertificate = (props) => {
   const [certificate, setCertificate] = useState({});
@@ -130,6 +131,21 @@ const ViewCertificate = (props) => {
     }
   }
 
+  const getDataToSign = (certificate) => {
+    const { receiver_name, no, 
+      title, description, score, date} = certificate;
+    const descriptionText = htmlToText.fromString(description).replace(/(\r\n|\n|\r)/gm, "");
+    const mergeCertificateData = receiver_name + no + title + descriptionText + score + date;
+    return web3.utils.keccak256(mergeCertificateData)
+  }
+
+  const getSignature = async (certificate) => {
+    const certificateHash = getDataToSign(certificate);
+    const accounts = await web3.eth.getAccounts();
+    const signature = await web3.eth.personal.sign(certificateHash, accounts[0]);
+    return signature;
+  }
+
   const onSign = async () => {
     setProcessing(true);
     createNotification({
@@ -139,7 +155,7 @@ const ViewCertificate = (props) => {
     try {
       const accounts = await web3.eth.getAccounts();
       const digicertContract = DigiCertContract.getNewInstance(certificate.sc_address);
-      const signature = await props.getSignature(certificate);
+      const signature = await getSignature(certificate);
       let method;
       if (isReceiver) {
         method = digicertContract.methods.receiverSigning(signature);
@@ -210,8 +226,8 @@ const ViewCertificate = (props) => {
           {isSigner ? 
           <SubmitButton
             isProcessing={isProcessing}
-            disabled={!allowToSigning}
-            buttonText={isSigned ? "Signed" : isReceiver ? "Accept" : "Sign"}
+            disabled={!allowToSigning || certificateStatus == 2}
+            buttonText={isSigned ? "Signed" : certificateStatus == 2 ? "Accepted" : isReceiver ? "Accept" : "Sign"}
             onClick={() => {
               onSign();
             }}

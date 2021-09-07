@@ -90,7 +90,7 @@ const ManageCertificate = (props) => {
     if (props.type === ACTOR.USER && props.user) {
       results = await API.getCertificatesByUser(props.user.user_id, offset, limit);
     } else if (props.type === ACTOR.ADMIN && props.admin) {
-      results = await API.getCertificatesByAdmin(props.user.admin_id, offset, limit);
+      results = await API.getCertificatesByAdmin(props.admin.admin_id, offset, limit);
     }
     
     const newCertificates = [];
@@ -319,13 +319,6 @@ const ManageCertificate = (props) => {
     } 
   }
 
-  const getSignature = async (certificate) => {
-    const certificateHash = getDataToSign(certificate);
-    const accounts = await web3.eth.getAccounts();
-    const signature = await web3.eth.personal.sign(certificateHash, accounts[0]);
-    return signature;
-  }
-
   const onDelete = async () => {
     try {
       if (!web3.utils.isAddress(deleteSelectedData.scAddress)) {
@@ -360,7 +353,7 @@ const ManageCertificate = (props) => {
 
   const resolveContent = () => {
     if (view) {
-      return <ViewCertificate actor={actor} getSignature={getSignature} certificateId={certificateId}/>;
+      return <ViewCertificate actor={actor} certificateId={certificateId}/>;
     } else {
       switch (step) {
         case "1":
