@@ -4,6 +4,7 @@ import Footer from '../../components/Footer/Footer';
 import SearchCertificate from '../../components/SearchCertifcate/SearchCertificate';
 import { history } from '../../store';
 import './LandingPage.scss';
+import telkomLogo from '../../assets/images/telkom-logo2.png';
 
 const LandingPage = (props) => {
     const myRef = useRef(null);
@@ -19,6 +20,7 @@ const LandingPage = (props) => {
     return (
         <div className="landing-page">
             <div className="first-section">
+                <img src={telkomLogo} />
                 <h1>TELKOM BLOCKCHAIN - BASED EDUCATIONAL CERTIFICATES</h1>
                 <button className="signin-btn" onClick={() => history.push("/signin")}>Sign In</button>
                 <button className="search-btn" onClick={() => executeScroll()}>Search Certificate</button>
