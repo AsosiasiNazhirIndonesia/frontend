@@ -30,11 +30,13 @@ const ViewCertificate = (props) => {
   const certificateId = props.certificateId;
 
   const decideSigner = () => {
+    console.log(certificateStatus > 0)
     if (!(Object.keys(certificate) <= 0 
-      || certificateStatus != 0 || progressBarContent.length <= 0
+      || certificateStatus < 1 || progressBarContent.length <= 0
       || !user || Object.keys(user) <= 0)) {
 
       let temp = {};
+      console.log('hey');
       setReceiver(
         progressBarContent[progressBarContent.length - 1].user_id === user.user_id
       );
@@ -245,7 +247,7 @@ const ViewCertificate = (props) => {
           <SubmitButton
             isProcessing={isProcessing}
             disabled={!allowToSigning || certificateStatus == 2}
-            buttonText={isSigned ? "Signed" : certificateStatus == 2 ? "Accepted" : isReceiver ? "Accept" : "Sign"}
+            buttonText={isSigned && !isReceiver ? "Signed" : isSigned && !isReceiver ? "Accepted" : isReceiver ? "Accept" : "Sign"}
             onClick={() => {
               onSign();
             }}
