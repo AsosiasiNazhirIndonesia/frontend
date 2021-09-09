@@ -14,6 +14,8 @@ import DomToImage from "dom-to-image";
 import { useSelector } from "react-redux";
 import { createNotification } from "../../components/Notification/Notification";
 import htmlToText from "html-to-text";
+import linkedinLogo from "../../assets/images/linkedin.png";
+import moment from "moment";
 
 const ViewCertificate = (props) => {
   const [certificate, setCertificate] = useState({});
@@ -136,6 +138,8 @@ const ViewCertificate = (props) => {
       title, description, score, date} = certificate;
     const descriptionText = htmlToText.fromString(description).replace(/(\r\n|\n|\r)/gm, "");
     const mergeCertificateData = receiver_name + no + title + descriptionText + score + date;
+    console.log(mergeCertificateData);
+    console.log(web3.utils.keccak256(mergeCertificateData));
     return web3.utils.keccak256(mergeCertificateData)
   }
 
@@ -185,6 +189,11 @@ const ViewCertificate = (props) => {
     setProcessing(false);
   }
 
+  const shareToLinkedIn = () => {
+    const dateArr = certificate.date.split('-');
+    window.open(`https://www.linkedin.com/profile/add?startTask=Telkom%20Blockchain%20Based%20Digital%20Certificate&name=${certificate.name}&organizationId=75615928&issueYear=${dateArr[2]}&issueMonth=${dateArr[1]}&expirationYear=0&expirationMonth=0&certUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2FUSER%3Fmenu%3Dmanage-certificate%26view_certificate%3Dtrue%26certificate_id%3D${certificate.certificate_id}&certId=${certificate.sc_address}`)
+  }
+
   return (
     <React.Fragment>
       <form className="form-document-status">
@@ -199,18 +208,27 @@ const ViewCertificate = (props) => {
       </form>
       <ProgressBar progress={progressBarContent} />
       <div className="view-action-btn">
-        <SubmitButton
-            buttonText="Download"
-            onClick={() => {
-              LazyDownloadPDFButton();
-            }}
-          ></SubmitButton>
+        {isReceiver ? 
+          <SubmitButton
+              buttonText="Download"
+              onClick={() => {
+                LazyDownloadPDFButton();
+              }}
+            ></SubmitButton> : <></>}
         <SubmitButton
             buttonText="On Blockchain"
             onClick={() => {
               window.open(`https://ropsten.etherscan.io/address/${certificate.sc_address}`, "__blank")
             }}
           ></SubmitButton>
+        {isReceiver ? 
+        <div className="share-btn">
+          <img src={linkedinLogo}
+            onClick={() => {
+              shareToLinkedIn();
+            }}
+          />
+        </div> : <></>}
       </div>
       <div className="view-pdf">
         <CertificatePDF 

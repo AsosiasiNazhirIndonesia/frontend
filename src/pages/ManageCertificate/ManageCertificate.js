@@ -25,7 +25,7 @@ const ManageCertificate = (props) => {
   const [isDelete, setIsDelete] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [certificateLogo, setCertificateLogo] = useState("");
+  const [certificateLogo, setCertificateLogo] = useState(null);
   const [documentName, setDocumentName] = useState({
     status: INPUT_STATUS.INIT,
     value: "",
@@ -275,8 +275,8 @@ const ManageCertificate = (props) => {
         value: "Please check your metamask and stay on this page until certificate has been deployed to blockchain"});
       const res = await tx.send({
         from: accounts[0],
-        gas: 3000000,
-        gasPrice: '100000000000'
+        gas: 1500000,
+        gasPrice: '30000000000'
       });
       
 
@@ -304,6 +304,8 @@ const ManageCertificate = (props) => {
         receiver_name: receiverName.value,
         certificate_signers
       });
+
+      await DigiCertContract.verify(res._address, [certificateHash, sendToPubKey.value, approvers]);
       
       createNotification({
         type: "success", 

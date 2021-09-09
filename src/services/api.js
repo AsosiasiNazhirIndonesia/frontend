@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const HOST = "http://localhost:3001";
+export const HOST = "http://103.172.204.60:3000";
 const API = {};
 
 API.getUserByPublicKey = async (publicKey) => {

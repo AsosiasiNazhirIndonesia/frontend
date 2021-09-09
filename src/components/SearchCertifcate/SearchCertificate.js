@@ -1,13 +1,13 @@
 import SubmitButton from "../elements/SubmitButton/SubmitButton";
 import InputField from "../elements/InputField/InputField";
 import "./SearchCertificate.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ViewCertificate from "../../pages/ManageCertificate/ViewCertificate";
 import API from "../../services/api";
 import { createNotification } from "../Notification/Notification";
 import { INPUT_STATUS } from "../../constants/component.constant";
 
-export default () => {
+export default (props) => {
     const [scAddress, setScAddress] = useState({
         status: INPUT_STATUS.INIT,
         value: "",
@@ -17,14 +17,14 @@ export default () => {
     const [isProcessing, setProcessing] = useState(false);
     const [certificateId, setCertificateId] = useState(null);
 
-    const getCertificateId = async () => {
+    const getCertificateId = async (address) => {
         setCertificateId(null);
-        if (!scAddress.value || scAddress.value === '') {
+        if (!address || address === '') {
             return;
         }
 
         setProcessing(true);
-        const certificate = await API.getCertificateByScAddress(scAddress.value);
+        const certificate = await API.getCertificateByScAddress(address);
         if (certificate) {
             setCertificateId(certificate.certificate_id);
         } else {
@@ -35,6 +35,13 @@ export default () => {
         }
         setProcessing(false);
     }
+
+    useEffect(() => {
+        if (props.contractAddress) {
+            setScAddress({status: INPUT_STATUS.VALID, value: props.contractAddress});
+            getCertificateId(props.contractAddress);
+        }
+    }, [])
 
     return (
         <>
@@ -54,7 +61,7 @@ export default () => {
                             errorMessage: "",
                         })
                     }}/>
-                <SubmitButton isProcessing={isProcessing} buttonText={"Search"} onClick={getCertificateId}/>
+                <SubmitButton isProcessing={isProcessing} buttonText={"Search"} onClick={() => getCertificateId(scAddress.value)}/>
             </div>
         </div>
         {certificateId ? <ViewCertificate certificateId={certificateId}/> : <></>}

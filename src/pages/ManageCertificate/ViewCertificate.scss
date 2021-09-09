@@ -43,6 +43,15 @@
   margin: 2rem;
 }
 
+.share-btn {
+  position: relative;
+  margin-right: 24px;
+  img {
+    width: 100px;
+    cursor: pointer;
+  }
+}
+
 .view-action-btn {
   display: flex;
   flex-direction: row;
@@ -57,6 +66,7 @@
 
   .submit-btn {
     width: 200px;
+    padding: 12px 24px;
 
     margin-right: 24px;
   }

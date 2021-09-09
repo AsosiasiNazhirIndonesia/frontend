@@ -15,14 +15,17 @@ export default (props) => {
       });
       certificateSigners = sortedSigners.map((signer) => {
         return {
-          name: signer.User.name
+          name: signer.User.name,
+          is_sign: signer.is_sign
         }
       });
     }
 
     let result = '';
     for(const assignToUser of certificateSigners) {
-      result += assignToUser.name + ', ';
+      if (assignToUser.is_sign) {
+        result += assignToUser.name + ', ';
+      }
     }
 
     return result.substr(0, result.length - 2);

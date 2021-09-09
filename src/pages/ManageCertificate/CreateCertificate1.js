@@ -16,13 +16,15 @@ import draftToHtml from "draftjs-to-html"
 import API from "../../services/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
 
 const CreateCertificate1 = (props) => {
   const [isProcessing, setProcessing] = useState(false);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   )
-  
+  const [certificateDate, setCertificateDate] = useState({status: INPUT_STATUS.INIT, errorMessage: '', value: null});
+
   const onEditorStateChange = () => {
     const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
     props.setInputValue("certificateDescription", content);
@@ -135,13 +137,6 @@ const CreateCertificate1 = (props) => {
         </div>
         <div className="title">
           <p>Description</p>
-          {/* <InputField
-            type="text"
-            name="title-input"
-            placeholder="Certificate description"
-            value={props.getInputValue("certificateDescription")}
-            onChange={(e) => { props.setInputValue("certificateDescription", e.target.value) }}
-          ></InputField> */}
           <div className="certificate-desc">
             <Editor
               editorState={editorState}
@@ -165,11 +160,16 @@ const CreateCertificate1 = (props) => {
         <div className="title">
           <p>Certificate Date</p>
           <InputField
-            type="text"
+            type="date"
             name="title-input"
             placeholder="Certificate date"
-            value={props.getInputValue("certificateDate")}
-            onChange={(e) => { props.setInputValue("certificateDate", e.target.value) }}
+            value={certificateDate}
+            onChange={(value) => {
+              setCertificateDate({
+                status: value ? INPUT_STATUS.VALID : INPUT_STATUS.INVALID,
+                errorMessage: value ? '' : 'This field is required',
+                value: value}); 
+              props.setInputValue("certificateDate", moment(value).format('DD-MM-YYYY')) }}
           ></InputField>
         </div>
       </div>

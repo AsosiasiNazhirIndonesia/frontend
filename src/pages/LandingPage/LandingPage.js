@@ -1,13 +1,20 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import Footer from '../../components/Footer/Footer';
 import SearchCertificate from '../../components/SearchCertifcate/SearchCertificate';
 import { history } from '../../store';
-import ViewCertificate from '../ManageCertificate/ViewCertificate';
 import './LandingPage.scss';
 
-export default () => {
+const LandingPage = (props) => {
     const myRef = useRef(null);
     const executeScroll = () => myRef.current.scrollIntoView();
+    const contractAddress = new URLSearchParams(props.location.search).get("contract_address");
+
+    useEffect(() => {
+        if (contractAddress) {
+            executeScroll();
+        }
+    }, [])
 
     return (
         <div className="landing-page">
@@ -17,9 +24,11 @@ export default () => {
                 <button className="search-btn" onClick={() => executeScroll()}>Search Certificate</button>
             </div>
             <div className="second-section" ref={myRef}>
-                <SearchCertificate/>
+                <SearchCertificate contractAddress={contractAddress}/>
             </div>
             <Footer/>
         </div>
     );
 }
+
+export default withRouter(LandingPage);
