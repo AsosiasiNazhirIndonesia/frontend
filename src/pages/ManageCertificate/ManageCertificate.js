@@ -275,7 +275,7 @@ const ManageCertificate = (props) => {
         value: "Please check your metamask and stay on this page until certificate has been deployed to blockchain"});
       const res = await tx.send({
         from: accounts[0],
-        gas: 1500000,
+        gas: 3000000,
         gasPrice: '30000000000'
       });
       
