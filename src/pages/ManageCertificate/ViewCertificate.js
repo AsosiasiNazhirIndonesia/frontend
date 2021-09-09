@@ -193,7 +193,7 @@ const ViewCertificate = (props) => {
 
   const shareToLinkedIn = () => {
     const dateArr = certificate.date.split('-');
-    window.open(`https://www.linkedin.com/profile/add?startTask=Telkom%20Blockchain%20Based%20Digital%20Certificate&name=${certificate.name}&organizationId=75615928&issueYear=${dateArr[2]}&issueMonth=${dateArr[1]}&expirationYear=0&expirationMonth=0&certUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2FUSER%3Fmenu%3Dmanage-certificate%26view_certificate%3Dtrue%26certificate_id%3D${certificate.certificate_id}&certId=${certificate.sc_address}`)
+    window.open(`https://www.linkedin.com/profile/add?startTask=Telkom%20Blockchain%20Based%20Digital%20Certificate&name=${certificate.name}&organizationId=75615928&issueYear=${dateArr[2]}&issueMonth=${dateArr[1]}&expirationYear=0&expirationMonth=0&certUrl=http%3A%2F%2F103.172.204.60%2Fdashboard%2FUSER%3Fmenu%3Dmanage-certificate%26view_certificate%3Dtrue%26certificate_id%3D${certificate.certificate_id}&certId=${certificate.sc_address}`)
   }
 
   return (
