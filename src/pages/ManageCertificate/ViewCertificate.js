@@ -137,7 +137,7 @@ const ViewCertificate = (props) => {
     const { receiver_name, no, 
       title, description, score, date} = certificate;
     const descriptionText = htmlToText.fromString(description).replace(/(\r\n|\n|\r| )/gm, "");
-    const mergeCertificateData = receiver_name + no + title + descriptionText + score + date;
+    const mergeCertificateData = (receiver_name + no + title + descriptionText + score + date).replace(/(\r\n|\n|\r| )/gm, "");
     console.log(mergeCertificateData);
     console.log(web3.utils.keccak256(mergeCertificateData));
     return web3.utils.keccak256(mergeCertificateData)
