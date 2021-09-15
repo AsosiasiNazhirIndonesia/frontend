@@ -245,7 +245,7 @@ const ViewCertificate = (props) => {
           <SubmitButton
             isProcessing={isProcessing}
             disabled={!allowToSigning || certificateStatus == 2}
-            buttonText={isSigned && !isReceiver ? "Signed" : isSigned && !isReceiver ? "Accepted" : isReceiver ? "Accept" : "Sign"}
+            buttonText={isSigned && !isReceiver ? "Signed" : isSigned && isReceiver ? "Accepted" : isReceiver ? "Accept" : "Sign"}
             onClick={() => {
               onSign();
             }}
