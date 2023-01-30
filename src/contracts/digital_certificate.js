@@ -4,21 +4,24 @@ import abi from "./abi.json";
 import bytecodes from "./bytecodes.json";
 import { sourceCode } from "./source_code";
 
-const DigiCertContract = {};
+const CertificateSet = {};
 
-DigiCertContract.getNewInstance = (address) => {
+// when switching to new Org
+CertificateSet.getNewInstance = (address) => {
   return new web3.eth.Contract(abi, address);
 };
 
-DigiCertContract.deploy = (certificateHash, receiver, approvers) => {
-  const digiCertContract = DigiCertContract.getNewInstance(undefined);
-  return digiCertContract.deploy({
+// when creating to new Org, dont use deploy, use CertificateSetFactory instead
+CertificateSet.deploy = (certificateHash, receiver, approvers) => {
+  const CertificateSet = CertificateSet.getNewInstance(undefined);
+  return CertificateSet.deploy({
     data: bytecodes.object,
     arguments: [certificateHash, receiver, approvers],
   });
 };
 
-DigiCertContract.verify = async (address, constructorArguements) => {
+// when creating to new Org, dont use deploy, use CertificateSetFactory instead
+CertificateSet.verify = async (address, constructorArguements) => {
   try {
     console.log('try to verifying contract');
     var data = new FormData();
@@ -47,4 +50,4 @@ DigiCertContract.verify = async (address, constructorArguements) => {
   }
 };
 
-export default DigiCertContract;
+export default CertificateSet;

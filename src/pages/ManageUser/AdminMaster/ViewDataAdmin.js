@@ -31,7 +31,7 @@ const ViewDataAdmin = (props) => {
       </form>
       <form className="form-role-information">
         <div>
-          <p className="title-role">Admin Role :</p>
+          <p className="title-role">Super Admin :</p>
           <span className="role">{props.selectedAdmin.admin_role}</span>
         </div>
       </form>

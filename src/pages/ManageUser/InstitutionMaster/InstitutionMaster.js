@@ -1,6 +1,5 @@
 import { useParams, withRouter } from "react-router-dom";
 import SubmitButton from "../../../components/elements/SubmitButton/SubmitButton";
-import InputField from "../../../components/elements/InputField/InputField";
 import TableInstitution from "../../../components/Table/TableInstitution";
 import AddEditInstitution from "./AddEditInstitution";
 import Delete from "../../../components/Popup/Delete";
@@ -11,6 +10,8 @@ import API from "../../../services/api";
 import { INPUT_STATUS } from "../../../constants/component.constant";
 import { createNotification } from "../../../components/Notification/Notification";
 import { history } from "../../../store";
+import web3 from "../../../services/web3";
+import CertificateSetFactory from "../../../contracts/digital_certificate_factory";
 
 const InstitutionMaster = (props) => {
   const value = {};
@@ -72,12 +73,31 @@ const InstitutionMaster = (props) => {
 
   const submit = async () => {
     try {
+      
+      const certificateSetFactory = CertificateSetFactory.getNewInstance('0x8eBD7A6D00C5Ac6215B9cB463306C841C7F3d4C1');
+      const accounts = await web3.eth.getAccounts();
+      const tx = certificateSetFactory.methods.createCertificateSet(accounts[0], institutionName.value);
+
+      createNotification({
+        type: "Deploy...", 
+        value: "Please check your metamask and stay on this page until new smartcontract is deployed for this Institution"});
+
+      const res = await tx.send({
+        from: accounts[0],
+        gas: 3000000,
+        gasPrice: '30000000000'
+      });
+
+      const contractAddresses = await certificateSetFactory.methods.certificateSets().call();
+      const institutionContractAddress = contractAddresses[contractAddresses.length-1];
+
       await API.addInstitution({
         name: institutionName.value,
         email: email.value,
         phone_number: phoneNumber.value,
         address: address.value,
         type: type.value,
+        sc_address: institutionContractAddress,
       });
       createNotification({
         type: "success",

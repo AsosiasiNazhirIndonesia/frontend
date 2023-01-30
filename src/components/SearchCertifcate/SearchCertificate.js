@@ -8,7 +8,14 @@ import { createNotification } from "../Notification/Notification";
 import { INPUT_STATUS } from "../../constants/component.constant";
 
 export default (props) => {
+
   const [scAddress, setScAddress] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
+
+  const [tokenId, setTokenId] = useState({
     status: INPUT_STATUS.INIT,
     value: "",
     errorMessage: "",
@@ -17,14 +24,15 @@ export default (props) => {
   const [isProcessing, setProcessing] = useState(false);
   const [certificateId, setCertificateId] = useState(null);
 
-  const getCertificateId = async (address) => {
+  const getCertificateId = async (address,tokenId) => {
     setCertificateId(null);
     if (!address || address === "") {
       return;
     }
 
     setProcessing(true);
-    const certificate = await API.getCertificateByScAddress(address);
+    const certificate = await API.getCertificateByScAddressAndTokenId(address,tokenId);
+    
     if (certificate) {
       setCertificateId(certificate.certificate_id);
     } else {
@@ -49,9 +57,8 @@ export default (props) => {
   return (
     <>
       <div className="search-certificate">
-        <h1>Search Certificate</h1>
+        <h4>Cari Sertifikat</h4>
         <div className="search-form">
-          <span>Cari Sertifikat</span>
           <InputField
             type="text"
             name="search-input"
@@ -65,10 +72,23 @@ export default (props) => {
               });
             }}
           />
+          <InputField
+            type="text"
+            name="search-input"
+            placeholder="Masukan NFT Id"
+            value={tokenId}
+            onChange={(e) => {
+              setTokenId({
+                status: INPUT_STATUS.VALID,
+                value: e.target.value,
+                errorMessage: "",
+              });
+            }}
+          />
           <SubmitButton
             isProcessing={isProcessing}
             buttonText={"Search"}
-            onClick={() => getCertificateId(scAddress.value)}
+            onClick={() => getCertificateId(scAddress.value,tokenId.value)}
           />
         </div>
       </div>

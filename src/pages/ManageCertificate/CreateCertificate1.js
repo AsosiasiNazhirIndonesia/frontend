@@ -14,8 +14,7 @@ import {
 } from "draft-js";
 import draftToHtml from "draftjs-to-html"
 import API from "../../services/api";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+
 import moment from "moment";
 
 const CreateCertificate1 = (props) => {
@@ -87,24 +86,6 @@ const CreateCertificate1 = (props) => {
           certificateLogo={props.getInputValue("certificateLogo")}/>
       </div>
       <div className="form-detail-certificate">
-        <div className="title">
-          <p>Logo</p>
-          {!props.getInputValue("certificateLogo")?
-          <>
-            <input
-              type="file"
-              className="custom-file-input"
-              id="input"
-              accept="image/*"
-              onChange={onUpload}
-              disabled={isProcessing}
-              hidden
-            />
-            <label htmlFor="input" className="browse-btn">
-              {!isProcessing ? 'Browse' : <FontAwesomeIcon icon={faSpinner}/>}
-            </label>
-          </> : <span>{props.getInputValue("certificateLogo")}</span> }
-        </div>
         <div className="title">
           <p>Title</p>
           <InputField

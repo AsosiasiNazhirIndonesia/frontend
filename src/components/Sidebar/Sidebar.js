@@ -3,7 +3,7 @@ import menuIcon from "../../assets/icons/menu.svg";
 import { history } from "../../store";
 import { useEffect, useState } from "react";
 import React from "react";
-import { ACTOR, ACTOR_TOKEN } from "../../constants/component.constant";
+import { ACTOR } from "../../constants/component.constant";
 import { useSelector } from "react-redux";
 
 export default (props) => {
@@ -87,37 +87,15 @@ export default (props) => {
           <img src={menuIcon} />
           <span>Manage Certificates</span>
         </div>
-        <div
-          className={props.menu === "manage_user" ? "menu active" : "menu"}
-          onClick={() => setIsManageUser(!isManageUser)}
+        {/* <div
+          className={
+            props.menu === "manage_user" ? "menu active" : "menu"
+          }
+          onClick={() => history.push(`/dashboard/${props.actor}?menu=user-master`)}
         >
           <img src={menuIcon} />
           <span>Manage User</span>
-        </div>
-        {isManageUser ? (
-          <React.Fragment>
-            <div
-              className={
-                props.menu === "role-master" ? "menu sub active" : "menu sub"
-              }
-              onClick={() => history.push(`/dashboard/${props.actor}?menu=role-master`)}
-            >
-              <img src={menuIcon} />
-              <span>Role Master</span>
-            </div>
-            <div
-              className={
-                props.menu === "user-master" ? "menu sub active" : "menu sub"
-              }
-              onClick={() => history.push(`/dashboard/${props.actor}?menu=user-master`)}
-            >
-              <img src={menuIcon} />
-              <span>User Master</span>
-            </div>
-          </React.Fragment>
-        ) : (
-          <div></div>
-        )}
+        </div> */}
       </React.Fragment>
     );
   }

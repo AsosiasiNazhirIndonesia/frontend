@@ -58,7 +58,7 @@ const CreateCertificate2 = (props) => {
     window.open(`/profile?actor_type=USER&actor_public_key=${pubKey}`, "_blank");
   }
 
-  const disabledSumbitBtn = () => {
+  const disabledSubmitBtn = () => {
     let disabled = false;
     if (props.getInputValue('sendToPubKey').status !== INPUT_STATUS.VALID) {
       disabled = true;
@@ -79,7 +79,7 @@ const CreateCertificate2 = (props) => {
     <React.Fragment>
       <form className="form-sendTo">
         <div className="sendTo-input">
-          <p>Send to</p>
+          <p>Awarded to</p>
           <InputField
             type="text"
             name="search-input"
@@ -94,7 +94,7 @@ const CreateCertificate2 = (props) => {
       </form>
       <div className="form-assignTo">
         <div className="assignTo-input">
-          <p>Assign To</p>
+          <p>Signers</p>
           {props.assignToPubKeys.map((assignToPubKey, key) => {
             return (
             <div className="assignTo-input-item">
@@ -109,11 +109,12 @@ const CreateCertificate2 = (props) => {
               {props.assignToUsers[key].user_id ?
                 <span>Name: <Link to="" onClick={(e) => goToProfile(e, props.assignToUsers[key].public_key)}>{props.assignToUsers[key].name}</Link></span> :
                 <></>}
-            </div>);
+            </div>
+            );
           })}
         </div>
         <div className="btn-add-user">
-          <SubmitButton buttonText="Add User" onClick={() => addAssignToInputs()}></SubmitButton>
+          <SubmitButton buttonText="Add Signer" onClick={() => addAssignToInputs()}></SubmitButton>
           {props.assignToPubKeys.length > 1 ? 
             <div className="btn-delete-user">
               <SubmitButton className="delete-btn" buttonText="Delete User" onClick={() => deleteAssignToInputs()}></SubmitButton>
@@ -135,7 +136,7 @@ const CreateCertificate2 = (props) => {
         <div className="btn-next">
           <SubmitButton
             buttonText="Next"
-            disabled={disabledSumbitBtn()}
+            disabled={disabledSubmitBtn()}
             onClick={() => {
               history.push(
                 "/dashboard/ADMIN?menu=manage-certificate&create_certificate_step=3"

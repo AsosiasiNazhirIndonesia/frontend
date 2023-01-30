@@ -1,7 +1,6 @@
-import telkomLogo from "../../assets/images/telkom-logo.png";
+import aniLogo from "../../assets/images/ani-logo.png";
 import "./CertificatePDF.scss";
 import { HOST } from "../../services/api";
-import { useState } from "react";
 
 export default (props) => {
   const composeAssignToName = () => {
@@ -39,7 +38,7 @@ export default (props) => {
         }}
       /> */}
       <div className="template-body" ref={props.cetificateRef} id="certificateImage">
-        <img src={props.certificateLogo ? `${HOST}/api/files/${props.certificateLogo}` : telkomLogo} className="certificate-logo"/>
+        {/* <img src={props.certificateLogo ? `${HOST}/api/files/${props.certificateLogo}` : aniLogo} className="certificate-logo"/> */}
         <div className="template-header">
           <span>{props.certificateTitle}</span>
         </div>
@@ -52,6 +51,7 @@ export default (props) => {
           <div className="description" dangerouslySetInnerHTML={{__html: props.certificateDescription}}></div>
           <span className="score">Score: {props.certificateScore}</span>
           <span className="sc-address">Contract Address: {props.scAddress ? props.scAddress : '-'}</span>
+          <span className="sc-address">NFT ID: {props.tokenId ? props.tokenId : '-'}</span>
         </div>
         <div className="template-footer">
           <span className="certificate-date">Date: {props.certificateDate}</span>

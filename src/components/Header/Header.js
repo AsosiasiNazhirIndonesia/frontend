@@ -1,6 +1,6 @@
 import './Header.scss';
 import logo from '../../assets/images/logo.svg';
-import telkomLogo from '../../assets/images/telkom-logo.png';
+import aniLogo from '../../assets/images/ani-logo.png';
 import avatar from '../../assets/images/avatar.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
@@ -21,10 +21,9 @@ export default (props) => {
             <div className="header">
                 <div className="header-left">
                     <img src={logo}></img>
-                    <img src={telkomLogo}></img>
+                    <img src={aniLogo}></img>
                     <div className="title">
-                        <h4>Telkom Blockchain-Based</h4>
-                        <h4>Digital Certifiates</h4>
+                        <h4>Sertifikat Digital Berbasis Blockchain</h4>
                     </div>
                 </div>
                 <div className="header-right">

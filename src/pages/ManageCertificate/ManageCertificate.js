@@ -18,8 +18,10 @@ import { createNotification } from "../../components/Notification/Notification";
 import Pagination from "../../components/elements/Pagination/Pagination";
 import { connect, useSelector } from "react-redux";
 import moment from "moment";
-import DigiCertContract from "../../contracts/digital_certificate";
+import CertificateSet from "../../contracts/digital_certificate";
 import htmlToText from "html-to-text";
+const { Buffer } = require('buffer');
+
 
 const ManageCertificate = (props) => {
   const [isDelete, setIsDelete] = useState(false);
@@ -111,7 +113,8 @@ const ManageCertificate = (props) => {
         sendTo: result.User.name,
         signaturedBy: composeApprovers(result.CertificateSigners),
         status: "",
-        scAddress: result.sc_address
+        scAddress: result.sc_address,
+        tokenId: result.token_id
       });
     }
     if (newCertificates.length > 0) {
@@ -253,6 +256,7 @@ const ManageCertificate = (props) => {
   }
 
   const submit = async () => {
+
     const certificateHash = getDataToSign({
       receiver_name: receiverName.value,
       no: certificateNo.value, 
@@ -267,18 +271,25 @@ const ManageCertificate = (props) => {
       approvers.push(assignToPubKey.value);
     }
 
-    const tx = DigitalCertificate.deploy(certificateHash, sendToPubKey.value, approvers);
+    const institution = await API.getInstitutionById(props.admin.institution_id);
+    const certificateSet = CertificateSet.getNewInstance(institution.sc_address);
+    const today = new Date();
+    const thisMonth = today.getMonth();
+    const tx = certificateSet.methods.mint(sendToPubKey.value, 0, Math.floor(new Date(today.setMonth(thisMonth + 12)).getTime() / 1000), certificateHash, approvers);
     const accounts = await web3.eth.getAccounts();
+
     try {
       createNotification({
-        type: "info", 
-        value: "Please check your metamask and stay on this page until certificate has been deployed to blockchain"});
+        type: "Minting...", 
+        value: "Please check your metamask and stay on this page until Certificate is Minted to blockchain"});
+
       const res = await tx.send({
         from: accounts[0],
         gas: 3000000,
         gasPrice: '30000000000'
       });
-      
+
+      const tokenId = await certificateSet.methods.encodeTokenId(0, sendToPubKey.value).call();
 
       const certificate_signers = [];
       let index = 0;
@@ -290,6 +301,7 @@ const ManageCertificate = (props) => {
         index++;
       }
 
+      //save to database
       API.addCertificate({
         admin_id: props.admin.admin_id,
         user_id: sendToUser.user_id,
@@ -300,12 +312,11 @@ const ManageCertificate = (props) => {
         description: certificateDescription.value,
         score: certificateScore.value,
         date: certificateDate.value,
-        sc_address: res._address,
+        sc_address: institution.sc_address,
+        token_id: tokenId,
         receiver_name: receiverName.value,
         certificate_signers
       });
-
-      await DigiCertContract.verify(res._address, [certificateHash, sendToPubKey.value, approvers]);
       
       createNotification({
         type: "success", 
@@ -321,37 +332,108 @@ const ManageCertificate = (props) => {
     } 
   }
 
-  const onDelete = async () => {
-    try {
-      if (!web3.utils.isAddress(deleteSelectedData.scAddress)) {
-        throw "Certificate not exist on blockchain";
-      }
-  
-      const digicertContract = DigiCertContract.getNewInstance(deleteSelectedData.scAddress);
-      const accounts = await web3.eth.getAccounts();
-      createNotification({
-        type: "info",
-        value: "Please check your metamask"
-      });
-      await digicertContract.methods.dropCertificate().send({
-        from: accounts[0],
-        gas: await digicertContract.methods.dropCertificate().estimateGas({from: accounts[0]}),
-        gasPrice: '100000000000'
-      });
-      createNotification({
-        type: "success",
-        value: `Drop certificate success`
-      });
-      getAllCertificates(currentPage - 1, itemsPerPage);
-    } catch (e) {
-      const message = typeof e === 'object' ? e.message : e;
-      createNotification({
-        type: "error",
-        value: message
-      });
+  // old submit deploying new contract
+  // const submit = async () => {
+  //   const certificateHash = getDataToSign({
+  //     receiver_name: receiverName.value,
+  //     no: certificateNo.value, 
+  //     title: certificateTitle.value,
+  //     description: certificateDescription.value,
+  //     score: certificateScore.value,
+  //     date: certificateDate.value
+  //   });
 
-    }
-  }
+  //   let approvers = [];
+  //   for (const assignToPubKey of assignToPubKeys) {
+  //     approvers.push(assignToPubKey.value);
+  //   }
+
+  //   const tx = DigitalCertificate.deploy(certificateHash, sendToPubKey.value, approvers);
+  //   const accounts = await web3.eth.getAccounts();
+  //   try {
+  //     createNotification({
+  //       type: "info", 
+  //       value: "Please check your metamask and stay on this page until certificate has been deployed to blockchain"});
+  //     const res = await tx.send({
+  //       from: accounts[0],
+  //       gas: 3000000,
+  //       gasPrice: '30000000000'
+  //     });
+      
+
+  //     const certificate_signers = [];
+  //     let index = 0;
+  //     for (const assignToUser of assignToUsers) {
+  //       certificate_signers.push({
+  //         user_id: assignToUser.user_id,
+  //         priority: index
+  //       });
+  //       index++;
+  //     }
+
+  //     API.addCertificate({
+  //       admin_id: props.admin.admin_id,
+  //       user_id: sendToUser.user_id,
+  //       logo: certificateLogo,
+  //       name: documentName.value,
+  //       title: certificateTitle.value,
+  //       no: certificateNo.value,
+  //       description: certificateDescription.value,
+  //       score: certificateScore.value,
+  //       date: certificateDate.value,
+  //       sc_address: res._address,
+  //       token_id: res._tokenId,
+  //       receiver_name: receiverName.value,
+  //       certificate_signers
+  //     });
+
+  //     await CertificateSet.verify(res._address, [certificateHash, sendToPubKey.value, approvers]);
+      
+  //     createNotification({
+  //       type: "success", 
+  //       value: "Your certificate already on blockchain"});
+
+  //       history.push(`/dashboard/${actor}?menu=manage-certificate`);
+  //   } catch(e) {
+  //     console.log(e);
+  //     createNotification({
+  //       type: "error",
+  //       value: "Something went wrong"
+  //     })
+  //   } 
+  // }
+
+  // const onDelete = async () => {
+  //   try {
+  //     if (!web3.utils.isAddress(deleteSelectedData.scAddress)) {
+  //       throw "Certificate not exist on blockchain";
+  //     }
+  
+  //     const certificateSet = CertificateSet.getNewInstance(deleteSelectedData.scAddress);
+  //     const accounts = await web3.eth.getAccounts();
+  //     createNotification({
+  //       type: "info",
+  //       value: "Please check your metamask"
+  //     });
+  //     await certificateSet.methods.dropCertificate().send({
+  //       from: accounts[0],
+  //       gas: await certificateSet.methods.dropCertificate().estimateGas({from: accounts[0]}),
+  //       gasPrice: '100000000000'
+  //     });
+  //     createNotification({
+  //       type: "success",
+  //       value: `Drop certificate success`
+  //     });
+  //     getAllCertificates(currentPage - 1, itemsPerPage);
+  //   } catch (e) {
+  //     const message = typeof e === 'object' ? e.message : e;
+  //     createNotification({
+  //       type: "error",
+  //       value: message
+  //     });
+
+  //   }
+  // }
 
   const resolveContent = () => {
     if (view) {
@@ -468,7 +550,7 @@ const ManageCertificate = (props) => {
       </div>
       <ProgressBar progress={resolveProgressBarContent()} />
       {resolveContent()}
-      <Delete delete={isDelete} setIsDelete={setIsDelete} del={onDelete} />
+      {/* <Delete delete={isDelete} setIsDelete={setIsDelete} del={onDelete} /> */}
     </div>
   );
 };

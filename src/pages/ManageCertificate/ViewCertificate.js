@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import SubmitButton from "../../components/elements/SubmitButton/SubmitButton";
 import { CERTIFICATE_STATUS } from "../../constants/component.constant";
-import DigiCertContract from "../../contracts/digital_certificate";
+import CertificateSet from "../../contracts/digital_certificate";
 import API from "../../services/api";
 import web3 from "../../services/web3";
 import { history } from "../../store";
@@ -15,7 +15,8 @@ import { useSelector } from "react-redux";
 import { createNotification } from "../../components/Notification/Notification";
 import htmlToText from "html-to-text";
 import linkedinLogo from "../../assets/images/linkedin.png";
-import moment from "moment";
+
+
 
 const ViewCertificate = (props) => {
   const [certificate, setCertificate] = useState({});
@@ -34,7 +35,6 @@ const ViewCertificate = (props) => {
       || !user || Object.keys(user) <= 0)) {
 
       let temp = {};
-      console.log('hey');
       setReceiver(
         progressBarContent[progressBarContent.length - 1].user_id === user.user_id
       );
@@ -57,10 +57,11 @@ const ViewCertificate = (props) => {
     }
   }
 
+  //TO DO
   const getCertificate = async () => {
     const newCert = await API.getCertificateById(certificateId);
     setCertificate(newCert);
-    getCertificateStatus(newCert.sc_address);
+    getCertificateStatus(newCert.sc_address,newCert.token_id);
     
     const newProgressBarContent = [{
       success: true,
@@ -71,10 +72,12 @@ const ViewCertificate = (props) => {
       return a.priority - b.priority;
     });
 
-    const digiCertContract = DigiCertContract.getNewInstance(newCert.sc_address);
+    const certificateSet = CertificateSet.getNewInstance(newCert.sc_address);
     let index = 0;
+    const signedByApprovers = await certificateSet.methods.signedByApprovers(newCert.token_id).call();
     for (const approver of sortedApprovers) {
-      const signedByApprover = await digiCertContract.methods.signedByApprovers(index).call();
+        //TO DO
+      const signedByApprover = signedByApprovers[index];
       const link = <Link 
         to="" 
         onClick={(e) => {
@@ -89,7 +92,7 @@ const ViewCertificate = (props) => {
       });
       index++;
     }
-    const signedByReceiver = await digiCertContract.methods.signedByReceiver().call();
+    const signedByReceiver = await certificateSet.methods.signedByReceiver(newCert.token_id).call();
     const link = <Link 
         to="" 
         onClick={(e) => {
@@ -105,13 +108,15 @@ const ViewCertificate = (props) => {
     setProgressBarContent(newProgressBarContent);
   }
 
-  const getCertificateStatus = async (scAddress) => {
+  const getCertificateStatus = async (scAddress,tokenId) => {
     if (!web3.utils.isAddress(scAddress)) {
       return;
     }
-    const digicertContract = DigiCertContract.getNewInstance(scAddress);
-    setCertificateStatus(await digicertContract.methods.status().call());
+    const certificateSet = CertificateSet.getNewInstance(scAddress);
+    setCertificateStatus(await certificateSet.methods.status(tokenId).call());
   }
+
+
 
   useEffect(() => {
     if (Object.keys(certificate) <= 0) {
@@ -133,13 +138,39 @@ const ViewCertificate = (props) => {
     }
   }
 
+  const DownloadPNGButton = async () => {
+
+  setProcessing(true);
+  const fileBlob = await
+  DomToImage
+  .toBlob(document.getElementById("certificateImage"))
+  .then(function (blob) {
+          return blob;
+      });
+  const ipfsURI = await API.uploadFileToIPFS(fileBlob,certificate.token_id);
+  const certificateSet = CertificateSet.getNewInstance(certificate.sc_address);
+  const accounts = await web3.eth.getAccounts();
+  console.log(ipfsURI);
+  const tx = certificateSet.methods.setURI(certificate.token_id, ipfsURI);
+
+  createNotification({
+    type: "Set URI...", 
+    value: "Please check your metamask and stay on this page until new URI is set"});
+
+  const res = await tx.send({
+    from: accounts[0],
+    gas: 3000000,
+    gasPrice: '30000000000'
+  });
+  setProcessing(false);
+  }
+
   const getDataToSign = (certificate) => {
     const { receiver_name, no, 
       title, description, score, date} = certificate;
     const descriptionText = htmlToText.fromString(description).replace(/(\r\n|\n|\r| )/gm, "");
     const mergeCertificateData = (receiver_name + no + title + descriptionText + score + date).replace(/(\r\n|\n|\r| )/gm, "");
-    console.log(mergeCertificateData);
-    console.log(web3.utils.keccak256(mergeCertificateData));
+
     return web3.utils.keccak256(mergeCertificateData)
   }
 
@@ -153,18 +184,18 @@ const ViewCertificate = (props) => {
   const onSign = async () => {
     setProcessing(true);
     createNotification({
-      type: "info",
-      value: "Please check your metamask"
+      type: "Signing...",
+      value: "Please check your metamask and click SIGN"
     });
     try {
       const accounts = await web3.eth.getAccounts();
-      const digicertContract = DigiCertContract.getNewInstance(certificate.sc_address);
+      const certificateSet = CertificateSet.getNewInstance(certificate.sc_address);
       const signature = await getSignature(certificate);
       let method;
       if (isReceiver) {
-        method = digicertContract.methods.receiverSigning(signature);
+        method = certificateSet.methods.receiverSigning(certificate.token_id,signature);
       } else {
-        method = digicertContract.methods.approverSigning(signature);
+        method = certificateSet.methods.approverSigning(certificate.token_id,signature);
       }
       await method.send({
         from: accounts[0],
@@ -191,6 +222,7 @@ const ViewCertificate = (props) => {
 
   const shareToLinkedIn = () => {
     const dateArr = certificate.date.split('-');
+    //To Do : change ip address, add token id
     window.open(`https://www.linkedin.com/profile/add?startTask=Telkom%20Blockchain%20Based%20Digital%20Certificate&name=${certificate.name}&organizationId=75615928&issueYear=${dateArr[2]}&issueMonth=${dateArr[1]}&expirationYear=0&expirationMonth=0&certUrl=http%3A%2F%2F103.172.204.60%2F%3Fcontract_address%3D${certificate.sc_address}`)
   }
 
@@ -214,11 +246,17 @@ const ViewCertificate = (props) => {
               onClick={() => {
                 LazyDownloadPDFButton();
               }}
-            ></SubmitButton> : <></>}
-        <SubmitButton
-            buttonText="On Blockchain"
-            onClick={() => {
-              window.open(`https://ropsten.etherscan.io/address/${certificate.sc_address}`, "__blank")
+            ></SubmitButton> : <></>} 
+            <SubmitButton
+            buttonText="Upload"
+            onClick={ async () => {
+              await DownloadPNGButton();
+            }}
+          ></SubmitButton>
+          <SubmitButton
+            buttonText="View"
+            onClick={ async () => {
+              window.open(`https://testnets.opensea.io/assets/goerli/${certificate.sc_address}/${certificate.token_id}`, "__blank")
             }}
           ></SubmitButton>
         {isReceiver ? 
@@ -239,6 +277,7 @@ const ViewCertificate = (props) => {
           certificateScore={certificate.score}
           certificateDate={certificate.date}
           scAddress={certificate.sc_address}
+          tokenId={certificate.token_id}
           certificateLogo={certificate.logo}
           certificateSigners={certificate.CertificateSigners}/>
           {isSigner ? 

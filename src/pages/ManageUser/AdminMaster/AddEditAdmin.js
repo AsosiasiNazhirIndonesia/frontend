@@ -9,6 +9,7 @@ import API from "../../../services/api";
 import web3 from "../../../services/web3";
 import { history } from "../../../store";
 import "./AddEditAdmin.scss";
+import CertificateSet from "../../../contracts/digital_certificate";
 
 const AddEditAdmin = (props) => {
   const [isProcessing, setProcessing] = useState(false);
@@ -159,7 +160,24 @@ const AddEditAdmin = (props) => {
         admin_role: role.value,
         institution_id: selectedInstitution.institution_id ? selectedInstitution.institution_id : null,
         photo: photo
-      }
+      };
+
+      const institution = await API.getInstitutionById(selectedInstitution.institution_id);
+      const institutionContractAddress = institution.sc_address;
+      const certificateSet = CertificateSet.getNewInstance(institutionContractAddress);
+      const accounts = await web3.eth.getAccounts();
+      const tx = certificateSet.methods.transferOwnership(publicKey.value);
+
+      createNotification({
+        type: "Transfer Ownership...", 
+        value: "Please check your metamask and stay on this page until contract ownership is transferred to New Admin"});
+
+      const res = await tx.send({
+        from: accounts[0],
+        gas: 3000000,
+        gasPrice: '30000000000'
+      });
+
       await API.addAdmin(request);
       createNotification({
         type: 'success',
@@ -268,7 +286,7 @@ const AddEditAdmin = (props) => {
         </div>
         <div className="user-phoneNumber">
           <p>
-            Role <font color="red">*</font>
+            Admin Level <font color="red">*</font>
           </p>
           <InputField
             type="dropdown"
@@ -292,7 +310,7 @@ const AddEditAdmin = (props) => {
             />
           </div> : <></>}
         <div className="upload-photo">
-          <p>Upload Photo</p>
+          <p>Upload Logo</p>
           {!photo ?
           <>
             <input

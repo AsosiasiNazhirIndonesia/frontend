@@ -8,13 +8,11 @@ import { ACTOR, ACTOR_TOKEN } from "../../constants/component.constant";
 import { setActorType, setAdmin, setUser } from "../../modules/actions/actor.action";
 import ManageCertificate from "../ManageCertificate/ManageCertificate";
 import InstitutionMaster from "../ManageUser/InstitutionMaster/InstitutionMaster";
-import RoleMaster from "../ManageUser/RoleMaster/RoleMaster";
 import UserMaster from "../ManageUser/UserMaster/UserMaster";
 import API from "../../services/api";
 import jwt from "jsonwebtoken";
 import "./Dashboard.scss";
 import { history } from "../../store";
-import { ACTION_TYPE } from "../../constants/action.type";
 import AdminMaster from "../ManageUser/AdminMaster/AdminMaster";
 
 const Dashboard = (props) => {
@@ -33,7 +31,7 @@ const Dashboard = (props) => {
   const getActorDetails = async () => {
     const token = getToken();
     if (!token) {
-      history.push('/signin');
+      history.push('/');
       return;
     }
 
@@ -51,8 +49,6 @@ const Dashboard = (props) => {
 
   const resolveContent = () => {
     switch (menu) {
-      case "role-master":
-        return <RoleMaster />;
       case "institution-master":
         return <InstitutionMaster />;
       case "user-master":
@@ -89,7 +85,7 @@ const Dashboard = (props) => {
         break;
     }
 
-    history.push('/signin');
+    history.push('/');
   }
 
   if (!actor) {

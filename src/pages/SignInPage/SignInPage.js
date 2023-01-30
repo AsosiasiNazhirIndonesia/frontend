@@ -18,31 +18,31 @@ const SignInPage = (props) => {
     const [isFailed, setIsFailed] = useState(false);
     const [errorMessage, setErrorMessage] = useState('Test');
 
-    const userLogin = async () => {
-        if (!web3) {
-            return;
-        }
-        setIsProcessing(true);
-        setIsFailed(false);
-        try {
-            const accounts = await web3.eth.getAccounts();
-            const user = await API.getUserByPublicKey(accounts[0]);
-            if (!user) {
-                throw 'User with your address not found';
-            }
-            const message = `DIGICERT${user.login_nonce}`;
-            const dataToSign = web3.utils.sha3(message);
-            const signature = await web3.eth.personal.sign(dataToSign, accounts[0]);
-            const result = await API.userLogin({user_id: user.user_id, signature});
-            localStorage.setItem(ACTOR_TOKEN.DIGICERT_USER_TOKEN, result.token);
-            props.setActorType(ACTOR.USER);
-            history.push('/dashboard/USER');
-        } catch (e) {
-            setIsFailed(true);
-            setErrorMessage(typeof e === 'string' ? e : e.message);
-        }
-        setIsProcessing(false);
-    }
+    // const userLogin = async () => {
+    //     if (!web3) {
+    //         return;
+    //     }
+    //     setIsProcessing(true);
+    //     setIsFailed(false);
+    //     try {
+    //         const accounts = await web3.eth.getAccounts();
+    //         const user = await API.getUserByPublicKey(accounts[0]);
+    //         if (!user) {
+    //             throw 'User with your address not found';
+    //         }
+    //         const message = `DIGICERT${user.login_nonce}`;
+    //         const dataToSign = web3.utils.sha3(message);
+    //         const signature = await web3.eth.personal.sign(dataToSign, accounts[0]);
+    //         const result = await API.userLogin({user_id: user.user_id, signature});
+    //         localStorage.setItem(ACTOR_TOKEN.DIGICERT_USER_TOKEN, result.token);
+    //         props.setActorType(ACTOR.USER);
+    //         history.push('/dashboard/USER');
+    //     } catch (e) {
+    //         setIsFailed(true);
+    //         setErrorMessage(typeof e === 'string' ? e : e.message);
+    //     }
+    //     setIsProcessing(false);
+    // }
 
     const adminLogin = async () => {
         if (!web3) {
@@ -52,6 +52,7 @@ const SignInPage = (props) => {
         setIsFailed(false);
         try {
             const accounts = await web3.eth.getAccounts();
+            console.log(accounts[0]);
             const admin = await API.getAdminByPublicKey(accounts[0]);
             if (!admin) {
                 throw 'Admin with your address not found';
@@ -83,7 +84,7 @@ const SignInPage = (props) => {
                 {web3 ?
                     <div className="button">
                         <SubmitButton isProcessing={isProcessing} buttonText={"Login as Admin"} onClick={() => adminLogin()}/>
-                        <SubmitButton isProcessing={isProcessing} buttonText={"Login as User"} onClick={() => userLogin()}/>
+                        <SubmitButton isProcessing={isProcessing} buttonText={"Login as User"} onClick={() => history.push('/userlogin')}/>
                     </div> : <FontAwesomeIcon icon={faSpinner} className="big-spinner"></FontAwesomeIcon>}
             </div>
         </div>

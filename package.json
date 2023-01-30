@@ -6,12 +6,16 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
+    "@magic-ext/oauth": "^7.1.0",
+    "@magic-ext/webauthn": "^7.1.0",
     "@react-pdf/renderer": "^2.0.19",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/form-data": "^2.5.0",
     "animate.css": "^4.1.1",
     "axios": "^0.21.1",
+    "axios-retry": "^3.3.1",
     "bootstrap": "^5.0.2",
     "dom-to-image": "^2.6.0",
     "draft-js": "^0.11.7",
@@ -20,10 +24,12 @@
     "html-to-text": "3.0.0",
     "html2canvas": "^1.3.2",
     "immutable": "^4.0.0-rc.12",
+    "ipfs-http-client": "27.0.0",
     "js-convert-case": "^4.1.2",
     "jsonwebtoken": "^8.5.1",
     "kafka-node": "^5.0.0",
     "kafkajs": "^1.15.0",
+    "magic-sdk": "^13.1.0",
     "moment": "^2.29.1",
     "node-sass": "5.0.0",
     "react": "^17.0.2",
@@ -47,10 +53,11 @@
     "smooth-scroll": "^16.1.3",
     "socket.io-client": "^4.1.2",
     "web-vitals": "^1.0.1",
-    "web3": "1.5.2"
+    "web3": "1.5.2",
+    "yarn": "^1.22.19"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "set PORT=8080 && react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
@@ -74,7 +81,13 @@
     ]
   },
   "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.0",
+    "@nomiclabs/hardhat-waffle": "^2.0.0",
+    "chai": "^4.2.0",
     "customize-cra": "^1.0.0",
+    "ethereum-waffle": "^3.0.0",
+    "ethers": "^5.0.0",
+    "hardhat": "^2.9.0",
     "react-app-rewired": "^2.1.8"
   }
 }

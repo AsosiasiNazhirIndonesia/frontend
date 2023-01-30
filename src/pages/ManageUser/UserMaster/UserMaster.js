@@ -1,13 +1,11 @@
 import { withRouter } from "react-router-dom";
 import SubmitButton from "../../../components/elements/SubmitButton/SubmitButton";
-import InputField from "../../../components/elements/InputField/InputField";
 import TableUser from "../../../components/Table/TableUser";
 import "./UserMaster.scss";
 import React, { useEffect, useState } from "react";
 import { history } from "../../../store";
 import AddEditUser from "./AddEditUser";
 import ViewDataUser from "./ViewDataUser";
-import Delete from "../../../components/Popup/Delete";
 import Pagination from "../../../components/elements/Pagination/Pagination";
 import API from "../../../services/api";
 
@@ -67,11 +65,11 @@ const UserMaster = (props) => {
 
   const resolveSubtitle = () => {
     if (add) {
-      return <h6 className="breadcrumb-path"> User Master - Add User</h6>;
+      return <h6 className="breadcrumb-path"> Manage User - Add User</h6>;
     } else if (edit) {
-      return <h6 className="breadcrumb-path"> User Master - Edit User</h6>;
+      return <h6 className="breadcrumb-path"> Manage User - Edit User</h6>;
     } else if (view) {
-      return <h6 className="breadcrumb-path"> User Master - View User</h6>;
+      return <h6 className="breadcrumb-path"> Manage User - View User</h6>;
     } else return <div></div>;
   };
 
@@ -80,7 +78,7 @@ const UserMaster = (props) => {
   return (
     <div className="user-content">
       <div className="breadcrumb">
-        <h1>User Master</h1>
+        <h1>Manage User</h1>
         {subtitle}
       </div>
       {content}

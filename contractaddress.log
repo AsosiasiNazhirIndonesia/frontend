@@ -1,0 +1,10 @@
+Deploying: WalletMapping...
+(node:18032) ExperimentalWarning: stream/web is an experimental feature. This feature could change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+SUCCESS: WalletMapping deployed to:  0x0Dc8C795e474c6cc0395b6c0BC5Cc25E2cBb34f7
+___________________________
+Deploying: CertificateSetFactory...
+SUCCESS: CertificateSetFactory deployed to: 0xb60E749DFcBb0CDFe2e8c2f1FbBf87d635665F8F
+___________________________
+Deploying: Creating Northern Michigan Athletic Club...
+SUCCESS: Northern Michigan Athetlic Club deployed to:  0x776442466F084F128a0CFae6de7760Cfaaa4441b

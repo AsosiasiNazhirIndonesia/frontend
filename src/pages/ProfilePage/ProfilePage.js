@@ -9,7 +9,6 @@ import TableCertificate from "../../components/Table/TableCertificate";
 
 const Profile = (props) => {
   const [actor, setActor] = useState({});
-  const [histories, setHistories] = useState([]);
   const actorType = new URLSearchParams(props.location.search).get(
     "actor_type"
   );
@@ -44,7 +43,8 @@ const Profile = (props) => {
         sendTo: result.User.name,
         signaturedBy: composeApprovers(result.CertificateSigners),
         status: "",
-        scAddress: result.sc_address
+        scAddress: result.sc_address,
+        tokenId: result.token_id,
       });
     }
     if (newCertificates.length > 0) {
@@ -57,12 +57,10 @@ const Profile = (props) => {
     if (actorType === ACTOR.ADMIN) {
       newActor = await API.getAdminByPublicKey(actorPubKey);
     } else if (actorType === ACTOR.USER) {
-      newActor = await API.getUserByPublicKey(actorPubKey);
+      newActor = await API.getUserByPublicKey(actorPubKey); 
     }
-
     setActor(newActor);
     if (newActor) {
-      setHistories(await API.getUserHistoriesByUser(newActor.user_id));
       getAllCertificates(newActor, 0, 20);
     }
   };
@@ -71,32 +69,7 @@ const Profile = (props) => {
     getActor();
   }, [actorPubKey]);
 
-  const renderHistories = () => {
-    return histories.map((history) => {
-      return (
-        <div className="history">
-          <div className="detail-history">
-            <span className="title-history">Institution</span>
-            <span className="title-value">{history.Institution.name}</span>
-          </div>
-          <div className="detail-history">
-            <span className="title-history">Role</span>
-            <span className="title-value">{history.Role.description}</span>
-          </div>
-          <div className="detail-history">
-            <span className="title-history">Start Date</span>
-            <span className="title-value">{history.start_date}</span>
-          </div>
-          <div className="detail-history">
-            <span className="title-history">End Date</span>
-            <span className="title-value">
-              {history.end_date ? history.end_date : "Until Now"}
-            </span>
-          </div>
-        </div>
-      );
-    });
-  };
+
 
   return (
     <React.Fragment>
@@ -139,7 +112,6 @@ const Profile = (props) => {
               actor={actor}
             />
           </div> : <></>}
-          {renderHistories()}
         </div>
       </div>
     </React.Fragment>
