@@ -150,7 +150,7 @@ const ViewCertificate = (props) => {
   const ipfsURI = await API.uploadFileToIPFS(fileBlob,certificate.token_id);
   const certificateSet = CertificateSet.getNewInstance(certificate.sc_address);
   const accounts = await web3.eth.getAccounts();
-  console.log(ipfsURI);
+
   const tx = certificateSet.methods.setURI(certificate.token_id, ipfsURI);
 
   createNotification({

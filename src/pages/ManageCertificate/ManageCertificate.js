@@ -257,6 +257,8 @@ const ManageCertificate = (props) => {
 
   const submit = async () => {
 
+    if (!assignToPubKeys)
+    {
     const certificateHash = getDataToSign({
       receiver_name: receiverName.value,
       no: certificateNo.value, 
@@ -331,6 +333,7 @@ const ManageCertificate = (props) => {
       })
     } 
   }
+}
 
   // old submit deploying new contract
   // const submit = async () => {

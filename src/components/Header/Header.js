@@ -1,6 +1,6 @@
 import './Header.scss';
 import logo from '../../assets/images/logo.svg';
-import aniLogo from '../../assets/images/ani-logo.png';
+import aniLogoWhite from '../../assets/images/ani-logo-white.png';
 import avatar from '../../assets/images/avatar.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
@@ -20,26 +20,26 @@ export default (props) => {
         <>
             <div className="header">
                 <div className="header-left">
-                    <img src={logo}></img>
-                    <img src={aniLogo}></img>
-                    <div className="title">
-                        <h4>Sertifikat Digital Berbasis Blockchain</h4>
-                    </div>
+                    <img src={aniLogoWhite}></img>
                 </div>
                 <div className="header-right">
                     {props.actor ?
-                    <div className="profile">
-                        <span className="profile-name">{profileName}</span>
-                        <img src={profilePhoto} onClick={() => setMenuVisible(!menuVisible)}/>
-                    </div> : <></>
+                        <div className="profile">
+                            <img className='' src={profilePhoto} onClick={() => setMenuVisible(!menuVisible)} />
+                            <div>
+                                <span className="profile-name">{profileName}</span>
+                                <div className="profile-name">{profileName}</div>
+                            </div>
+
+                        </div> : <></>
                     }
                     {menuVisible ?
                         <div className="profile-options">
                             <div className="menu">
-                                <div className="sub-menu" onClick={() => {if (props.logout) { history.push(`/profile?actor_type=${props.type}&actor_public_key=${actorPubKey}`) }}}>
+                                <div className="sub-menu" onClick={() => { if (props.logout) { history.push(`/profile?actor_type=${props.type}&actor_public_key=${actorPubKey}`) } }}>
                                     <span>Details</span><FontAwesomeIcon icon={faSignOutAlt} />
                                 </div>
-                                <div className="sub-menu" onClick={() => {if (props.logout) { props.logout() }}}>
+                                <div className="sub-menu" onClick={() => { if (props.logout) { props.logout() } }}>
                                     <span>Logout</span><FontAwesomeIcon icon={faSignOutAlt} />
                                 </div>
                             </div>

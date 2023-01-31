@@ -26,7 +26,8 @@ const CreateCertificate2 = (props) => {
     if (value.length === 42) {
       loadAssignToUsers(value, index);
       status = INPUT_STATUS.VALID;
-    } else {
+    } 
+    else {
       props.assignToUsers[index] = {};
       props.setAssignToUsers([...props.assignToUsers]);
     }
@@ -34,7 +35,7 @@ const CreateCertificate2 = (props) => {
     props.assignToPubKeys[index] = {
       status: INPUT_STATUS.INVALID,
       value: value,
-      errorMessage: status === INPUT_STATUS.INVALID ? 'public key length must be 42 characters' : ''
+      errorMessage: ''//status === INPUT_STATUS.INVALID ? 'public key length must be 42 characters' : ''
     }
     props.setAssignToPubKeys([...props.assignToPubKeys]);
   }
@@ -65,7 +66,7 @@ const CreateCertificate2 = (props) => {
     } else {
       for(const assignToPubKey of props.assignToPubKeys) {
         if (assignToPubKey.status !== INPUT_STATUS.VALID) {
-          disabled = true;
+          // disabled = true;
           break;
         }
       }
@@ -95,6 +96,7 @@ const CreateCertificate2 = (props) => {
       <div className="form-assignTo">
         <div className="assignTo-input">
           <p>Signers</p>
+          <span>Admin Institution as Default, please change/add if necessary</span>
           {props.assignToPubKeys.map((assignToPubKey, key) => {
             return (
             <div className="assignTo-input-item">
