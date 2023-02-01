@@ -1,148 +1,167 @@
 .header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    background-color: #1C1C18;
-    align-items: center;
-    
-    width: 100%;
-    height: 138px;
-    padding: 14px 74px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #1c1c18;
+  align-items: center;
+
+  width: 100%;
+  padding: 14px 74px;
 }
 
 .header .header-left {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .header .header-left img {
-    width: 89px;
-    margin-right: 32px;
+  width: 85.72px;
+  height: 85.72px;
 }
 
 .header .header-left .title {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .header .header-left .title h4 {
-    font-family: "Palanquin";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 33px;
-    margin: 0 !important;
+  font-family: "Palanquin";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 33px;
+  margin: 0 !important;
 
-    color: #000000;
+  color: #000000;
 }
 
 .header .header-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    margin-right: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .header .header-right .profile {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .header .header-right h5 {
-    font-family: "Nunito Sans";
-    font-style: normal;
-    font-weight: bold;
-    font-size: 24px;
-    line-height: 33px;
-    /* identical to box height */
-    text-align: right;
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 33px;
+  /* identical to box height */
+  text-align: right;
 
-    /* Text/primary */
-    color: #0B0038;
+  /* Text/primary */
+  color: #0b0038;
 }
 
 .header .header-right h5.to-login {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.header .header-right .profile-name {
-    font-family: "Palanquin";
-    font-style: normal;
-    font-weight: bold;
-    font-size: 18px;
-    line-height: 33px;
-    /* identical to box height */
+.header .header-right {
+  font-family: "Nunito Sans";
+  color: #fff;
 
-    text-align: right;
+  .profile {
+    .avatar {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 100%;
+    }
 
-    /* Text/primary */
+    .more {
+      width: 28px;
+      height: 28px;
+      object-fit: cover;
+      border-radius: 100%;
+      margin-left: 32px;
 
-    color: #fff;
-    margin-left: 16px
-}
+      cursor: pointer;
+    }
 
-.header .header-right img {
-    width: 44px;
-    height: 44px;
-    object-fit: cover;
-    border-radius: 100%;
+    .right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-left: 16px;
 
-    cursor: pointer;
+      .name {
+        font-size: 14px;
+        line-height: 19px;
+        font-weight: bold;
+      }
+
+      .role {
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: normal;
+      }
+    }
+  }
+
+  /* identical to box height */
 }
 
 .header .header-right .submit-btn {
-    width: 100px;
-    padding: 0;
+  width: 100px;
+  padding: 0;
 }
 
 .profile-options {
-    position: sticky;
+  position: sticky;
 }
 
 .profile-options .menu {
-    position: absolute;
-    top: 0;
-    left: -30px;
-    z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0px;
+  z-index: 20;
 
-    background: white;
-    border: 3px solid #f5f5f5;
-    width: 120px;
-    height: 120px;
-    padding: 6px;
-    text-align: left;
+  background: white;
+  border: 3px solid #f5f5f5;
+  width: 120px;
+  height: 120px;
+  padding: 6px;
+  text-align: left;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile-options .menu .sub-menu {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 8px;
-    margin-bottom: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 12px;
+  color: black;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 .profile-options .menu .sub-menu:last-child {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 
 .profile-options .menu .sub-menu span {
-    font-family: "Noto Sans";
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 14px;
-    margin-right: 6px;
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 14px;
+  margin-right: 6px;
 }

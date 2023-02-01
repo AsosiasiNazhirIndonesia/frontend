@@ -1,54 +1,94 @@
 .sidebar {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    background: #0B0038;
-    min-height: calc(100vh - 138px);
-    width: 385px;
-    padding: 72px 0px;
-}
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  min-height: calc(100vh - 138px);
+  width: 20%;
+  padding: 72px 0px;
 
-.sidebar .menu {
+  .separator-menu {
+    margin-bottom: 48px;
+  }
+
+  .separator-sub-menu {
+    margin-bottom: 8px;
+  }
+
+  .menu {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
     text-align: left;
     width: 100%;
-    margin-bottom: 14px;
-    padding: 5px 24px;
-
     cursor: pointer;
-}
+    padding: 0px 44px;
 
-.sidebar .active {
-    background: #3F3957;
-}
+    img {
+      width: 24px;
+      height: 24px;
+      margin-right: 24px;
+    }
 
-.sidebar .menu img {
-    width: 24px;
-    margin-right: 14px;
-}
+    span {
+      font-size: 14px;
+      line-height: 19px;
+      font-family: "Palanquin";
+      font-weight: 500;
+      flex: 1;
+      color: #bdbdbd;
+    }
+  }
 
-.sidebar .menu span {
-    font-family: "Palanquin";
-    font-style: normal;
-    font-weight: normal;
-    font-size: 24px;
-    line-height: 43px;
+  .active {
+    .iconName {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
 
-    color: #FFFFFF;
-}
+      span {
+        color: #67ca7d;
+        font-size: 14px;
+        line-height: 19px;
+        font-family: "Palanquin";
+        font-weight: 500;
+        flex: 1;
+      }
+    }
 
-.sidebar .sub {
-    padding-left: 50px;
-}
+    .dotActive {
+      height: 8px;
+      width: 8px;
+      border-radius: 100%;
+      background-color: #67ca7d;
+      margin-left: 14px;
+    }
 
-.sidebar .sub img {
-    width: 20px;
-}
+    .dotInactive {
+      height: 8px;
+      width: 8px;
+      border-radius: 100%;
+      background-color: transparent;
+      margin-left: 14px;
+    }
+  }
 
-.sidebar .sub span {
-    font-size: 20px;
+  .sub {
+    padding-left: 100px;
+    margin-bottom: 8px;
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+
+    span {
+      font-size: 14px;
+      line-height: 19px;
+      font-family: "Palanquin";
+      font-weight: 500;
+      flex: 1;
+      color: #bdbdbd;
+    }
+  }
 }
