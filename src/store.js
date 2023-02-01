@@ -1,9 +1,9 @@
-import {createStore, compose, applyMiddleware} from 'redux';
-import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
-import thunk from 'redux-thunk';
-import { createBrowserHistory } from 'history';
+import { createStore, compose, applyMiddleware } from "redux";
+import reduxImmutableStateInvariant from "redux-immutable-state-invariant";
+import thunk from "redux-thunk";
+import { createBrowserHistory } from "history";
 // 'routerMiddleware': the new way of storing route changes with redux middleware since rrV4.
-import { routerMiddleware } from 'react-router-redux';
+import { routerMiddleware } from "react-router-redux";
 import rootReducer from "./modules/reducers";
 export const history = createBrowserHistory();
 function configureStoreProd(initialState) {
@@ -17,9 +17,10 @@ function configureStoreProd(initialState) {
     reactRouterMiddleware,
   ];
 
-  return createStore(rootReducer, initialState, compose(
-    applyMiddleware(...middlewares)
-    )
+  return createStore(
+    rootReducer,
+    initialState,
+    compose(applyMiddleware(...middlewares))
   );
 }
 
@@ -37,13 +38,17 @@ function configureStoreDev(initialState) {
     reactRouterMiddleware,
   ];
 
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools
-  const store = createStore(rootReducer, initialState, composeEnhancers(
-    applyMiddleware(...middlewares)
-    )
+  const composeEnhancers =
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools
+  const store = createStore(
+    rootReducer,
+    initialState,
+    composeEnhancers(applyMiddleware(...middlewares))
   );
 
   return store;
 }
 
-export const configureStore = !process.env.DEV ? configureStoreProd : configureStoreDev;
+export const configureStore = !process.env.DEV
+  ? configureStoreProd
+  : configureStoreDev;

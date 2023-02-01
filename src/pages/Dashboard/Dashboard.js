@@ -5,7 +5,11 @@ import Header from "../../components/Header/Header";
 import SearchCertificate from "../../components/SearchCertifcate/SearchCertificate";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { ACTOR, ACTOR_TOKEN } from "../../constants/component.constant";
-import { setActorType, setAdmin, setUser } from "../../modules/actions/actor.action";
+import {
+  setActorType,
+  setAdmin,
+  setUser,
+} from "../../modules/actions/actor.action";
 import ManageCertificate from "../ManageCertificate/ManageCertificate";
 import InstitutionMaster from "../ManageUser/InstitutionMaster/InstitutionMaster";
 import UserMaster from "../ManageUser/UserMaster/UserMaster";
@@ -16,7 +20,7 @@ import { history } from "../../store";
 import AdminMaster from "../ManageUser/AdminMaster/AdminMaster";
 
 const Dashboard = (props) => {
-  const actor =  useParams().actor;
+  const actor = useParams().actor;
   const menu = new URLSearchParams(props.location.search).get("menu");
 
   const getToken = () => {
@@ -26,26 +30,25 @@ const Dashboard = (props) => {
     }
 
     return token;
-  }
+  };
 
   const getActorDetails = async () => {
     const token = getToken();
     if (!token) {
-      history.push('/');
+      history.push("/");
       return;
     }
-
     const decodedToken = jwt.decode(token);
     if (actor === ACTOR.ADMIN) {
       await props.getAdmin(decodedToken.public_key);
     } else if (actor === ACTOR.USER) {
       await props.getUser(decodedToken.public_key);
     }
-  }
+  };
 
   useEffect(() => {
     getActorDetails();
-  }, [])
+  }, []);
 
   const resolveContent = () => {
     switch (menu) {
@@ -64,6 +67,7 @@ const Dashboard = (props) => {
 
   const resolveActor = () => {
     let actorObj;
+
     if (actor === ACTOR.ADMIN && props.admin) {
       actorObj = props.admin;
     } else if (actor === ACTOR.USER && props.admin) {
@@ -71,10 +75,10 @@ const Dashboard = (props) => {
     }
 
     return actorObj;
-  }
+  };
 
   const logout = () => {
-    switch(actor) {
+    switch (actor) {
       case ACTOR.ADMIN:
         localStorage.removeItem(ACTOR_TOKEN.DIGICERT_ADMIN_TOKEN);
         props.logoutAdmin();
@@ -83,13 +87,15 @@ const Dashboard = (props) => {
         localStorage.removeItem(ACTOR_TOKEN.DIGICERT_USER_TOKEN);
         props.logoutUser();
         break;
+      default:
+        break;
     }
 
-    history.push('/');
-  }
+    history.push("/");
+  };
 
   if (!actor) {
-    return <Redirect to="/dashboard/USER"/>;
+    return <Redirect to="/dashboard/USER" />;
   }
 
   return (
@@ -104,9 +110,9 @@ const Dashboard = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  user:  state.getIn(['actor', 'user']).toJS(),
-  admin:  state.getIn(['actor', 'admin']).toJS(),
-  type: state.getIn(['actor', 'type'])
+  user: state.getIn(["actor", "user"]).toJS(),
+  admin: state.getIn(["actor", "admin"]).toJS(),
+  type: state.getIn(["actor", "type"]),
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -116,7 +122,7 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(setActorType(ACTOR.USER));
         dispatch(setUser(await API.getUserByPublicKey(publicKey)));
       } catch (e) {
-          console.log(e);
+        console.log(e);
         throw e;
       }
     },
@@ -125,7 +131,7 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(setActorType(ACTOR.ADMIN));
         dispatch(setAdmin(await API.getAdminByPublicKey(publicKey)));
       } catch (e) {
-          console.log(e);
+        console.log(e);
         throw e;
       }
     },
@@ -133,9 +139,12 @@ const mapDispatchToProps = (dispatch) => {
       setUser({});
     },
     logoutAdmin() {
-      setAdmin({})
-    }
-  }
+      setAdmin({});
+    },
+  };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(withRouter(Dashboard)));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(React.memo(withRouter(Dashboard)));

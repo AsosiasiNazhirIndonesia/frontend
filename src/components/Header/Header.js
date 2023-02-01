@@ -10,9 +10,12 @@ import { history } from "../../store";
 import { ACTOR } from "../../constants/component.constant";
 import SubmitButton from "../elements/SubmitButton/SubmitButton";
 import { HOST } from "../../services/api";
+import { useSelector } from "react-redux";
 
 const Header = (props) => {
   const [menuVisible, setMenuVisible] = useState(false);
+  const admin = useSelector((state) => state.getIn(["actor", "admin"]).toJS());
+  const user = useSelector((state) => state.getIn(["actor", "user"]).toJS());
 
   const profilePhoto = useMemo(() => {
     return props.actor && props.actor.photo
@@ -42,7 +45,14 @@ const Header = (props) => {
     <>
       <div className="header">
         <div className="header-left">
-          <img alt="logo-white" src={aniLogoWhite}></img>
+          <div
+            className=""
+            onClick={() =>
+              history.push(`/dashboard/${admin?.admin_id ? "ADMIN" : "USER"}`)
+            }
+          >
+            <img alt="logo-white" src={aniLogoWhite}></img>
+          </div>
         </div>
         <div className="header-right">
           {props.actor ? (

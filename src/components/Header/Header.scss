@@ -14,6 +14,10 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+
+  div {
+    cursor: pointer;
+  }
 }
 
 .header .header-left img {
