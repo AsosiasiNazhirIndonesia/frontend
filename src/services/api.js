@@ -155,7 +155,7 @@ API.getCertificateById = async (certificateId) => {
   }
 };
 
-API.getCertificateByScAddressAndTokenId = async (scAddress,tokenId) => {
+API.getCertificateByScAddressAndTokenId = async (scAddress, tokenId) => {
   try {
     const url = `${HOST}/api/certificates/sc_address_token_id/${scAddress}/${tokenId}`;
     const result = (await axios.get(url)).data;
@@ -163,9 +163,7 @@ API.getCertificateByScAddressAndTokenId = async (scAddress,tokenId) => {
   } catch (e) {
     throw getErrorMessage(e);
   }
-}
-
-
+};
 
 //institution
 API.addInstitution = async (request) => {
@@ -208,7 +206,6 @@ API.deleteInstitution = async (params) => {
   }
 };
 
-
 API.getInstitutionById = async (institutionId) => {
   try {
     const url = `${HOST}/api/institutions/${institutionId}`;
@@ -229,7 +226,7 @@ API.uploadFile = async (file) => {
   } catch (e) {
     throw getErrorMessage(e);
   }
-}
+};
 
 API.uploadFileToIPFS = async (file, tokenId) => {
   try {
@@ -239,19 +236,21 @@ API.uploadFileToIPFS = async (file, tokenId) => {
     const url = `http://localhost:4000/upload`;
     const tempResult = (await axios.post(url, tempFormData)).data;
 
-    const content = "{\"image\": \"ipfs://" + tempResult + "/" + tokenId + ".png\"}";
-    var blob = new Blob([content], { type: 'text/plain' });
-    var jsonFile = new File([blob], tokenId, {type: "text/plain"});
+    const content =
+      '{"image": "ipfs://' + tempResult + "/" + tokenId + '.png"}';
+    var blob = new Blob([content], { type: "text/plain" });
+    var jsonFile = new File([blob], tokenId, { type: "text/plain" });
 
     const formData = new FormData();
     formData.append("file", jsonFile, jsonFile.name);
     formData.append("filename", tokenId);
-    const result = "ipfs://" + (await axios.post(url, formData)).data + "/" + tokenId;
-    return result ;
+    const result =
+      "ipfs://" + (await axios.post(url, formData)).data + "/" + tokenId;
+    return result;
   } catch (e) {
     throw getErrorMessage(e);
   }
-}
+};
 
 API.addAdmin = async (request) => {
   try {
@@ -261,8 +260,7 @@ API.addAdmin = async (request) => {
   } catch (e) {
     throw getErrorMessage(e);
   }
-}
-
+};
 
 API.editAdmin = async (request) => {
   try {
@@ -272,9 +270,7 @@ API.editAdmin = async (request) => {
   } catch (e) {
     throw getErrorMessage(e);
   }
-}
-
-
+};
 
 const getErrorMessage = (e) => {
   return e
@@ -289,4 +285,3 @@ const getErrorMessage = (e) => {
 };
 
 export default API;
-

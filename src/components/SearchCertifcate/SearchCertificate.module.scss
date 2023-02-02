@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  background: #fff;
+  border-radius: 14px;
+  padding-top: 61px;
+  padding-bottom: 113px;
+  flex-direction: column;
+  height: 100%;
+}
+
+.searchCertificate {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 400px;
+}
+
+.searchCertificate h4 {
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-weight: bold;
+
+  /* identical to box height */
+
+  /* Text/primary */
+  color: #0b0038;
+  margin-bottom: 41px;
+}
+
+.searchIcon {
+  height: 16px;
+  width: 16px;
+}
+
+.searchKeyword {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+
+  .searchKeywordTitle {
+    color: red;
+    margin-left: 8px;
+    margin-right: 2px;
+    color: #b3b3b3;
+    font-size: 16px;
+    font-family: "Nunito Sans";
+  }
+  .searchKeywordValue {
+    color: #369FFF;
+    font-size: 16px;
+    font-family: "Nunito Sans";
+  }
+}

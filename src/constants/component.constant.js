@@ -15,7 +15,7 @@ export const ACTOR_TOKEN = {
 }
 
 export const CERTIFICATE_STATUS = {
-    0: "ON PROGRESS",
+    0: "On Progress",
     1: "DROPPED",
     2: "PUBLISHED"
 }

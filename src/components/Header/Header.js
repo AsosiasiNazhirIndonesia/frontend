@@ -15,7 +15,6 @@ import { useSelector } from "react-redux";
 const Header = (props) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const admin = useSelector((state) => state.getIn(["actor", "admin"]).toJS());
-  const user = useSelector((state) => state.getIn(["actor", "user"]).toJS());
 
   const profilePhoto = useMemo(() => {
     return props.actor && props.actor.photo

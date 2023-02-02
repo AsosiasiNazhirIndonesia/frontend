@@ -8,8 +8,9 @@ import "./InputField.scss";
 import { INPUT_STATUS } from "../../../constants/component.constant";
 import DatePicker from "react-date-picker";
 import Dropdown from "react-dropdown";
+import clsx from "clsx";
 
-export default (props) => {
+const TextField = (props) => {
   let input;
 
   switch (props.type) {
@@ -17,7 +18,7 @@ export default (props) => {
     case "password":
       input = (
         <input
-          className="text-input"
+          className={clsx("text-input")}
           disabled={props.disabled ? props.disabled : false}
           type={props.type ? props.type : "text"}
           value={props.value.value}
@@ -48,18 +49,22 @@ export default (props) => {
         />
       );
       break;
+    default:
+      break;
   }
 
   return (
-    <div className="inputField">
+    <div className={clsx("inputField")}>
+      {props?.icon && <div className="inputIcon">{props.icon}</div>}
       <span
-        className={
+        className={clsx(
           props.value.status === INPUT_STATUS.INVALID
             ? "input-span error"
             : props.value.status === INPUT_STATUS.VALID
             ? "input-span success"
             : "input-span default"
-        }
+        )}
+        style={{ paddingLeft: props.icon ? "44px" : "16px" }}
       >
         {input}
         {props.value.status === INPUT_STATUS.VALID ? (
@@ -84,3 +89,5 @@ export default (props) => {
     </div>
   );
 };
+
+export default TextField;

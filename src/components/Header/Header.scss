@@ -4,9 +4,12 @@
   justify-content: space-between;
   background-color: #1c1c18;
   align-items: center;
+  position: fixed;
 
   width: 100%;
   padding: 14px 74px;
+
+  z-index: 60;
 }
 
 .header .header-left {
