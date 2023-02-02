@@ -97,12 +97,7 @@ const SearchCertifcate = (props) => {
         <SubmitButton
           isProcessing={isProcessing}
           buttonText={"Search"}
-          onClick={() =>
-            getCertificateId(
-              "0x135Af3c53127A72f4B53e65A555c3137aC0c2191",
-              "1059758381351060812443814592978233279076862315318"
-            )
-          }
+          onClick={() => getCertificateId(scAddress?.value, tokenId?.value)}
         />
       </div>
       <div className="separator mt-6 mb-8" />

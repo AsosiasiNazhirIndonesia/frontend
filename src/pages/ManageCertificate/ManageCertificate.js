@@ -1,27 +1,23 @@
-import SubmitButton from "../../components/elements/SubmitButton/SubmitButton";
-import TableCertificate from "../../components/Table/TableCertificate";
-import { useParams, withRouter } from "react-router-dom";
-import { history } from "../../store";
+import htmlToText from "html-to-text";
 import React, { useEffect, useState } from "react";
+import { connect, useSelector } from "react-redux";
+import { useParams, withRouter } from "react-router-dom";
+import { createNotification } from "../../components/Notification/Notification";
+import TableCertificate from "../../components/Table/TableCertificate";
+import Pagination from "../../components/elements/Pagination/Pagination";
+import ProgressBar from "../../components/elements/ProgressBar/ProgressBar";
+import SubmitButton from "../../components/elements/SubmitButton/SubmitButton";
+import { ACTOR, INPUT_STATUS } from "../../constants/component.constant";
+import CertificateSet from "../../contracts/digital_certificate";
+import API from "../../services/api";
+import web3 from "../../services/web3";
+import { history } from "../../store";
 import CreateCertificate1 from "./CreateCertificate1";
 import CreateCertificate2 from "./CreateCertificate2";
 import CreateCertificate3 from "./CreateCertificate3";
-import ViewCertificate from "./ViewCertificate";
 import "./ManageCertificate.scss";
-import Delete from "../../components/Popup/Delete";
-import ProgressBar from "../../components/elements/ProgressBar/ProgressBar";
-import { ACTOR, INPUT_STATUS } from "../../constants/component.constant";
-import API from "../../services/api";
-import DigitalCertificate from "../../contracts/digital_certificate";
-import web3 from "../../services/web3";
-import { createNotification } from "../../components/Notification/Notification";
-import Pagination from "../../components/elements/Pagination/Pagination";
-import { connect, useSelector } from "react-redux";
-import moment from "moment";
-import CertificateSet from "../../contracts/digital_certificate";
-import htmlToText from "html-to-text";
-const { Buffer } = require('buffer');
-
+import ViewCertificate from "./ViewCertificate";
+const { Buffer } = require("buffer");
 
 const ManageCertificate = (props) => {
   const [isDelete, setIsDelete] = useState(false);
@@ -85,26 +81,36 @@ const ManageCertificate = (props) => {
     "certificate_id"
   );
   const actor = useParams().actor;
-  const deleteSelectedData = useSelector((state) => state.getIn(["delete", "selectedData"]).toJS())
+  const deleteSelectedData = useSelector((state) =>
+    state.getIn(["delete", "selectedData"]).toJS()
+  );
 
   const getAllCertificates = async (offset, limit) => {
     let results = [];
     if (props.type === ACTOR.USER && props.user) {
-      results = await API.getCertificatesByUser(props.user.user_id, offset, limit);
+      results = await API.getCertificatesByUser(
+        props.user.user_id,
+        offset,
+        limit
+      );
     } else if (props.type === ACTOR.ADMIN && props.admin) {
-      results = await API.getCertificatesByAdmin(props.admin.admin_id, offset, limit);
+      results = await API.getCertificatesByAdmin(
+        props.admin.admin_id,
+        offset,
+        limit
+      );
     }
-    
+
     const newCertificates = [];
     const composeApprovers = (approvers) => {
-      let names = '';
-      for(const approver of approvers) {
+      let names = "";
+      for (const approver of approvers) {
         names = names + ` ,${approver.User.name}`;
       }
 
       return names.substring(2, names.length);
-    }
-    
+    };
+
     for (const result of results) {
       newCertificates.push({
         id: result.certificate_id,
@@ -114,17 +120,17 @@ const ManageCertificate = (props) => {
         signaturedBy: composeApprovers(result.CertificateSigners),
         status: "",
         scAddress: result.sc_address,
-        tokenId: result.token_id
+        tokenId: result.token_id,
       });
     }
     if (newCertificates.length > 0) {
       setCertificates(newCertificates);
     }
-  }
+  };
 
   useEffect(() => {
     getAllCertificates(currentPage - 1, itemsPerPage);
-  }, [step]);
+  }, [step, currentPage, itemsPerPage, props?.type, props?.user]);
 
   const indexOfLastPost = currentPage * itemsPerPage;
   const indexOfFirstPost = indexOfLastPost - itemsPerPage;
@@ -150,6 +156,8 @@ const ManageCertificate = (props) => {
         return sendToPubKey;
       case "certificateLogo":
         return certificateLogo;
+      default:
+        break;
     }
   };
 
@@ -222,7 +230,7 @@ const ManageCertificate = (props) => {
         setCertificateDate({
           status,
           value: value,
-          errorMessage: status === INPUT_STATUS.INVALID ? 'required field' : ''
+          errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
         });
         break;
       case "certificateLogo":
@@ -244,102 +252,124 @@ const ManageCertificate = (props) => {
               : "",
         });
         break;
+      default:
+        break;
     }
   };
 
   const getDataToSign = (certificate) => {
-    const { receiver_name, no, 
-      title, description, score, date} = certificate;
-    const descriptionText = htmlToText.fromString(description).replace(/(\r\n|\n|\r| )/gm, "");
-    const mergeCertificateData = (receiver_name + no + title + descriptionText + score + date).replace(/(\r\n|\n|\r| )/gm, "");
-    return web3.utils.keccak256(mergeCertificateData)
-  }
+    const { receiver_name, no, title, description, score, date } = certificate;
+    const descriptionText = htmlToText
+      .fromString(description)
+      .replace(/(\r\n|\n|\r| )/gm, "");
+    const mergeCertificateData = (
+      receiver_name +
+      no +
+      title +
+      descriptionText +
+      score +
+      date
+    ).replace(/(\r\n|\n|\r| )/gm, "");
+    return web3.utils.keccak256(mergeCertificateData);
+  };
 
   const submit = async () => {
-
-    if (!assignToPubKeys)
-    {
-    const certificateHash = getDataToSign({
-      receiver_name: receiverName.value,
-      no: certificateNo.value, 
-      title: certificateTitle.value,
-      description: certificateDescription.value,
-      score: certificateScore.value,
-      date: certificateDate.value
-    });
-
-    let approvers = [];
-    for (const assignToPubKey of assignToPubKeys) {
-      approvers.push(assignToPubKey.value);
-    }
-
-    const institution = await API.getInstitutionById(props.admin.institution_id);
-    const certificateSet = CertificateSet.getNewInstance(institution.sc_address);
-    const today = new Date();
-    const thisMonth = today.getMonth();
-    const tx = certificateSet.methods.mint(sendToPubKey.value, 0, Math.floor(new Date(today.setMonth(thisMonth + 12)).getTime() / 1000), certificateHash, approvers);
-    const accounts = await web3.eth.getAccounts();
-
-    try {
-      createNotification({
-        type: "Minting...", 
-        value: "Please check your metamask and stay on this page until Certificate is Minted to blockchain"});
-
-      const res = await tx.send({
-        from: accounts[0],
-        gas: 3000000,
-        gasPrice: '30000000000'
-      });
-
-      const tokenId = await certificateSet.methods.encodeTokenId(0, sendToPubKey.value).call();
-
-      const certificate_signers = [];
-      let index = 0;
-      for (const assignToUser of assignToUsers) {
-        certificate_signers.push({
-          user_id: assignToUser.user_id,
-          priority: index
-        });
-        index++;
-      }
-
-      //save to database
-      API.addCertificate({
-        admin_id: props.admin.admin_id,
-        user_id: sendToUser.user_id,
-        logo: certificateLogo,
-        name: documentName.value,
-        title: certificateTitle.value,
+    if (assignToPubKeys) {
+      const certificateHash = getDataToSign({
+        receiver_name: receiverName.value,
         no: certificateNo.value,
+        title: certificateTitle.value,
         description: certificateDescription.value,
         score: certificateScore.value,
         date: certificateDate.value,
-        sc_address: institution.sc_address,
-        token_id: tokenId,
-        receiver_name: receiverName.value,
-        certificate_signers
       });
-      
-      createNotification({
-        type: "success", 
-        value: "Your certificate already on blockchain"});
 
-        history.push(`/dashboard/${actor}?menu=manage-certificate`);
-    } catch(e) {
-      console.log(e);
-      createNotification({
-        type: "error",
-        value: "Something went wrong"
-      })
-    } 
-  }
-}
+      let approvers = [];
+      for (const assignToPubKey of assignToPubKeys) {
+        approvers.push(assignToPubKey.value);
+      }
+
+      const institution = await API.getInstitutionById(
+        props.admin.institution_id
+      );
+      const certificateSet = CertificateSet.getNewInstance(
+        institution.sc_address
+      );
+      const today = new Date();
+      const thisMonth = today.getMonth();
+      const tx = certificateSet.methods.mint(
+        sendToPubKey.value,
+        0,
+        Math.floor(new Date(today.setMonth(thisMonth + 12)).getTime() / 1000),
+        certificateHash,
+        approvers
+      );
+      const accounts = await web3.eth.getAccounts();
+      try {
+        createNotification({
+          type: "Minting...",
+          value:
+            "Please check your metamask and stay on this page until Certificate is Minted to blockchain",
+        });
+
+        tx.send({
+          from: accounts[0],
+          gas: 3000000,
+          gasPrice: "30000000000",
+        }).then(async function (receipt) {
+          const tokenId = await certificateSet.methods
+            .encodeTokenId(0, sendToPubKey.value)
+            .call();
+
+          const certificate_signers = [];
+          let index = 0;
+          for (const assignToUser of assignToUsers) {
+            certificate_signers.push({
+              user_id: assignToUser.user_id,
+              priority: index,
+            });
+            index++;
+          }
+
+          //save to database
+          API.addCertificate({
+            admin_id: props.admin.admin_id,
+            user_id: sendToUser.user_id,
+            logo: certificateLogo,
+            name: documentName.value,
+            title: certificateTitle.value,
+            no: certificateNo.value,
+            description: certificateDescription.value,
+            score: certificateScore.value,
+            date: certificateDate.value,
+            sc_address: institution.sc_address,
+            token_id: tokenId,
+            receiver_name: receiverName.value,
+            certificate_signers,
+          });
+
+          createNotification({
+            type: "success",
+            value: "Your certificate already on blockchain",
+          });
+
+          history.push(`/dashboard/${actor}?menu=manage-certificate`);
+        });
+      } catch (e) {
+        console.log(e);
+        createNotification({
+          type: "error",
+          value: "Something went wrong",
+        });
+      }
+    }
+  };
 
   // old submit deploying new contract
   // const submit = async () => {
   //   const certificateHash = getDataToSign({
   //     receiver_name: receiverName.value,
-  //     no: certificateNo.value, 
+  //     no: certificateNo.value,
   //     title: certificateTitle.value,
   //     description: certificateDescription.value,
   //     score: certificateScore.value,
@@ -355,14 +385,13 @@ const ManageCertificate = (props) => {
   //   const accounts = await web3.eth.getAccounts();
   //   try {
   //     createNotification({
-  //       type: "info", 
+  //       type: "info",
   //       value: "Please check your metamask and stay on this page until certificate has been deployed to blockchain"});
   //     const res = await tx.send({
   //       from: accounts[0],
   //       gas: 3000000,
   //       gasPrice: '30000000000'
   //     });
-      
 
   //     const certificate_signers = [];
   //     let index = 0;
@@ -391,9 +420,9 @@ const ManageCertificate = (props) => {
   //     });
 
   //     await CertificateSet.verify(res._address, [certificateHash, sendToPubKey.value, approvers]);
-      
+
   //     createNotification({
-  //       type: "success", 
+  //       type: "success",
   //       value: "Your certificate already on blockchain"});
 
   //       history.push(`/dashboard/${actor}?menu=manage-certificate`);
@@ -403,7 +432,7 @@ const ManageCertificate = (props) => {
   //       type: "error",
   //       value: "Something went wrong"
   //     })
-  //   } 
+  //   }
   // }
 
   // const onDelete = async () => {
@@ -411,7 +440,7 @@ const ManageCertificate = (props) => {
   //     if (!web3.utils.isAddress(deleteSelectedData.scAddress)) {
   //       throw "Certificate not exist on blockchain";
   //     }
-  
+
   //     const certificateSet = CertificateSet.getNewInstance(deleteSelectedData.scAddress);
   //     const accounts = await web3.eth.getAccounts();
   //     createNotification({
@@ -440,7 +469,7 @@ const ManageCertificate = (props) => {
 
   const resolveContent = () => {
     if (view) {
-      return <ViewCertificate actor={actor} certificateId={certificateId}/>;
+      return <ViewCertificate actor={actor} certificateId={certificateId} />;
     } else {
       switch (step) {
         case "1":
@@ -463,27 +492,33 @@ const ManageCertificate = (props) => {
             />
           );
         case "3":
-          return <CreateCertificate3 
-          sendToUser={sendToUser} 
-          assignToUsers={assignToUsers} 
-          getInputValue={getInputValue}
-          submit={submit}/>;
+          return (
+            <CreateCertificate3
+              sendToUser={sendToUser}
+              assignToUsers={assignToUsers}
+              getInputValue={getInputValue}
+              submit={submit}
+            />
+          );
         default:
           return (
             <React.Fragment>
-              {actor === ACTOR.ADMIN ?
-              <div className="bef-table">
-                <div className="btn-add-certificate">
-                  <SubmitButton
-                    buttonText={"Create Certificate"}
-                    onClick={() => {
-                      history.push(
-                        `/dashboard/${actor}?menu=manage-certificate&create_certificate_step=1`
-                      );
-                    }}
-                  ></SubmitButton>
+              {actor === ACTOR.ADMIN ? (
+                <div className="bef-table">
+                  <div className="btn-add-certificate">
+                    <SubmitButton
+                      buttonText={"Create Certificate"}
+                      onClick={() => {
+                        history.push(
+                          `/dashboard/${actor}?menu=manage-certificate&create_certificate_step=1`
+                        );
+                      }}
+                    ></SubmitButton>
+                  </div>
                 </div>
-              </div> : <></>}
+              ) : (
+                <></>
+              )}
               <TableCertificate
                 certificates={certificates}
                 setIsDelete={setIsDelete}
@@ -559,9 +594,11 @@ const ManageCertificate = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  admin:  state.getIn(['actor', 'admin']).toJS(),
-  user:  state.getIn(['actor', 'user']).toJS(),
-  type: state.getIn(['actor', 'type'])
+  admin: state.getIn(["actor", "admin"]).toJS(),
+  user: state.getIn(["actor", "user"]).toJS(),
+  type: state.getIn(["actor", "type"]),
 });
 
-export default connect(mapStateToProps)(React.memo(withRouter(ManageCertificate)));
+export default connect(mapStateToProps)(
+  React.memo(withRouter(ManageCertificate))
+);

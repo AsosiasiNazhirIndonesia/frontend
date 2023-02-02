@@ -144,7 +144,7 @@ const ViewCertificate = (props) => {
       ),
       user_id: newCert.user_id,
     });
-    
+
     setProgressBarContent(newProgressBarContent);
   };
 
@@ -158,7 +158,6 @@ const ViewCertificate = (props) => {
 
   useEffect(() => {
     if (Object.keys(certificate) <= 0) {
-      alert('a')
       getCertificate();
     }
     if (user) {
@@ -222,7 +221,7 @@ const ViewCertificate = (props) => {
 
     return web3.utils.keccak256(mergeCertificateData);
   };
-  console.log(progressBarContent);
+
   const getSignature = async (certificate) => {
     const certificateHash = getDataToSign(certificate);
     const accounts = await web3.eth.getAccounts();
@@ -320,12 +319,16 @@ const ViewCertificate = (props) => {
           ) : (
             <></>
           )}
-          <SubmitButton
-            buttonText="Upload"
-            onClick={async () => {
-              await DownloadPNGButton();
-            }}
-          ></SubmitButton>
+          {isReceiver ? (
+            <SubmitButton
+              buttonText="Upload"
+              onClick={async () => {
+                await DownloadPNGButton();
+              }}
+            ></SubmitButton>
+          ) : (
+            <div />
+          )}
           <SubmitButton
             buttonText="View"
             onClick={async () => {
