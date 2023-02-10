@@ -5,25 +5,28 @@ import React from "react";
 
 const ProgressBar = (props) => {
   const composeProgressList = () => {
-    const progressLength = props.progress.length;
     return props.progress.map((item, key) => {
       return (
-        <React.Fragment>
+        <div class={styles['progress-info-container']}>
           <div className={styles["progress-info"]} key={key}>
-            <img src={item.success ? circleCheck : circleBlank} alt="" />
+            <img
+              src={item.success ? circleCheck : circleBlank}
+              alt=""
+              className={styles["progress-icon"]}
+            />
             <span>{item.text}</span>
           </div>
-          {key <= progressLength - 2 ? (
-            <div className={styles["separator"]}></div>
-          ) : (
-            <></>
-          )}
-        </React.Fragment>
+        </div>
       );
     });
   };
 
-  return <div className={styles["progress-list"]}>{composeProgressList()}</div>;
+  return (
+    <div className={styles["progress-list"]}>
+      {composeProgressList()}
+      {/* <div className={styles["separator"]}></div> */}
+    </div>
+  );
 };
 
 export default ProgressBar;

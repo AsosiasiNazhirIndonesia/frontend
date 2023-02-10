@@ -62,7 +62,8 @@ const TextField = (props) => {
             ? "input-span error"
             : props.value.status === INPUT_STATUS.VALID
             ? "input-span success"
-            : "input-span default"
+            : "input-span default",
+          props?.type === "dropdown" ? "overflow-visible" : ""
         )}
         style={{ paddingLeft: props.icon ? "44px" : "16px" }}
       >

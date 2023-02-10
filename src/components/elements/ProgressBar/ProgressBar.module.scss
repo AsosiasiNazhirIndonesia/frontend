@@ -1,35 +1,51 @@
 .progress-list {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: baseline;
+  display: flex;
+  flex-direction: row;
+  background-color: #F7F7F7;
+  border-radius: 5px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 24px 120px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-info-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
 }
 
 .progress-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-
-    width: 156px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  position: relative;
 }
 
-.progress-info img {
-    width: 30px;
-    margin-bottom: 8px;
+.progress-icon {
+  width: 39px;
+  height: 39px;
+  margin-bottom: 16px;
+  z-index: 999;
 }
 
 .progress-info span {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 24px;
-    line-height: 50px;
-    text-align: center;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  text-align: start;
 
-    color: #000000;
+  color: #000000;
 }
 
 .progress-list .separator {
-    border-bottom: 2px solid black;
-    width: 134px;
+  background-color:  #bdbdbd;
+  width: calc(100% - 320px);
+  height: 1px;
+  position: absolute;
+  z-index: 2;
+  top: 40px;
 }

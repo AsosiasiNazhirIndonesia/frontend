@@ -72,7 +72,12 @@ const ViewCertificate = (props) => {
     const newProgressBarContent = [
       {
         success: true,
-        text: `Init By ${newCert.Admin.name}`,
+        text: (
+          <div>
+            <div className={styles["progress-title"]}>Init By:</div>
+            <div className={styles["progress-link"]}>{newCert.Admin.name}</div>
+          </div>
+        ),
       },
     ];
 
@@ -107,9 +112,15 @@ const ViewCertificate = (props) => {
       newProgressBarContent.push({
         success: signedByApprover,
         text: signedByApprover ? (
-          <div>Signed By {link}</div>
+          <div>
+            <div className={styles["progress-title"]}>Signed by :</div>
+            <div className={styles["progress-link"]}>{link}</div>
+          </div>
         ) : (
-          <div>Assign to {link}</div>
+          <div>
+            <div className={styles["progress-title"]}>Assign to:</div>
+            <div className={styles["progress-link"]}>{link}</div>
+          </div>
         ),
         user_id: approver.user_id,
       });
@@ -138,9 +149,15 @@ const ViewCertificate = (props) => {
     newProgressBarContent.push({
       success: signedByReceiver,
       text: signedByReceiver ? (
-        <div>Received By {link}</div>
+        <div>
+          <div className={styles["progress-title"]}>Received by :</div>
+          <div className={styles["progress-link"]}>{link}</div>
+        </div>
       ) : (
-        <div>Send to {link}</div>
+        <div>
+          <div className={styles["progress-title"]}>Send to :</div>
+          <div className={styles["progress-link"]}>{link}</div>
+        </div>
       ),
       user_id: newCert.user_id,
     });

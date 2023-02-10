@@ -43,103 +43,120 @@ const AddEditAdmin = (props) => {
   const [selectedInstitution, setSelectedInstitution] = useState({});
   const [institutions, setInstitutions] = useState([]);
   const [inputFilled, setInputFilled] = useState(false);
-  
+
   const getAllInstitutions = async () => {
     if (institutions.length <= 0) {
       setInstitutions(await API.getAllInstitutions(0, 100));
     }
-  }
+  };
 
   const fillInput = () => {
     if (inputFilled) {
       return;
     }
 
-    setName({status: INPUT_STATUS.VALID, value: props.selectedAdmin.name});
-    setEmail({status: INPUT_STATUS.VALID, value: props.selectedAdmin.email});
-    setPhoneNumber({status: INPUT_STATUS.VALID, value: props.selectedAdmin.phone_number});
-    setPublicKey({status: INPUT_STATUS.VALID, value: props.selectedAdmin.public_key});
-    setRole({status: INPUT_STATUS.VALID, value: props.selectedAdmin.admin_role});
-    setSelectedInstitution(props.selectedAdmin.Institution ? props.selectedAdmin.Institution : {});
+    setName({ status: INPUT_STATUS.VALID, value: props.selectedAdmin.name });
+    setEmail({ status: INPUT_STATUS.VALID, value: props.selectedAdmin.email });
+    setPhoneNumber({
+      status: INPUT_STATUS.VALID,
+      value: props.selectedAdmin.phone_number,
+    });
+    setPublicKey({
+      status: INPUT_STATUS.VALID,
+      value: props.selectedAdmin.public_key,
+    });
+    setRole({
+      status: INPUT_STATUS.VALID,
+      value: props.selectedAdmin.admin_role,
+    });
+    setSelectedInstitution(
+      props.selectedAdmin.Institution ? props.selectedAdmin.Institution : {}
+    );
     setInputFilled(true);
-  }
+  };
 
   useEffect(() => {
     getAllInstitutions();
     if (props.edit) {
       fillInput();
     }
-  }, role);
+  }, [role]);
 
   const onChange = (e) => {
     const inputName = e.target.name;
     const inputValue = e.target.value;
-    let status = inputValue && inputValue !== '' ? INPUT_STATUS.VALID : INPUT_STATUS.INVALID;
-    let errorMessage = status === INPUT_STATUS.INVALID ? `this data is required` : '';
+    let status =
+      inputValue && inputValue !== ""
+        ? INPUT_STATUS.VALID
+        : INPUT_STATUS.INVALID;
+    let errorMessage =
+      status === INPUT_STATUS.INVALID ? `this data is required` : "";
 
-    switch(inputName) {
+    switch (inputName) {
       case "name":
         setName({
           status,
           errorMessage,
-          value: inputValue
+          value: inputValue,
         });
         break;
       case "publickey":
         if (!web3.utils.isAddress(inputValue)) {
           status = INPUT_STATUS.INVALID;
-          errorMessage = 'Invalid public key format';
+          errorMessage = "Invalid public key format";
         }
         setPublicKey({
           status,
           errorMessage,
-          value: inputValue
+          value: inputValue,
         });
         break;
       case "email":
         setEmail({
           status,
           errorMessage,
-          value: inputValue
+          value: inputValue,
         });
         break;
       case "phonenumber":
         setPhoneNumber({
           status,
           errorMessage,
-          value: inputValue
+          value: inputValue,
         });
         break;
     }
-  }
+  };
 
   const getInstitutionsOptions = () => {
     const options = [];
-    for(const institution of institutions) {
+    for (const institution of institutions) {
       options.push({
         label: institution.name,
-        value: institution.institution_id
+        value: institution.institution_id,
       });
     }
     return options;
-  }
+  };
 
   const onSelect = async (val) => {
     setRole({
       status: INPUT_STATUS.VALID,
-      value: val.value
+      value: val.value,
     });
 
-    if (val.value === 'MAIN') {
+    if (val.value === "MAIN") {
       setSelectedInstitution({});
     }
-  }
+  };
 
   const onSelectInstitution = async (val) => {
-    setSelectedInstitution(institutions.find((institution) => {
-      return institution.institution_id === val.value;
-    }))
-  }
+    setSelectedInstitution(
+      institutions.find((institution) => {
+        return institution.institution_id === val.value;
+      })
+    );
+  };
 
   const onUpload = async (e) => {
     setProcessing(true);
@@ -147,7 +164,7 @@ const AddEditAdmin = (props) => {
     setOriginalFileName(e.target.files[0].name);
     setPhoto(result.filename);
     setProcessing(false);
-  }
+  };
 
   const add = async () => {
     setProcessing(true);
@@ -158,42 +175,50 @@ const AddEditAdmin = (props) => {
         public_key: publicKey.value,
         phone_number: phoneNumber.value,
         admin_role: role.value,
-        institution_id: selectedInstitution.institution_id ? selectedInstitution.institution_id : null,
-        photo: photo
+        institution_id: selectedInstitution.institution_id
+          ? selectedInstitution.institution_id
+          : null,
+        photo: photo,
       };
 
-      const institution = await API.getInstitutionById(selectedInstitution.institution_id);
+      const institution = await API.getInstitutionById(
+        selectedInstitution.institution_id
+      );
       const institutionContractAddress = institution.sc_address;
-      const certificateSet = CertificateSet.getNewInstance(institutionContractAddress);
+      const certificateSet = CertificateSet.getNewInstance(
+        institutionContractAddress
+      );
       const accounts = await web3.eth.getAccounts();
       const tx = certificateSet.methods.transferOwnership(publicKey.value);
 
       createNotification({
-        type: "Transfer Ownership...", 
-        value: "Please check your metamask and stay on this page until contract ownership is transferred to New Admin"});
+        type: "Transfer Ownership...",
+        value:
+          "Please check your metamask and stay on this page until contract ownership is transferred to New Admin",
+      });
 
       const res = await tx.send({
         from: accounts[0],
         gas: 3000000,
-        gasPrice: '30000000000'
+        gasPrice: "30000000000",
       });
 
       await API.addAdmin(request);
       createNotification({
-        type: 'success',
-        value: 'Success to add admin'
+        type: "success",
+        value: "Success to add admin",
       });
-      history.push('/dashboard/ADMIN?menu=admin-master');
+      history.push("/dashboard/ADMIN?menu=admin-master");
     } catch (e) {
       console.log(e);
       createNotification({
-        type: 'error',
-        value: e
+        type: "error",
+        value: e,
       });
     }
-    
+
     setProcessing(false);
-  }
+  };
 
   const edit = async () => {
     setProcessing(true);
@@ -205,25 +230,27 @@ const AddEditAdmin = (props) => {
         public_key: publicKey.value,
         phone_number: phoneNumber.value,
         admin_role: role.value,
-        institution_id: selectedInstitution.institution_id ? selectedInstitution.institution_id : null,
-        photo: photo ? photo : props.selectedAdmin.photo
-      }
+        institution_id: selectedInstitution.institution_id
+          ? selectedInstitution.institution_id
+          : null,
+        photo: photo ? photo : props.selectedAdmin.photo,
+      };
       await API.editAdmin(request);
       createNotification({
-        type: 'success',
-        value: 'Success to update admin'
+        type: "success",
+        value: "Success to update admin",
       });
-      history.push('/dashboard/ADMIN?menu=admin-master');
+      history.push("/dashboard/ADMIN?menu=admin-master");
     } catch (e) {
       console.log(e);
       createNotification({
-        type: 'error',
-        value: e
+        type: "error",
+        value: e,
       });
     }
-    
+
     setProcessing(false);
-  }
+  };
 
   const submit = () => {
     if (props.add) {
@@ -231,7 +258,7 @@ const AddEditAdmin = (props) => {
     } else {
       edit();
     }
-  }
+  };
 
   return (
     <React.Fragment>
@@ -292,46 +319,60 @@ const AddEditAdmin = (props) => {
             type="dropdown"
             name="role"
             value={role}
-            options={['MAIN','INSTITUTION']}
+            options={[
+              { value: "MAIN", label: "Main" },
+              { value: "INSTITUTION", label: "Institution" },
+            ]}
             onChange={onSelect}
           />
         </div>
-        {role.value === 'INSTITUTION' ?
+        {role.value === "INSTITUTION" ? (
           <div className="user-phoneNumber">
-            <p>
-              Instituion
-            </p>
+            <p>Instituion</p>
             <InputField
               type="dropdown"
               name="role"
-              value={{value: selectedInstitution.name, label: selectedInstitution.institution_id}}
+              value={{
+                value: selectedInstitution.name,
+                label: selectedInstitution.institution_id,
+              }}
               options={getInstitutionsOptions()}
               onChange={onSelectInstitution}
             />
-          </div> : <></>}
+          </div>
+        ) : (
+          <></>
+        )}
         <div className="upload-photo">
           <p>Upload Logo</p>
-          {!photo ?
-          <>
-            <input
-              type="file"
-              className="custom-file-input"
-              id="input"
-              accept="image/*"
-              onChange={onUpload}
-              disabled={isProcessing}
-              hidden
-            />
-            <label htmlFor="input" className="browse-btn">
-              {!isProcessing ? 'Browse' : <FontAwesomeIcon icon={faSpinner}/>}
-            </label>
-          </> : <span>{originalFileName}</span> }
+          {!photo ? (
+            <>
+              <input
+                type="file"
+                className="custom-file-input"
+                id="input"
+                accept="image/*"
+                onChange={onUpload}
+                disabled={isProcessing}
+                hidden
+              />
+              <label htmlFor="input" className="browse-btn">
+                {!isProcessing ? (
+                  "Browse"
+                ) : (
+                  <FontAwesomeIcon icon={faSpinner} />
+                )}
+              </label>
+            </>
+          ) : (
+            <span>{originalFileName}</span>
+          )}
         </div>
       </form>
       <div className="save-btn">
-        <SubmitButton 
-          isProcessing={isProcessing} 
-          disabled = {
+        <SubmitButton
+          isProcessing={isProcessing}
+          disabled={
             name.status !== INPUT_STATUS.VALID ||
             publicKey.status !== INPUT_STATUS.VALID ||
             email.status !== INPUT_STATUS.VALID ||
@@ -339,7 +380,8 @@ const AddEditAdmin = (props) => {
             role.status !== INPUT_STATUS.VALID
           }
           buttonText={"Save"}
-          onClick={submit} />
+          onClick={submit}
+        />
       </div>
     </React.Fragment>
   );
