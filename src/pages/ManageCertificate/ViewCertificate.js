@@ -327,6 +327,19 @@ const ViewCertificate = (props) => {
         <ProgressBar progress={progressBarContent} />
         <div className={styles["view-action-btn"]}>
           {isReceiver ? (
+            <div className={styles["share-btn"]}>
+              <img
+                alt=""
+                src={linkedinLogo}
+                onClick={() => {
+                  shareToLinkedIn();
+                }}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+          {isReceiver ? (
             <SubmitButton
               buttonText="Download"
               onClick={() => {
@@ -336,7 +349,7 @@ const ViewCertificate = (props) => {
           ) : (
             <></>
           )}
-          {isReceiver ? (
+          {!isReceiver ? (
             <SubmitButton
               buttonText="Upload"
               onClick={async () => {
@@ -355,19 +368,6 @@ const ViewCertificate = (props) => {
               );
             }}
           ></SubmitButton>
-          {isReceiver ? (
-            <div className="share-btn">
-              <img
-                alt=""
-                src={linkedinLogo}
-                onClick={() => {
-                  shareToLinkedIn();
-                }}
-              />
-            </div>
-          ) : (
-            <></>
-          )}
         </div>
       </div>
       <div className={styles["view-pdf"]}>
@@ -405,7 +405,7 @@ const ViewCertificate = (props) => {
         )}
       </div>
       {props.actor ? (
-        <div className="btn-done">
+        <div className={styles["btn-done"]}>
           <SubmitButton
             buttonText="Back"
             onClick={() => {

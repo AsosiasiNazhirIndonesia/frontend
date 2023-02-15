@@ -1,7 +1,7 @@
 .progress-list {
   display: flex;
   flex-direction: row;
-  background-color: #F7F7F7;
+  background-color: white;
   border-radius: 5px;
   align-items: flex-start;
   justify-content: space-between;
@@ -15,6 +15,7 @@
   flex-direction: column;
   flex: 1;
   align-items: center;
+  background-color: white;
 }
 
 .progress-info {
@@ -29,7 +30,7 @@
   width: 39px;
   height: 39px;
   margin-bottom: 16px;
-  z-index: 999;
+  z-index: 2;
 }
 
 .progress-info span {

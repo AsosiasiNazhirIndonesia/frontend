@@ -328,7 +328,7 @@ const AddEditAdmin = (props) => {
         </div>
         {role.value === "INSTITUTION" ? (
           <div className="user-phoneNumber">
-            <p>Instituion</p>
+            <p>Institution</p>
             <InputField
               type="dropdown"
               name="role"
