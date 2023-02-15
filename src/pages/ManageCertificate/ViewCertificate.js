@@ -28,15 +28,18 @@ const ViewCertificate = (props) => {
   const [isProcessing, setProcessing] = useState(false);
   const [allowToSigning, setAllowToSigning] = useState(false);
   const user = useSelector((state) => state.getIn(["actor", "user"]).toJS());
+  const admin = useSelector((state) => state.getIn(["actor", "admin"]).toJS());
   const certificateId = props.certificateId;
 
   const decideSigner = () => {
+    console.log(progressBarContent[progressBarContent.length - 1], admin);
     if (
       !(
         Object.keys(certificate) <= 0 ||
         progressBarContent.length <= 0 ||
-        !user ||
-        Object.keys(user) <= 0
+        (user?.user_id
+          ? !user || Object.keys(user) <= 0
+          : !admin || Object.keys(admin) <= 0)
       )
     ) {
       let temp = {};
@@ -45,17 +48,33 @@ const ViewCertificate = (props) => {
           user.user_id
       );
       for (const content of progressBarContent) {
-        if (content.user_id === user.user_id) {
-          setSigner(true);
-          if (temp.success && !content.success) {
-            setAllowToSigning(true);
-            setSigned(false);
-          } else if (content.success) {
-            setAllowToSigning(false);
-            setSigned(true);
-          } else {
-            setSigned(false);
-            setAllowToSigning(false);
+        if (user?.user_id) {
+          if (content.user_id === user.user_id) {
+            setSigner(true);
+            if (temp.success && !content.success) {
+              setAllowToSigning(true);
+              setSigned(false);
+            } else if (content.success) {
+              setAllowToSigning(false);
+              setSigned(true);
+            } else {
+              setSigned(false);
+              setAllowToSigning(false);
+            }
+          }
+        } else if (admin?.admin_id) {
+          if (content.user_id === admin.admin_id) {
+            setSigner(true);
+            if (temp.success && !content.success) {
+              setAllowToSigning(true);
+              setSigned(false);
+            } else if (content.success) {
+              setAllowToSigning(false);
+              setSigned(true);
+            } else {
+              setSigned(false);
+              setAllowToSigning(false);
+            }
           }
         }
         temp = content;
@@ -177,7 +196,8 @@ const ViewCertificate = (props) => {
     if (Object.keys(certificate) <= 0) {
       getCertificate();
     }
-    if (user) {
+
+    if (user || admin) {
       decideSigner();
     }
   }, [props.certificateId, certificate, certificateStatus, progressBarContent]);
@@ -280,7 +300,7 @@ const ViewCertificate = (props) => {
       });
       if (!isReceiver) {
         API.signingCertificate({
-          user_id: user.user_id,
+          user_id: user.user_id || admin?.admin_id,
           certificate_id: certificate.certificate_id,
         });
       }
@@ -384,22 +404,24 @@ const ViewCertificate = (props) => {
           certificateSigners={certificate.CertificateSigners}
         />
         {isSigner ? (
-          <SubmitButton
-            isProcessing={isProcessing}
-            disabled={!allowToSigning || certificateStatus == 2}
-            buttonText={
-              isSigned && !isReceiver
-                ? "Signed"
-                : isSigned && isReceiver
-                ? "Accepted"
-                : isReceiver
-                ? "Accept"
-                : "Sign"
-            }
-            onClick={() => {
-              onSign();
-            }}
-          ></SubmitButton>
+          <div className={styles["btn-done"]}>
+            <SubmitButton
+              isProcessing={isProcessing}
+              disabled={!allowToSigning || certificateStatus == 2}
+              buttonText={
+                isSigned && !isReceiver
+                  ? "Signed"
+                  : isSigned && isReceiver
+                  ? "Accepted"
+                  : isReceiver
+                  ? "Accept"
+                  : "Sign"
+              }
+              onClick={() => {
+                onSign();
+              }}
+            ></SubmitButton>
+          </div>
         ) : (
           <></>
         )}
