@@ -74,7 +74,7 @@ const InstitutionMaster = (props) => {
   const submit = async () => {
     try {
       
-      const certificateSetFactory = CertificateSetFactory.getNewInstance('0x8eBD7A6D00C5Ac6215B9cB463306C841C7F3d4C1');
+      const certificateSetFactory = CertificateSetFactory.getNewInstance('0xF595439D6c19cBc441e358CBD71799125724EA11');
       const accounts = await web3.eth.getAccounts();
       const tx = certificateSetFactory.methods.createCertificateSet(accounts[0], institutionName.value);
 

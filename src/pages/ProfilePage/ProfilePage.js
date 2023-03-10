@@ -102,6 +102,10 @@ const Profile = (props) => {
                   <div className="colOne">Email:</div>
                   <div className="colTwo">{actor ? actor.email : ''}</div>
                 </div>
+                <div className="table-row">
+                  <div className="colOne">Address:</div>
+                  <div className="colTwo">{actor ? actor.address : ''}</div>
+                </div>
               </div>
             </div>
           </div>

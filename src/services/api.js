@@ -105,6 +105,16 @@ API.addCertificate = async (request) => {
   }
 };
 
+API.updateCertificate = async (request) => {
+  try {
+    const url = `${HOST}/api/certificates`;
+    const result = (await axios.put(url, request)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
 API.signingCertificate = async (request) => {
   try {
     const url = `${HOST}/api/certificates/signing`;
@@ -114,6 +124,7 @@ API.signingCertificate = async (request) => {
     throw getErrorMessage(e);
   }
 };
+
 
 API.getAllCertificates = async (offset, limit) => {
   try {
@@ -216,6 +227,59 @@ API.getInstitutionById = async (institutionId) => {
   }
 };
 
+//certificate_type
+API.addCertificateType = async (request) => {
+  try {
+    const url = `${HOST}/api/certificatetypes`;
+    const result = (await axios.post(url, request)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.getAllCertificateTypes = async (offset, limit) => {
+  try {
+    const url = `${HOST}/api/certificatetypes?order_by=name&offset=${offset}&limit=${limit}`;
+    const result = (await axios.get(url)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.updateCertificateType = async (request) => {
+  try {
+    const url = `${HOST}/api/certificatetypes`;
+    const result = (await axios.put(url, request)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.deleteCertificateType = async (params) => {
+  try {
+    const url = `${HOST}/api/certificatetypes`;
+    const result = (await axios.delete(url, { data: params })).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+API.getCertificateTypeById = async (certificateTypeId) => {
+  try {
+    const url = `${HOST}/api/certificatetypes/${certificateTypeId}`;
+    const result = (await axios.get(url)).data;
+    return result.data;
+  } catch (e) {
+    throw getErrorMessage(e);
+  }
+};
+
+
+
 API.uploadFile = async (file) => {
   try {
     const formData = new FormData();
@@ -233,7 +297,7 @@ API.uploadFileToIPFS = async (file, tokenId) => {
     const tempFormData = new FormData();
     tempFormData.append("file", file, file.name);
     tempFormData.append("filename", tokenId + ".png");
-    const url = `http://localhost:4000/upload`;
+    const url = `http://localhost:5000/upload`;
     const tempResult = (await axios.post(url, tempFormData)).data;
 
     const content =

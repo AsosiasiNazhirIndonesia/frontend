@@ -17,6 +17,7 @@ import CreateCertificate2 from "./CreateCertificate2";
 import CreateCertificate3 from "./CreateCertificate3";
 import "./ManageCertificate.scss";
 import ViewCertificate from "./ViewCertificate";
+import name from "ipfs-http-client/src/name";
 const { Buffer } = require("buffer");
 
 const ManageCertificate = (props) => {
@@ -54,6 +55,11 @@ const ManageCertificate = (props) => {
     value: "",
     errorMessage: "",
   });
+  const [certificateType, setCertificateType] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
   const [certificateDate, setCertificateDate] = useState({
     status: INPUT_STATUS.INIT,
     value: "",
@@ -81,9 +87,20 @@ const ManageCertificate = (props) => {
     "certificate_id"
   );
   const actor = useParams().actor;
+
   const deleteSelectedData = useSelector((state) =>
     state.getIn(["delete", "selectedData"]).toJS()
   );
+
+  const [admins, setAdmins] = useState([]);
+  const [selectedAdmin, setSelectedAdmin] = useState({});
+
+  const getAllAdmins = async (offset, limit) => {
+    const results = await API.getAllAdmins(offset, limit);
+    if (results.length > 0) {
+      setAdmins(results);
+    }
+  }
 
   const getAllCertificates = async (offset, limit) => {
     let results = [];
@@ -94,8 +111,22 @@ const ManageCertificate = (props) => {
         limit
       );
     } else if (props.type === ACTOR.ADMIN && props.admin) {
+
+      let creatorId = props.admin.admin_id;
+      if (props.admin.name !== 'creator')
+      {
+        await getAllAdmins(0,1000);
+        setSelectedAdmin(
+        admins.find((admin) => {   
+            return (admin.name === 'creator' && admin.institution_id === props.admin.institution_id);
+          })
+        );
+        if (selectedAdmin) creatorId = selectedAdmin.admin_id;
+
+      }
+
       results = await API.getCertificatesByAdmin(
-        props.admin.admin_id,
+        creatorId,
         offset,
         limit
       );
@@ -226,6 +257,13 @@ const ManageCertificate = (props) => {
           errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
         });
         break;
+      case "certificateType":
+        setCertificateType({
+          status,
+          value: value,
+          errorMessage: status === INPUT_STATUS.INVALID ? "required field" : "",
+        });
+        break;
       case "certificateDate":
         setCertificateDate({
           status,
@@ -289,79 +327,85 @@ const ManageCertificate = (props) => {
         approvers.push(assignToPubKey.value);
       }
 
-      const institution = await API.getInstitutionById(
-        props.admin.institution_id
-      );
-      const certificateSet = CertificateSet.getNewInstance(
-        institution.sc_address
-      );
-      const today = new Date();
-      const thisMonth = today.getMonth();
-      const tx = certificateSet.methods.mint(
-        sendToPubKey.value,
-        0,
-        Math.floor(new Date(today.setMonth(thisMonth + 12)).getTime() / 1000),
-        certificateHash,
-        approvers
-      );
       const accounts = await web3.eth.getAccounts();
-      try {
-        createNotification({
-          type: "Minting...",
-          value:
-            "Please check your metamask and stay on this page until Certificate is Minted to blockchain",
-        });
 
-        tx.send({
-          from: accounts[0],
-          gas: 3000000,
-          gasPrice: "30000000000",
-        }).then(async function (receipt) {
-          const tokenId = await certificateSet.methods
-            .encodeTokenId(0, sendToPubKey.value)
-            .call();
+      //jika signernya hanya admin, langsung Minting
+      // if (approvers[0] === accounts[0] && approvers.length === 1) {
+        const institution = await API.getInstitutionById(
+          props.admin.institution_id
+        );
+        // const certificateSet = CertificateSet.getNewInstance(
+        //   institution.sc_address
+        // );
+        // const today = new Date();
+        // const thisMonth = today.getMonth();
+        // const tx = certificateSet.methods.mint(
+        //   sendToPubKey.value,
+        //   0,
+        //   Math.floor(new Date(today.setMonth(thisMonth + 12)).getTime() / 1000),
+        //   certificateHash,
+        //   approvers
+        // );
 
-          const certificate_signers = [];
-          let index = 0;
-          for (const assignToUser of assignToUsers) {
-            certificate_signers.push({
-              user_id: assignToUser.user_id,
-              priority: index,
+        try {
+          // createNotification({
+          //   type: "Minting...",
+          //   value:
+          //     "Please check your metamask and stay on this page until Certificate is Minted to blockchain",
+          // });
+
+          // tx.send({
+          //   from: accounts[0],
+          //   gas: 3000000,
+          //   gasPrice: "30000000000",
+          // }).then(async function (receipt) {
+          //   const tokenId = await certificateSet.methods
+          //     .encodeTokenId(0, sendToPubKey.value)
+          //     .call();
+
+            const certificate_signers = [];
+            let index = 0;
+            for (const assignToUser of assignToUsers) {
+              certificate_signers.push({
+                user_id: assignToUser.user_id,
+                priority: index,
+              });
+              index++;
+            }
+
+            //save to database
+            API.addCertificate({
+              admin_id: props.admin.admin_id,
+              user_id: sendToUser.user_id,
+              logo: certificateLogo,
+              name: documentName.value,
+              title: certificateTitle.value,
+              no: certificateNo.value,
+              description: certificateDescription.value,
+              score: certificateScore.value,
+              date: certificateDate.value,
+              sc_address: institution.sc_address,
+              token_id: '111111111111111111111111111111111111111111111111',//tokenId, (default tokenid before minting)
+              receiver_name: receiverName.value,
+              certificate_type_id: certificateType.value,
+              certificate_signers,
             });
-            index++;
-          }
 
-          //save to database
-          API.addCertificate({
-            admin_id: props.admin.admin_id,
-            user_id: sendToUser.user_id,
-            logo: certificateLogo,
-            name: documentName.value,
-            title: certificateTitle.value,
-            no: certificateNo.value,
-            description: certificateDescription.value,
-            score: certificateScore.value,
-            date: certificateDate.value,
-            sc_address: institution.sc_address,
-            token_id: tokenId,
-            receiver_name: receiverName.value,
-            certificate_signers,
-          });
+            createNotification({
+              type: "success",
+              value: "Your certificate has been created",//already on blockchain",
+            });
 
+            history.push(`/dashboard/${actor}?menu=manage-certificate`);
+          // });
+        } catch (e) {
+          console.log(e);
           createNotification({
-            type: "success",
-            value: "Your certificate already on blockchain",
+            type: "error",
+            value: "Something went wrong",
           });
-
-          history.push(`/dashboard/${actor}?menu=manage-certificate`);
-        });
-      } catch (e) {
-        console.log(e);
-        createNotification({
-          type: "error",
-          value: "Something went wrong",
-        });
-      }
+        }
+      // }
     }
   };
 
@@ -503,7 +547,7 @@ const ManageCertificate = (props) => {
         default:
           return (
             <React.Fragment>
-              {actor === ACTOR.ADMIN ? (
+              {(actor === ACTOR.ADMIN && props.admin.name === 'creator') ? (
                 <div className="bef-table">
                   <div className="btn-add-certificate">
                     <SubmitButton

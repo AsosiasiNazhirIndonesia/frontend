@@ -52,7 +52,7 @@ const SignInPage = (props) => {
         setIsFailed(false);
         try {
             const accounts = await web3.eth.getAccounts();
-            console.log(accounts[0]);
+            // console.log(accounts[0]);
             const admin = await API.getAdminByPublicKey(accounts[0]);
             if (!admin) {
                 throw 'Admin with your address not found';

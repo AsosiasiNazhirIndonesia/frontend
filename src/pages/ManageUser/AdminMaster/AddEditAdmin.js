@@ -169,7 +169,43 @@ const AddEditAdmin = (props) => {
   const add = async () => {
     setProcessing(true);
     try {
+
+      const userRequest = {
+        name: name.value,
+        email: email.value,
+        public_key: publicKey.value,
+
+      };
+      await API.createUser(userRequest);
+      
+      if (name.value === 'creator')
+          {
+            const institution = await API.getInstitutionById(
+              selectedInstitution.institution_id
+            );
+            const institutionContractAddress = institution.sc_address;
+            const certificateSet = CertificateSet.getNewInstance(
+              institutionContractAddress
+            );
+            const accounts = await web3.eth.getAccounts();
+            const tx = certificateSet.methods.transferOwnership(publicKey.value);
+
+            createNotification({
+              type: "Transfer Ownership...",
+              value:
+                "Please check your metamask and stay on this page until contract ownership is transferred to New Admin",
+            });
+
+            const res = await tx.send({
+              from: accounts[0],
+              gas: 3000000,
+              gasPrice: "30000000000",
+            });
+          }
+          
+      const newUser = await API.getUserByPublicKey(publicKey.value);
       const request = {
+        admin_id: newUser.user_id,
         name: name.value,
         email: email.value,
         public_key: publicKey.value,
@@ -180,29 +216,7 @@ const AddEditAdmin = (props) => {
           : null,
         photo: photo,
       };
-
-      const institution = await API.getInstitutionById(
-        selectedInstitution.institution_id
-      );
-      const institutionContractAddress = institution.sc_address;
-      const certificateSet = CertificateSet.getNewInstance(
-        institutionContractAddress
-      );
-      const accounts = await web3.eth.getAccounts();
-      const tx = certificateSet.methods.transferOwnership(publicKey.value);
-
-      createNotification({
-        type: "Transfer Ownership...",
-        value:
-          "Please check your metamask and stay on this page until contract ownership is transferred to New Admin",
-      });
-
-      const res = await tx.send({
-        from: accounts[0],
-        gas: 3000000,
-        gasPrice: "30000000000",
-      });
-
+      console.dir(newUser.user_id);
       await API.addAdmin(request);
       createNotification({
         type: "success",
@@ -328,7 +342,9 @@ const AddEditAdmin = (props) => {
         </div>
         {role.value === "INSTITUTION" ? (
           <div className="user-phoneNumber">
-            <p>Institution</p>
+            <p>
+              Institution
+            </p>
             <InputField
               type="dropdown"
               name="role"

@@ -46,6 +46,7 @@ class TableUser extends Component {
       <tr>
         <th>Name</th>
         <th>Email</th>
+        <th>Address</th>
         <th>Phone Number</th>
         <th>Public Key</th>
         <th>Action</th>

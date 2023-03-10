@@ -16,7 +16,7 @@ const CreateCertificate2 = (props) => {
     props.assignToPubKeys[index] = {
       status: status,
       value: publicKey,
-      errorMessage: status === INPUT_STATUS.INVALID && !user ? 'user not found' : ''
+      errorMessage: status === INPUT_STATUS.INVALID && !user ? 'user signer is not found' : ''
     }
     props.setAssignToPubKeys([...props.assignToPubKeys]);
   }
@@ -26,8 +26,7 @@ const CreateCertificate2 = (props) => {
     if (value.length === 42) {
       loadAssignToUsers(value, index);
       status = INPUT_STATUS.VALID;
-    } 
-    else {
+    } else {
       props.assignToUsers[index] = {};
       props.setAssignToUsers([...props.assignToUsers]);
     }
@@ -35,7 +34,7 @@ const CreateCertificate2 = (props) => {
     props.assignToPubKeys[index] = {
       status: INPUT_STATUS.INVALID,
       value: value,
-      errorMessage: ''//status === INPUT_STATUS.INVALID ? 'public key length must be 42 characters' : ''
+      errorMessage: status === INPUT_STATUS.INVALID ? 'public key length must be 42 characters' : ''
     }
     props.setAssignToPubKeys([...props.assignToPubKeys]);
   }
@@ -59,14 +58,14 @@ const CreateCertificate2 = (props) => {
     window.open(`/profile?actor_type=USER&actor_public_key=${pubKey}`, "_blank");
   }
 
-  const disabledSubmitBtn = () => {
+  const disabledSumbitBtn = () => {
     let disabled = false;
     if (props.getInputValue('sendToPubKey').status !== INPUT_STATUS.VALID) {
       disabled = true;
     } else {
       for(const assignToPubKey of props.assignToPubKeys) {
         if (assignToPubKey.status !== INPUT_STATUS.VALID) {
-          // disabled = true;
+          disabled = true;
           break;
         }
       }
@@ -80,7 +79,7 @@ const CreateCertificate2 = (props) => {
     <React.Fragment>
       <form className="form-sendTo">
         <div className="sendTo-input">
-          <p>Awarded to</p>
+          <p>Send to</p>
           <InputField
             type="text"
             name="search-input"
@@ -95,8 +94,7 @@ const CreateCertificate2 = (props) => {
       </form>
       <div className="form-assignTo">
         <div className="assignTo-input">
-          <p>Signers</p>
-          <span>Admin Institution as Default, please change/add if necessary</span>
+          <p>Assign To</p>
           {props.assignToPubKeys.map((assignToPubKey, key) => {
             return (
             <div className="assignTo-input-item">
@@ -111,12 +109,11 @@ const CreateCertificate2 = (props) => {
               {props.assignToUsers[key].user_id ?
                 <span>Name: <Link to="" onClick={(e) => goToProfile(e, props.assignToUsers[key].public_key)}>{props.assignToUsers[key].name}</Link></span> :
                 <></>}
-            </div>
-            );
+            </div>);
           })}
         </div>
         <div className="btn-add-user">
-          <SubmitButton buttonText="Add Signer" onClick={() => addAssignToInputs()}></SubmitButton>
+          <SubmitButton buttonText="Add User" onClick={() => addAssignToInputs()}></SubmitButton>
           {props.assignToPubKeys.length > 1 ? 
             <div className="btn-delete-user">
               <SubmitButton className="delete-btn" buttonText="Delete User" onClick={() => deleteAssignToInputs()}></SubmitButton>
@@ -138,7 +135,7 @@ const CreateCertificate2 = (props) => {
         <div className="btn-next">
           <SubmitButton
             buttonText="Next"
-            disabled={disabledSubmitBtn()}
+            disabled={disabledSumbitBtn()}
             onClick={() => {
               history.push(
                 "/dashboard/ADMIN?menu=manage-certificate&create_certificate_step=3"

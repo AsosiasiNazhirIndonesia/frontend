@@ -16,6 +16,10 @@ const ViewDataUser = (props) => {
           <span className="email">Nuranggie@gmail.co.id</span>
         </div>
         <div>
+          <p className="title-address">Address :</p>
+          <span className="address">Bandung</span>
+        </div>
+        <div>
           <p className="title-phoneNumber">Phone Number :</p>
           <span className="phoneNumber">08123456789</span>
         </div>

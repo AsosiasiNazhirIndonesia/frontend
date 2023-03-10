@@ -22,6 +22,11 @@ const AddEditUser = (props) => {
     value: "",
     errorMessage: "",
   });
+  const [address, setAddress] = useState({
+    status: INPUT_STATUS.INIT,
+    value: "",
+    errorMessage: "",
+  });
   const [phoneNumber, setPhoneNumber] = useState({
     status: INPUT_STATUS.INIT,
     value: "",
@@ -55,6 +60,10 @@ const AddEditUser = (props) => {
     setEmail({
       status: INPUT_STATUS.VALID,
       value: props.selectedUser.email
+    });
+    setAddress({
+      status: INPUT_STATUS.VALID,
+      value: props.selectedUser.address
     });
     setPhoneNumber({
       status: INPUT_STATUS.VALID,
@@ -240,6 +249,18 @@ const AddEditUser = (props) => {
             name="email"
             placeholder="Masukan Email Aktif"
             value={email}
+            onChange={onChange}
+          />
+        </div>
+        <div className="user-address">
+          <p>
+            Address <font color="red">*</font>
+          </p>
+          <InputField
+            type="text"
+            name="address"
+            placeholder="Masukan Alamat"
+            value={address}
             onChange={onChange}
           />
         </div>

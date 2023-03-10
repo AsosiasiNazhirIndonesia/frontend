@@ -1,16 +1,460 @@
-export const sourceCode = `// SPDX-License-Identifier: unlicensed
+export const sourceCode = `// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
-import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Context.sol";
-import "../interfaces/IWalletMapping.sol";
-import "../interfaces/ICertificateSet.sol";
-import "./BitMaps.sol";
+interface IERC165 {
+    /**
+     * @dev Returns true if this contract implements the interface defined by
+     * 'interfaceId'. See the corresponding
+     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+     * to learn more about how these ids are created.
+     *
+     * This function call must use less than 30 000 gas.
+     */
+    function supportsInterface(bytes4 interfaceId) external view returns (bool);
+}
+
+abstract contract ERC165 is IERC165 {
+    /**
+     * @dev See {IERC165-supportsInterface}.
+     */
+    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+        return interfaceId == type(IERC165).interfaceId;
+    }
+}
+
+interface IERC1155Receiver is IERC165 {
+    /**
+     * @dev Handles the receipt of a single ERC1155 token type. This function is
+     * called at the end of a 'safeTransferFrom' after the balance has been updated.
+     *
+     * NOTE: To accept the transfer, this must return
+     * 'bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))'
+     * (i.e. 0xf23a6e61, or its own function selector).
+     *
+     * @param operator The address which initiated the transfer (i.e. msg.sender)
+     * @param from The address which previously owned the token
+     * @param id The ID of the token being transferred
+     * @param value The amount of tokens being transferred
+     * @param data Additional data with no specified format
+     * @return 'bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))' if transfer is allowed
+     */
+    function onERC1155Received(
+        address operator,
+        address from,
+        uint256 id,
+        uint256 value,
+        bytes calldata data
+    ) external returns (bytes4);
+
+    /**
+     * @dev Handles the receipt of a multiple ERC1155 token types. This function
+     * is called at the end of a 'safeBatchTransferFrom' after the balances have
+     * been updated.
+     *
+     * NOTE: To accept the transfer(s), this must return
+     * 'bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))'
+     * (i.e. 0xbc197c81, or its own function selector).
+     *
+     * @param operator The address which initiated the batch transfer (i.e. msg.sender)
+     * @param from The address which previously owned the token
+     * @param ids An array containing ids of each token being transferred (order and length must match values array)
+     * @param values An array containing amounts of each token being transferred (order and length must match ids array)
+     * @param data Additional data with no specified format
+     * @return 'bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))' if transfer is allowed
+     */
+    function onERC1155BatchReceived(
+        address operator,
+        address from,
+        uint256[] calldata ids,
+        uint256[] calldata values,
+        bytes calldata data
+    ) external returns (bytes4);
+}
+
+interface IERC1155 is IERC165 {
+    /**
+     * @dev Emitted when 'value' tokens of token type 'id' are transferred from 'from' to 'to' by 'operator'.
+     */
+    event TransferSingle(address indexed operator, address indexed from, address indexed to, uint256 id, uint256 value);
+
+    /**
+     * @dev Equivalent to multiple {TransferSingle} events, where 'operator', 'from' and 'to' are the same for all
+     * transfers.
+     */
+    event TransferBatch(
+        address indexed operator,
+        address indexed from,
+        address indexed to,
+        uint256[] ids,
+        uint256[] values
+    );
+
+    /**
+     * @dev Emitted when 'account' grants or revokes permission to 'operator' to transfer their tokens, according to
+     * 'approved'.
+     */
+    event ApprovalForAll(address indexed account, address indexed operator, bool approved);
+
+    /**
+     * @dev Emitted when the URI for token type 'id' changes to 'value', if it is a non-programmatic URI.
+     *
+     * If an {URI} event was emitted for 'id', the standard
+     * https://eips.ethereum.org/EIPS/eip-1155#metadata-extensions[guarantees] that 'value' will equal the value
+     * returned by {IERC1155MetadataURI-uri}.
+     */
+    event URI(string value, uint256 indexed id);
+
+    /**
+     * @dev Returns the amount of tokens of token type 'id' owned by 'account'.
+     *
+     * Requirements:
+     *
+     * - 'account' cannot be the zero address.
+     */
+    function balanceOf(address account, uint256 id) external view returns (uint256);
+
+    /**
+     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {balanceOf}.
+     *
+     * Requirements:
+     *
+     * - 'accounts' and 'ids' must have the same length.
+     */
+    function balanceOfBatch(
+        address[] calldata accounts,
+        uint256[] calldata ids
+    ) external view returns (uint256[] memory);
+
+    /**
+     * @dev Grants or revokes permission to 'operator' to transfer the caller's tokens, according to 'approved',
+     *
+     * Emits an {ApprovalForAll} event.
+     *
+     * Requirements:
+     *
+     * - 'operator' cannot be the caller.
+     */
+    function setApprovalForAll(address operator, bool approved) external;
+
+    /**
+     * @dev Returns true if 'operator' is approved to transfer ''account'''s tokens.
+     *
+     * See {setApprovalForAll}.
+     */
+    function isApprovedForAll(address account, address operator) external view returns (bool);
+
+    /**
+     * @dev Transfers 'amount' tokens of token type 'id' from 'from' to 'to'.
+     *
+     * Emits a {TransferSingle} event.
+     *
+     * Requirements:
+     *
+     * - 'to' cannot be the zero address.
+     * - If the caller is not 'from', it must have been approved to spend ''from'''s tokens via {setApprovalForAll}.
+     * - 'from' must have a balance of tokens of type 'id' of at least 'amount'.
+     * - If 'to' refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
+     * acceptance magic value.
+     */
+    function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes calldata data) external;
+
+    /**
+     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {safeTransferFrom}.
+     *
+     * Emits a {TransferBatch} event.
+     *
+     * Requirements:
+     *
+     * - 'ids' and 'amounts' must have the same length.
+     * - If 'to' refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
+     * acceptance magic value.
+     */
+    function safeBatchTransferFrom(
+        address from,
+        address to,
+        uint256[] calldata ids,
+        uint256[] calldata amounts,
+        bytes calldata data
+    ) external;
+}
+
+interface IERC1155MetadataURI is IERC1155 {
+    /**
+     * @dev Returns the URI for token type 'id'.
+     *
+     * If the '\{id\}' substring is present in the URI, it must be replaced by
+     * clients with the actual token type ID.
+     */
+    function uri(uint256 id) external view returns (string memory);
+}
+
+abstract contract Context {
+    function _msgSender() internal view virtual returns (address) {
+        return msg.sender;
+    }
+
+    function _msgData() internal view virtual returns (bytes calldata) {
+        return msg.data;
+    }
+}
+
+abstract contract Ownable is Context {
+    address private _owner;
+
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    /**
+     * @dev Initializes the contract setting the deployer as the initial owner.
+     */
+    constructor() {
+        _transferOwnership(_msgSender());
+    }
+
+    /**
+     * @dev Returns the address of the current owner.
+     */
+    function owner() public view virtual returns (address) {
+        return _owner;
+    }
+
+    /**
+     * @dev Throws if called by any account other than the owner.
+     */
+    modifier onlyOwner() {
+        require(owner() == _msgSender(), "Ownable: caller is not the owner");
+        _;
+    }
+
+    /**
+     * @dev Leaves the contract without owner. It will not be possible to call
+     * 'onlyOwner' functions anymore. Can only be called by the current owner.
+     *
+     * NOTE: Renouncing ownership will leave the contract without an owner,
+     * thereby removing any functionality that is only available to the owner.
+     */
+    function renounceOwnership() public virtual onlyOwner {
+        _transferOwnership(address(0));
+    }
+
+    /**
+     * @dev Transfers ownership of the contract to a new account ('newOwner').
+     * Can only be called by the current owner.
+     */
+    function transferOwnership(address newOwner) public virtual onlyOwner {
+        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        _transferOwnership(newOwner);
+    }
+
+    /**
+     * @dev Transfers ownership of the contract to a new account ('newOwner').
+     * Internal function without access restriction.
+     */
+    function _transferOwnership(address newOwner) internal virtual {
+        address oldOwner = _owner;
+        _owner = newOwner;
+        emit OwnershipTransferred(oldOwner, newOwner);
+    }
+}
+
+library Strings {
+    bytes16 private constant _HEX_SYMBOLS = "0123456789abcdef";
+
+    /**
+     * @dev Converts a 'uint256' to its ASCII 'string' decimal representation.
+     */
+    function toString(uint256 value) internal pure returns (string memory) {
+        // Inspired by OraclizeAPI's implementation - MIT licence
+        // https://github.com/oraclize/ethereum-api/blob/b42146b063c7d6ee1358846c198246239e9360e8/oraclizeAPI_0.4.25.sol
+
+        if (value == 0) {
+            return "0";
+        }
+        uint256 temp = value;
+        uint256 digits;
+        while (temp != 0) {
+            digits++;
+            temp /= 10;
+        }
+        bytes memory buffer = new bytes(digits);
+        while (value != 0) {
+            digits -= 1;
+            buffer[digits] = bytes1(uint8(48 + uint256(value % 10)));
+            value /= 10;
+        }
+        return string(buffer);
+    }
+
+    /**
+     * @dev Converts a 'uint256' to its ASCII 'string' hexadecimal representation.
+     */
+    function toHexString(uint256 value) internal pure returns (string memory) {
+        if (value == 0) {
+            return "0x00";
+        }
+        uint256 temp = value;
+        uint256 length = 0;
+        while (temp != 0) {
+            length++;
+            temp >>= 8;
+        }
+        return toHexString(value, length);
+    }
+
+    /**
+     * @dev Converts a 'uint256' to its ASCII 'string' hexadecimal representation with fixed length.
+     */
+    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {
+        bytes memory buffer = new bytes(2 * length + 2);
+        buffer[0] = "0";
+        buffer[1] = "x";
+        for (uint256 i = 2 * length + 1; i > 1; --i) {
+            buffer[i] = _HEX_SYMBOLS[value & 0xf];
+            value >>= 4;
+        }
+        require(value == 0, "Strings: hex length insufficient");
+        return string(buffer);
+    }
+}
+
+interface IWalletMapping {
+    error UserAlreadyLinked(address userAddress);
+    error WalletAlreadyLinked(address walletAddress);
+    error StringLongerThan31Bytes(string str);
+
+    function linkWallet(address userAddress, address walletAddress) external;
+
+    function getLinkedWallet(
+        address userAddress
+    ) external view returns (address);
+
+    function getLiteWalletAddress(
+        string memory firstName,
+        string memory lastName,
+        uint256 phoneNumber
+    ) external pure returns (address liteWallet);
+
+    function transitionCertificatesByContracts(
+        address from,
+        address to,
+        address[] memory contracts
+    ) external;
+}
+
+interface ICertificateSet {
+    error IncorrectExpiry(address user, uint96 certificateType, uint256 expiry);
+    error IncorrectBalance(address user, uint96 certificateType, uint256 balance);
+    error NewCertificateTypeNotIncremental(uint96 certificateType, uint256 maxCertificateType);
+    error ArrayParamsUnequalLength();
+    error WalletNotLinked(address walletAddress);
+    error SoulboundTokenNoSetApprovalForAll(address operator, bool approved);
+    error SoulboundTokenNoIsApprovedForAll(address account, address operator);
+    error SoulboundTokenNoSafeTransferFrom(
+        address from,
+        address to,
+        uint256 id,
+        uint256 amount,
+        bytes data
+    );
+    error SoulboundTokenNoSafeBatchTransferFrom(
+        address from,
+        address to,
+        uint256[] ids,
+        uint256[] amounts,
+        bytes data
+    );
+    error ERC1155ReceiverNotImplemented();
+    error ERC1155ReceiverRejectedTokens();
+
+    event TransitionWallet(
+        address indexed kycAddress,
+        address indexed walletAddress
+    );
+
+    function setURI(uint256 tokenId, string memory newuri) external;
+
+    function expiryOf(uint256 tokenId) external view returns (uint256);
+
+    function mint(
+        address account,
+        uint96 certificateType,
+        uint256 expiryTimestamp,
+        bytes32 certificateHash,
+        address[] memory signers
+    ) external returns (uint256 tokenId);
+    
+    function approverSigning(
+        uint256 tokenId, 
+        bytes memory signature
+    ) external;
+
+    function mintBatch(
+        address to,
+        uint96[] memory certificateTypes,
+        uint256[] memory expiryTimestamps,        
+        bytes32[] memory certificateHash,
+        address[][] memory signers
+    ) external returns (uint256[] memory tokenIds);
+
+    function revoke(
+        address account,
+        uint96 certificateType
+    ) external returns (uint256 tokenId);
+
+    function revokeBatch(
+        address to,
+        uint96[] memory certificateTypes
+    ) external returns (uint256[] memory tokenIds);
+
+    function moveUserTokensToWallet(
+        address kycAddress,
+        address walletAddress
+    ) external;
+
+    function encodeTokenId(
+        uint96 certificateType,
+        address account
+    ) external pure returns (uint256 tokenId);
+
+    function decodeTokenId(
+        uint256 tokenId
+    ) external pure returns (uint96 certificateType, address account);
+}
+
+library BitMaps {
+    struct BitMap {
+        mapping(uint256 => uint256) _data;
+    }
+
+    /**
+     * @dev Returns whether the bit at 'index' is set.
+     */
+    function get(
+        BitMap storage bitmap,
+        uint256 index
+    ) internal view returns (bool) {
+        uint256 bucket = index >> 8;
+        uint256 mask = 1 << (index & 0xff);
+        return bitmap._data[bucket] & mask != 0;
+    }
+
+    /**
+     * @dev Sets the bit at 'index'.
+     */
+    function set(BitMap storage bitmap, uint256 index) internal {
+        uint256 bucket = index >> 8;
+        uint256 mask = 1 << (index & 0xff);
+        bitmap._data[bucket] |= mask;
+    }
+
+    /**
+     * @dev Unsets the bit at 'index'.
+     */
+    function unset(BitMap storage bitmap, uint256 index) internal {
+        uint256 bucket = index >> 8;
+        uint256 mask = 1 << (index & 0xff);
+        bitmap._data[bucket] &= ~mask;
+    }
+}
 
 contract CertificateSet is
     Context,
@@ -26,10 +470,11 @@ contract CertificateSet is
 
     address public walletMapping;
     uint96 public maxCertificateType;
-    string public contractURI;
-    string private _uri;
+    string public name;
+    address[] public minters;
     mapping(address => BitMaps.BitMap) private _balances;
     mapping(uint256 => uint256) private _expiries;
+    
 
 //===========================
 
@@ -41,7 +486,6 @@ contract CertificateSet is
 
     //Certificate receiver
     mapping(uint256 => address) private _receiver;
-    mapping(uint256 => bool) private _signedByReceiver;
 
     //Certificate signer
     mapping(uint256 => uint256) private _totalApprover;
@@ -50,39 +494,27 @@ contract CertificateSet is
     mapping(uint256 => bool[]) private _signedByApprovers;
 
     mapping(uint256 => CertificateStatus) private _status;
+    mapping(uint256 => string) private _uri;
 
 //===========================
 
-
+  
 
     address private constant ZERO_ADDRESS = address(0);
     uint256 private constant BITMAP_SIZE = 256;
 
     event CertificateDropped(uint256 date);
     event CertificateIssued(uint256 date);
-    event SignedByReceiver(address receiver, uint256 date);
     event SignedByApprover(address approver, uint256 date);
 
     constructor(
         address _owner,
         address _walletMapping,
-        string memory _baseUri
-    ) {
+        string memory _name
+    ) 
+    {
         walletMapping = _walletMapping;
-        setURI(
-            string.concat(
-                _baseUri,
-                Strings.toHexString(uint160(address(this)), 20),
-                "/"
-            )
-        ); // base + address(this) + /
-        setContractURI(
-            string.concat(
-                _baseUri,
-                Strings.toHexString(uint160(address(this)), 20),
-                "/"
-            )
-        ); // base + address(this) + /
+        name = _name;
         transferOwnership(_owner);
     }
 
@@ -92,7 +524,7 @@ contract CertificateSet is
      * @return URI string
      */
     function uri(uint256 id) external view returns (string memory) {
-        return string.concat(_uri, Strings.toString(id));
+        return _uri[id];
     }
 
 
@@ -115,10 +547,6 @@ contract CertificateSet is
 
     function receiver(uint256 id) external view returns (address) {
         return _receiver[id];
-    }
-
-    function signedByReceiver(uint256 id) external view returns (bool) {
-        return _signedByReceiver[id];
     }
 
     function totalApprover(uint256 id) external view returns (uint256) {
@@ -165,6 +593,11 @@ contract CertificateSet is
         return batchBalances;
     }
 
+    function setMinters(address[] memory _minters) public onlyOwner
+    {
+        minters = _minters;
+    }
+
     /**
      * @notice Mint token to an account address
      * @dev Checks if "to" address param has an associated linked wallet (in WalletMapping). If yes, mints to that address. If no, mints to the "to" address. Only callable by contract owner.
@@ -179,9 +612,13 @@ contract CertificateSet is
         uint256 expiry,        
         bytes32 certificateHash,
         address[] memory signers
-    ) external onlyOwner returns (uint256 tokenId) {
-        address user = getUser(to);
+    ) 
+    external
+    returns (uint256 tokenId) 
+    {
 
+        address user = getUser(to);
+ 
         tokenId = _mint(user, certificateType, expiry, certificateHash, signers);
 
         emit TransferSingle(_msgSender(), ZERO_ADDRESS, user, tokenId, 1);
@@ -193,11 +630,6 @@ contract CertificateSet is
             1,
             ""
         );
-    }
-
-    function receiverSigning(uint256 tokenId, bytes memory signature) external {
-        _receiverSigning(tokenId, signature);
-        emit CertificateIssued(block.timestamp);
     }
     
     function approverSigning(uint256 tokenId, bytes memory signature) external {
@@ -218,7 +650,7 @@ contract CertificateSet is
         uint256[] memory expiries,
         bytes32[] memory certificateHashes,
         address[][] memory signers
-    ) external onlyOwner returns (uint256[] memory tokenIds) {
+    ) external returns (uint256[] memory tokenIds) {
         if (certificateTypes.length != expiries.length)
             revert ArrayParamsUnequalLength();
         address user = getUser(account);
@@ -359,19 +791,11 @@ contract CertificateSet is
     }
 
     /**
-     * @notice Update token metadata base URI
+     * @notice Update token metadata URI
      * @param newuri New URI
      */
-    function setURI(string memory newuri) public onlyOwner {
-        _uri = newuri;
-    }
-
-    /**
-     * @notice Update contract metadata URI
-     * @param newuri New URI
-     */
-    function setContractURI(string memory newuri) public onlyOwner {
-        contractURI = newuri;
+    function setURI(uint256 id, string memory newuri) public onlyOwner {
+        _uri[id] = newuri;
     }
 
     /**
@@ -443,10 +867,23 @@ contract CertificateSet is
         uint256 expiry,
         bytes32 certificateHash,
         address[] memory signers
-    ) internal returns (uint256 tokenId) {
-        tokenId = encodeTokenId(certificateType, user);
+    ) internal 
+    returns (uint256 tokenId) {
 
+        uint256 index;
+        int minterIndex = -1;
+        for (index = 0; index < minters.length; index++) {
+            if (minters[index] == msg.sender) 
+            {
+                minterIndex = int(index);
+            }
+        }
+        require(minterIndex >= 0, 'minter not found');
+
+        tokenId = encodeTokenId(certificateType, user);
+        
         bool isExpired = expiry > 0 && expiry <= block.timestamp;
+
         uint256 priorBalance = balanceOf(user, tokenId);
         if (isExpired) revert IncorrectExpiry(user, certificateType, expiry);
         if (priorBalance > 0)
@@ -454,18 +891,20 @@ contract CertificateSet is
 
         BitMaps.BitMap storage balances = _balances[user];
         BitMaps.set(balances, certificateType);
+ 
+
         _expiries[tokenId] = expiry;
         _certificateHash[tokenId] = certificateHash;
         _issuer[tokenId] = msg.sender;
         _receiver[tokenId] = user;
-        _signedByReceiver[tokenId] = false;
         _approvers[tokenId] = signers;
         _totalApprover[tokenId] = signers.length;
         _totalSignature[tokenId] = 0;
-        uint256 index;
+  
         for(index = 0; index < _totalApprover[tokenId]; index++) {
             _signedByApprovers[tokenId].push(false);
         }
+
         _status[tokenId] = CertificateStatus.CREATED;
 
         uint96 nextPossibleNewCertificateType = uint96(maxCertificateType) + 1; // ensure new certificateTypes are one greater, pack bitmaps sequentially
@@ -511,26 +950,13 @@ contract CertificateSet is
         return (v, r, s);
     }
     
-    function _receiverSigning(uint256 tokenId, bytes memory signature) internal {
-        require(_status[tokenId] == CertificateStatus.CREATED, 'invalid certificate status');
-        require(_totalSignature[tokenId] == _totalApprover[tokenId], 'waiting for approver signature');
-        require(!_signedByReceiver[tokenId], 'already signed by receiver');
-        bytes memory prefix = "\x19Ethereum Signed Message:\n32";
-        bytes32 prefixedHash = keccak256(abi.encodePacked(prefix, _certificateHash[tokenId]));
-        (uint8 v, bytes32 r, bytes32 s) = splitSignature(signature);
-        require(ecrecover(prefixedHash, v, r, s) == _receiver[tokenId], 'invalid receiver signature');
-        
-        _signedByReceiver[tokenId] = true;
-        _status[tokenId] = CertificateStatus.ISSUED;
-        emit SignedByReceiver(_receiver[tokenId], block.timestamp);
-    }
-    
     function _approverSigning(uint256 tokenId, bytes memory signature) internal {
         require(_status[tokenId] == CertificateStatus.CREATED, 'invalid certificate status');
         int approverIndex = -1;
         uint256 index;
         for (index = 0; index < _approvers[tokenId].length; index++) {
-            if (_approvers[tokenId][index] == msg.sender) {
+            if (_approvers[tokenId][index] == msg.sender) 
+            {
                 approverIndex = int(index);
             }
         }
@@ -546,6 +972,10 @@ contract CertificateSet is
         
         _signedByApprovers[tokenId][uint256(approverIndex)] = true;
         _totalSignature[tokenId] = _totalSignature[tokenId] + 1;
+        if (_totalSignature[tokenId] == _approvers[tokenId].length)  
+        {
+            _status[tokenId] = CertificateStatus.ISSUED;
+        }
         emit SignedByApprover(_approvers[tokenId][uint256(approverIndex)], block.timestamp);
     }
 

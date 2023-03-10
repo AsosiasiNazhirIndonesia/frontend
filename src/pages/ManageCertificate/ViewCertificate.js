@@ -32,7 +32,7 @@ const ViewCertificate = (props) => {
   const certificateId = props.certificateId;
 
   const decideSigner = () => {
-    console.log(progressBarContent[progressBarContent.length - 1], admin);
+    // console.log(progressBarContent[progressBarContent.length - 1], admin);
     if (
       !(
         Object.keys(certificate) <= 0 ||
@@ -43,6 +43,7 @@ const ViewCertificate = (props) => {
       )
     ) {
       let temp = {};
+      
       setReceiver(
         progressBarContent[progressBarContent.length - 1].user_id ===
           user.user_id
@@ -106,12 +107,13 @@ const ViewCertificate = (props) => {
 
     const certificateSet = CertificateSet.getNewInstance(newCert.sc_address);
     let index = 0;
+    const signedByReceiver = newCert.is_accepted;
     const signedByApprovers = await certificateSet.methods
       .signedByApprovers(newCert.token_id)
       .call();
 
     for (const approver of sortedApprovers) {
-      //TO DO
+
       const signedByApprover = signedByApprovers[index];
       const link = (
         <Link
@@ -146,9 +148,9 @@ const ViewCertificate = (props) => {
       index++;
     }
 
-    const signedByReceiver = await certificateSet.methods
-      .signedByReceiver(newCert.token_id)
-      .call();
+    // const signedByReceiver = await certificateSet.methods
+    //   .signedByReceiver(newCert.token_id)
+    //   .call();
 
     const link = (
       <Link
@@ -164,7 +166,7 @@ const ViewCertificate = (props) => {
         {newCert.User.name}
       </Link>
     );
-
+    
     newProgressBarContent.push({
       success: signedByReceiver,
       text: signedByReceiver ? (
@@ -213,7 +215,7 @@ const ViewCertificate = (props) => {
     }
   };
 
-  const DownloadPNGButton = async () => {
+  const UploadPNGButton = async () => {
     setProcessing(true);
     const fileBlob = await DomToImage.toBlob(
       document.getElementById("certificateImage")
@@ -276,46 +278,182 @@ const ViewCertificate = (props) => {
       value: "Please check your metamask and click SIGN",
     });
     try {
-      const accounts = await web3.eth.getAccounts();
-      const certificateSet = CertificateSet.getNewInstance(
-        certificate.sc_address
-      );
-      const signature = await getSignature(certificate);
-      let method;
-      if (isReceiver) {
-        method = certificateSet.methods.receiverSigning(
-          certificate.token_id,
-          signature
+
+
+      let tokenId = certificate.token_id;
+
+      if (!isReceiver) { // Receiver tidak perlu klik Accept
+
+        const accounts = await web3.eth.getAccounts();
+        const certificateSet = CertificateSet.getNewInstance(
+          certificate.sc_address
         );
-      } else {
+        const signature = await getSignature(certificate);
+  
+        let method;
+
+        if (tokenId === '111111111111111111111111111111111111111111111111')
+        
+        {
+
+            const today = new Date();
+
+            const thisMonth = today.getMonth();
+
+            let approvers = [];
+            for (const signer of certificate.CertificateSigners) {
+              approvers.push(signer.User.public_key);
+            }
+
+            const tx = certificateSet.methods.mint(
+              certificate.User.public_key,
+              0,
+              Math.floor(new Date(today.setMonth(thisMonth + 12)).getTime() / 1000),
+              getDataToSign(certificate),
+              approvers
+            );
+
+            const accounts = await web3.eth.getAccounts();
+
+            try {
+              createNotification({
+                type: "Minting...",
+                value:
+                  "Please check your metamask and stay on this page until Certificate is Minted to blockchain",
+              });
+
+              await tx.send({
+                from: accounts[0],
+                gas: 3000000,
+                gasPrice: "30000000000",
+              }).then(async function (receipt) {
+                tokenId = receipt.events.TransferSingle.returnValues.id;
+                try {
+                  await API.updateCertificate({
+                    certificate_id: certificateId,
+                    admin_id: certificate.admin_id,
+                    user_id: certificate.user_id,
+                    logo: certificate.logo,
+                    name: certificate.name,
+                    title: certificate.title,
+                    no: certificate.no,
+                    description: certificate.description,
+                    score: certificate.score,
+                    date: certificate.date,
+                    sc_address: certificate.sc_address,
+                    token_id: tokenId,
+                    receiver_name: certificate.receiver_name,
+                    is_accepted: certificate.is_accepted
+                    });
+          
+                    createNotification({
+                      type: "success",
+                      value: "Update TokenId Success",
+                    });
+      
+                  } catch (e) {
+                    console.log(e);
+                    createNotification({
+                      type: "error",
+                      value: "Can't update TokenId to Database",
+                    });
+                  }
+                });
+
+            } catch (e) {
+              console.log(e);
+              createNotification({
+                type: "error",
+                value: "Minting Error",
+              });
+            }
+
+        }
+
         method = certificateSet.methods.approverSigning(
-          certificate.token_id,
+          tokenId,
           signature
         );
-      }
-      await method.send({
-        from: accounts[0],
-        gasLimit: await method.estimateGas({ from: accounts[0] }),
-        gasPrice: "100000000000",
-      });
-      if (!isReceiver) {
-        API.signingCertificate({
-          user_id: user.user_id || admin?.admin_id,
-          certificate_id: certificate.certificate_id,
+        await method.send({
+          from: accounts[0],
+          gasLimit: await method.estimateGas({ from: accounts[0] }),
+          gasPrice: "100000000000",
+        }).then(async function (receipt) {
+
+          await API.signingCertificate({
+            user_id: user.user_id || admin?.admin_id,
+            certificate_id: certificate.certificate_id,
+          });
+
+          createNotification({
+            type: "success",
+            value: "Your signature submitted on blockchain and saved to database!",
+          });
         });
+
+
+        
+
+
+      }
+
+      else
+      {
+
+        try {
+          await API.updateCertificate({
+            certificate_id: certificateId,
+            admin_id: certificate.admin_id,
+            user_id: certificate.user_id,
+            logo: certificate.logo,
+            name: certificate.name,
+            title: certificate.title,
+            no: certificate.no,
+            description: certificate.description,
+            score: certificate.score,
+            date: certificate.date,
+            sc_address: certificate.sc_address,
+            token_id: tokenId,
+            receiver_name: certificate.receiver_name,
+            is_accepted: String(true)
+            });
+  
+            createNotification({
+              type: "success",
+              value: "Update IsAccepted Success",
+            });
+
+          } catch (e) {
+            console.log(e);
+            createNotification({
+              type: "error",
+              value: "Can't update IsAccepted to Database",
+            });
+          }
+
+          createNotification({
+            type: "success",
+            value: "Your signature saved to database!",
+          });
+
+        // } catch (e) {
+        //   createNotification({
+        //     type: "error",
+        //     value: typeof e === "object" ? e.message : e,
+        //   });
+        // }
       }
 
       getCertificate();
-      createNotification({
-        type: "success",
-        value: "Your signature submitted on blockchain!",
-      });
+
+
     } catch (e) {
       createNotification({
         type: "error",
         value: typeof e === "object" ? e.message : e,
       });
     }
+
     setProcessing(false);
   };
 
@@ -326,6 +464,10 @@ const ViewCertificate = (props) => {
       `https://www.linkedin.com/profile/add?startTask=Telkom%20Blockchain%20Based%20Digital%20Certificate&name=${certificate.name}&organizationId=75615928&issueYear=${dateArr[2]}&issueMonth=${dateArr[1]}&expirationYear=0&expirationMonth=0&certUrl=http%3A%2F%2F103.172.204.60%2F%3Fcontract_address%3D${certificate.sc_address}`
     );
   };
+
+  console.log("##################################################");
+  console.log(certificateStatus);
+  console.log(allowToSigning);
 
   return (
     <div className={styles.container}>
@@ -373,7 +515,7 @@ const ViewCertificate = (props) => {
             <SubmitButton
               buttonText="Upload"
               onClick={async () => {
-                await DownloadPNGButton();
+                await UploadPNGButton();
               }}
             ></SubmitButton>
           ) : (
@@ -403,11 +545,12 @@ const ViewCertificate = (props) => {
           certificateLogo={certificate.logo}
           certificateSigners={certificate.CertificateSigners}
         />
-        {isSigner ? (
+        
+        {isSigner ? ( 
           <div className={styles["btn-done"]}>
             <SubmitButton
               isProcessing={isProcessing}
-              disabled={!allowToSigning || certificateStatus == 2}
+              disabled={!allowToSigning || certificate.is_accepted}
               buttonText={
                 isSigned && !isReceiver
                   ? "Signed"
