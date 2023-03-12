@@ -1,0 +1,21 @@
+.certificatetype-content {
+    width: 100%;
+    .breadcrumb {
+      padding: 1rem 0 1rem 2rem;
+      border-bottom: 2px solid rgba(11, 0, 56, 0.2);
+    }
+    .bef-table {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .btn-add-certificatetype {
+        margin: 2rem;
+        width: fit-content;
+      }
+      .search-input {
+        margin: 0.5rem 2rem 0 0;
+        width: 30%;
+      }
+    }
+  }
+  

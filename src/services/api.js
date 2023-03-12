@@ -240,7 +240,7 @@ API.addCertificateType = async (request) => {
 
 API.getAllCertificateTypes = async (offset, limit) => {
   try {
-    const url = `${HOST}/api/certificatetypes?order_by=name&offset=${offset}&limit=${limit}`;
+    const url = `${HOST}/api/certificatetypes?order_by=type&offset=${offset}&limit=${limit}`;
     const result = (await axios.get(url)).data;
     return result.data;
   } catch (e) {

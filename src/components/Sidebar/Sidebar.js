@@ -112,6 +112,27 @@ const Sidebar = (props) => {
                 )}
               </div>
             </div>
+            <div
+              className={
+                props.menu === "certificate-type-master"
+                  ? "menu sub active"
+                  : "menu sub"
+              }
+              onClick={() =>
+                history.push(
+                  `/dashboard/${props.actor}?menu=certificate-type-master`
+                )
+              }
+            >
+              <div className="iconName">
+                <span>Certificate Type Master</span>
+                {props.menu === "certificate-type-master" ? (
+                  <div className="dotActive" />
+                ) : (
+                  <div className="dotInactive" />
+                )}
+              </div>
+            </div>
           </React.Fragment>
         ) : (
           <div></div>

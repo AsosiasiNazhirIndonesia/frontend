@@ -4,11 +4,11 @@ import './index.css';
 import './assets/scss/index.scss';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
-import ReactNotification from "react-notifications-component"
+import {ReactNotifications} from "react-notifications-component"
 
 ReactDOM.render(
   <React.StrictMode>
-    <ReactNotification
+    <ReactNotifications
       types={[
         {
           htmlClasses: ["notification__item--awesome"],

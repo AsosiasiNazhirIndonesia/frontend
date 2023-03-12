@@ -18,6 +18,7 @@ import jwt from "jsonwebtoken";
 import "./Dashboard.scss";
 import { history } from "../../store";
 import AdminMaster from "../ManageUser/AdminMaster/AdminMaster";
+import CertificateTypeMaster from "../ManageCertificate/CertificateTypeMaster/CertificateTypeMaster";
 
 const Dashboard = (props) => {
   const actor = useParams().actor;
@@ -58,6 +59,8 @@ const Dashboard = (props) => {
         return <UserMaster />;
       case "admin-master":
         return <AdminMaster />;
+      case "certificate-type-master":
+        return <CertificateTypeMaster />;
       case "manage-certificate":
         return <ManageCertificate />;
       default:
