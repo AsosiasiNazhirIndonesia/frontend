@@ -1,11 +1,13 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 import "./Table.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 class TableCertificateTypes extends Component {
   renderTableData(props) {
     return props.certTypes.map((certType, index) => {
-      const { name } = certType; //destructuring
+      const { name, id } = certType; //destructuring
       return (
         <tr key={index}>
           <td>{name}</td>
@@ -16,13 +18,14 @@ class TableCertificateTypes extends Component {
                 to=""
                 onClick={(e) => {
                   e.preventDefault();
-                //   this.props.setInputValue("institutionId", id);
-                //   this.props.setInputValue("institutionName", institutionName);
-                //   this.props.setInputValue("email", email);
-                //   this.props.setInputValue("phoneNumber", phoneNumber);
-                //   this.props.setInputValue("address", address);
-                //   this.props.setInputValue("type", type);
-                //   this.props.setIsEdit(true);
+                  //   this.props.setInputValue("institutionId", id);
+                  //   this.props.setInputValue("institutionName", institutionName);
+                  //   this.props.setInputValue("email", email);
+                  //   this.props.setInputValue("phoneNumber", phoneNumber);
+                  //   this.props.setInputValue("address", address);
+                  //   this.props.setInputValue("type", type);
+                  //   this.props.setIsEdit(true);
+                  this.props.onEdit(certType);
                 }}
               >
                 Edit
@@ -33,8 +36,8 @@ class TableCertificateTypes extends Component {
                 to=""
                 onClick={(e) => {
                   e.preventDefault();
-                //   this.props.setInputValue("institutionId", id);
-                  this.props.setIsDelete(true);
+                  //   this.props.setInputValue("institutionId", id);
+                  this.props.onDelete(certType);
                 }}
               >
                 Delete
@@ -58,12 +61,18 @@ class TableCertificateTypes extends Component {
   render() {
     return (
       <div>
-        <table className="institutions-table">
-          <thead>{this.renderTableHeader()}</thead>
-          <tbody className="content-table">
-            {this.renderTableData(this.props)}
-          </tbody>
-        </table>
+        {this.props.loading ? (
+          <div>
+            <FontAwesomeIcon icon={faSpinner} className="fa-spinner" />
+          </div>
+        ) : (
+          <table className="institutions-table">
+            <thead>{this.renderTableHeader()}</thead>
+            <tbody className="content-table">
+              {this.renderTableData(this.props)}
+            </tbody>
+          </table>
+        )}
       </div>
     );
   }

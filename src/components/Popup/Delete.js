@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import "./Delete.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const Delete = (props) => {
   const onDelete = (e) => {
@@ -28,7 +30,13 @@ const Delete = (props) => {
             >
               Cancel
             </button>
-            <button className="btn-delete">Delete</button>
+            {props.loading ? (
+              <div>
+                <FontAwesomeIcon icon={faSpinner} className="fa-spinner" />
+              </div>
+            ) : (
+              <button className="btn-delete">Delete</button>
+            )}
           </div>
         </form>
       </div>
