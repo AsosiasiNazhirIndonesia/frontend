@@ -59,6 +59,7 @@ const ModalSelectCertType = ({ visible, onSubmit, onCancel }) => {
           />
           <div className={styles["submit-btn-container"]}>
             <Button
+              type="button"
               className="bg-danger"
               buttonText="Cancel"
               onClick={() => onCancel && onCancel()}

@@ -68,7 +68,7 @@ const TextField = (props) => {
         style={{ paddingLeft: props.icon ? "44px" : "16px" }}
       >
         {input}
-        {props.value.status === INPUT_STATUS.VALID ? (
+        {/* {props.value.status === INPUT_STATUS.VALID ? (
           <FontAwesomeIcon icon={faCheckCircle} className="faCheckCircle" />
         ) : (
           <div></div>
@@ -80,7 +80,7 @@ const TextField = (props) => {
           />
         ) : (
           <div></div>
-        )}
+        )} */}
       </span>
       {props.value.status === INPUT_STATUS.INVALID ? (
         <small className="small-error">{props.value.errorMessage}</small>
