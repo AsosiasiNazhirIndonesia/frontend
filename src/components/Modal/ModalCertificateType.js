@@ -65,8 +65,8 @@ const ModalCertificateType = ({
   };
 
   return (
-    <div className={visible ? styles["modal-container"] : "hidden"}>
-      <div className={styles["modal-box"]}>
+    <div className={visible ? "modal-container" : "hidden"}>
+      <div className={"modal-box"}>
         <h1>{title}</h1>
         <form
           onSubmit={handleSubmit((d) => {

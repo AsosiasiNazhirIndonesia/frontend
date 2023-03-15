@@ -1,4 +1,4 @@
-import { store } from "react-notifications-component"
+import { Store as store } from "react-notifications-component";
 
 export function createNotification({ type, value }) {
   // return () => {
@@ -16,9 +16,9 @@ export function createNotification({ type, value }) {
           duration: 30000,
           onScreen: true,
         },
-      })
+      });
 
-      break
+      break;
     case "success":
       store.addNotification({
         title: "Success",
@@ -32,9 +32,9 @@ export function createNotification({ type, value }) {
           duration: 30000,
           onScreen: true,
         },
-      })
+      });
 
-      break
+      break;
     case "warning":
       store.addNotification({
         title: "Warning!",
@@ -48,9 +48,9 @@ export function createNotification({ type, value }) {
           duration: 30000,
           onScreen: true,
         },
-      })
+      });
 
-      break
+      break;
     case "error":
       store.addNotification({
         title: "Error!",
@@ -64,9 +64,9 @@ export function createNotification({ type, value }) {
           duration: 10000,
           onScreen: true,
         },
-      })
+      });
 
-      break
+      break;
   }
   // }
 }

@@ -9,13 +9,14 @@ const CreateCertificate3 = (props) => {
   const [isProcessing, setProcessing] = useState(false);
 
   const composeAssignToName = () => {
-    let result = '';
-    for(const assignToUser of props.assignToUsers) {
-      result += assignToUser.name + ', ';
+    let result = "";
+    for (const assignToUser of props.assignToUsers) {
+      console.log(assignToUser);
+      result += assignToUser.name + ", ";
     }
 
     return result.substr(0, result.length - 2);
-  }
+  };
 
   return (
     <React.Fragment>
@@ -30,15 +31,18 @@ const CreateCertificate3 = (props) => {
         </div>
       </form>
       <form className="form-certificate">
-        <CertificatePDF 
-            certificateTitle={props.getInputValue("certificateTitle").value} 
-            receiverName={props.getInputValue("receiverName").value}
-            certificateNo={props.getInputValue("certificateNo").value}
-            certificateDescription={props.getInputValue("certificateDescription").value}
-            certificateScore={props.getInputValue("certificateScore").value}
-            certificateDate={props.getInputValue("certificateDate").value}
-            certificateLogo={props.getInputValue("certificateLogo")}
-            certificateSigners={props.assignToUsers}/>
+        <CertificatePDF
+          certificateTitle={props.getInputValue("certificateTitle").value}
+          receiverName={props.getInputValue("receiverName").value}
+          certificateNo={props.getInputValue("certificateNo").value}
+          certificateDescription={
+            props.getInputValue("certificateDescription").value
+          }
+          certificateScore={props.getInputValue("certificateScore").value}
+          certificateDate={props.getInputValue("certificateDate").value}
+          certificateLogo={props.getInputValue("certificateLogo")}
+          certificateSigners={props.assignToUsers}
+        />
       </form>
       <div className="btn-back-next">
         <div className="btn-back">
@@ -53,14 +57,15 @@ const CreateCertificate3 = (props) => {
           ></SubmitButton>
         </div>
         <div className="btn-send">
-          <SubmitButton 
+          <SubmitButton
             isProcessing={isProcessing}
             buttonText="Send"
             onClick={async () => {
               setProcessing(true);
               await props.submit();
               setProcessing(false);
-            }}></SubmitButton>
+            }}
+          ></SubmitButton>
         </div>
       </div>
     </React.Fragment>

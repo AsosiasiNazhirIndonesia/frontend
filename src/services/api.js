@@ -8,8 +8,10 @@ API.getUserByPublicKey = async (publicKey) => {
   try {
     const url = `${HOST}/api/users/public_key/${publicKey}`;
     const result = (await axios.get(url)).data;
+    console.log('aweawe', result)
     return result.data;
   } catch (e) {
+    console.log('aweawe eerr', e)
     throw getErrorMessage(e);
   }
 };

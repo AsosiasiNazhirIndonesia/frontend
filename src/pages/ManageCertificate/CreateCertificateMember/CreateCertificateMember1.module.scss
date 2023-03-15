@@ -1,0 +1,111 @@
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sign-progress {
+  height: 150px;
+  width: 95%;
+  margin: 0 auto 1rem auto;
+  border: solid 1px black;
+}
+.form-name-template {
+  width: 95%;
+  border-radius: 5px;
+  background: #fff;
+  margin: 1rem auto;
+  text-align: left;
+  .name-template {
+    padding: 1rem;
+    width: 40%;
+  }
+  .submit-template {
+    padding: 1rem;
+    padding-top: 0;
+    width: 30%;
+  }
+}
+
+.form-detail-certificate {
+  width: 95%;
+  border-radius: 5px;
+  background: #fff;
+  margin: 0 2rem;
+  text-align: left;
+  padding: 1rem 0;
+  .name-user,
+  .no-certificate,
+  .title {
+    width: 90%;
+    margin: 0 auto;
+    margin-bottom: 1rem;
+  }
+
+  .browse-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 60px;
+    width: 100%;
+    min-height: 62px;
+    background: #5bc0de;
+    box-shadow: 0px 15px 30px rgba(241, 70, 32, 0.2);
+    border-radius: 8px;
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    color: #ffffff;
+    cursor: pointer;
+    width: 25%;
+  }
+
+  .btn-submit {
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 2rem;
+  }
+}
+
+.certificate-desc {
+  height: 300px;
+
+  .editor-class {
+    height: 200px;
+    border: 2px solid #dfe1e6;
+    background: #f5f2ff;
+  }
+}
+
+.btn-next {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-self: center;
+  margin-top: 4rem;
+}
+
+.sign-progress {
+  text-align: left;
+}
+
+p {
+  font-weight: bold;
+}
+
+.pdf {
+  position: relative;
+  height: 200px;
+  width: 100%;
+
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,60 @@
+.template {
+  position: relative;
+  height: 400px;
+  width: 600px;
+}
+
+.template-body {
+  position: relative;
+  // background: #fffac9;
+  background-image: url("animember.png");
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+
+  display: "flex";
+  flex-direction: "column";
+  justify-content: "flex-start";
+  // border: 10px solid #FFD700;
+  padding: 0;
+  margin: 0;
+
+  .card-number {
+    font-size: 20px;
+    top: 49.5%;
+    left: 48%;
+    position: absolute;
+  }
+
+  .card-name {
+    font-size: 20px;
+    top: 55%;
+    left: 48%;
+    position: absolute;
+  }
+
+  .card-dob {
+    font-size: 20px;
+    top: 60.5%;
+    left: 48%;
+    position: absolute;
+  }
+
+  .card-address {
+    font-size: 20px;
+    top: 66.5%;
+    left: 48%;
+    position: absolute;
+  }
+}
+
+.certificate-logo {
+  position: absolute;
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: contain;
+  top: 5px;
+  left: 8px;
+  z-index: 0;
+}

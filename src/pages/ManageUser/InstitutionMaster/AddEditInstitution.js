@@ -6,7 +6,7 @@ const AddEditInstitution = (props) => {
   if (props.add) {
     return (
       <div className="modal-container">
-        <div className="modal-box">
+        <div className="modal-box-institution">
           <h1>Add Institution</h1>
           <div className="institution-name">
             <p>
@@ -93,7 +93,7 @@ const AddEditInstitution = (props) => {
   } else if (props.edit) {
     return (
       <div className="modal-container">
-        <div className="modal-box">
+        <div className="modal-box-institution">
           <h1>Edit Institution</h1>
           <div className="institution-name">
             <p>

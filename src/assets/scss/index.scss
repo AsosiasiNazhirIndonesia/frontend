@@ -1,104 +1,140 @@
 @import "~bootstrap/scss/bootstrap";
-@import 'animate.css/animate.min.css';
-@import 'animate.css/animate.compat.css';
-@import 'react-notifications-component/dist/theme.css';
-@import 'react-dropdown/style.css';
+@import "animate.css/animate.min.css";
+@import "animate.css/animate.compat.css";
+@import "react-notifications-component/dist/theme.css";
+@import "react-dropdown/style.css";
 @import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 @font-face {
-    font-family: 'Noto Sans';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Noto Sans'), url('../fonts/NotoSans-Regular.ttf') format('truetype');
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Noto Sans"),
+    url("../fonts/NotoSans-Regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Noto Sans';
-    font-style: normal;
-    font-weight: bold;
-    src: local('Noto Sans'), url('../fonts/NotoSans-Bold.ttf') format('truetype');
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: bold;
+  src: local("Noto Sans"), url("../fonts/NotoSans-Bold.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Noto Sans';
-    font-style: italic;
-    font-weight: normal;
-    src: local('Noto Sans'), url('../fonts/NotoSans-Italic.ttf') format('truetype');
+  font-family: "Noto Sans";
+  font-style: italic;
+  font-weight: normal;
+  src: local("Noto Sans"),
+    url("../fonts/NotoSans-Italic.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Noto Sans';
-    font-style: italic;
-    font-weight: bold;
-    src: local('Noto Sans'), url('../fonts/NotoSans-BoldItalic.ttf') format('truetype');
+  font-family: "Noto Sans";
+  font-style: italic;
+  font-weight: bold;
+  src: local("Noto Sans"),
+    url("../fonts/NotoSans-BoldItalic.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Noto Serif';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Noto Sans'), url('../fonts/NotoSerif-Regular.ttf') format('truetype');
+  font-family: "Noto Serif";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Noto Sans"),
+    url("../fonts/NotoSerif-Regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Noto Serif';
-    font-style: normal;
-    font-weight: bold;
-    src: local('Noto Sans'), url('../fonts/NotoSerif-Bold.ttf') format('truetype');
+  font-family: "Noto Serif";
+  font-style: normal;
+  font-weight: bold;
+  src: local("Noto Sans"), url("../fonts/NotoSerif-Bold.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Noto Serif';
-    font-style: italic;
-    font-weight: normal;
-    src: local('Noto Sans'), url('../fonts/NotoSerif-Italic.ttf') format('truetype');
+  font-family: "Noto Serif";
+  font-style: italic;
+  font-weight: normal;
+  src: local("Noto Sans"),
+    url("../fonts/NotoSerif-Italic.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Noto Serif';
-    font-style: italic;
-    font-weight: bold;
-    src: local('Noto Sans'), url('../fonts/NotoSerif-BoldItalic.ttf') format('truetype');
+  font-family: "Noto Serif";
+  font-style: italic;
+  font-weight: bold;
+  src: local("Noto Sans"),
+    url("../fonts/NotoSerif-BoldItalic.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Palanquin';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Noto Sans'), url('../fonts/Palanquin-Regular.ttf') format('truetype');
+  font-family: "Palanquin";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Noto Sans"),
+    url("../fonts/Palanquin-Regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Palanquin';
-    font-style: normal;
-    font-weight: bold;
-    src: local('Noto Sans'), url('../fonts/Palanquin-Bold.ttf') format('truetype');
+  font-family: "Palanquin";
+  font-style: normal;
+  font-weight: bold;
+  src: local("Noto Sans"), url("../fonts/Palanquin-Bold.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Nunito Sans';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Noto Sans'), url('../fonts/NunitoSans-Regular.ttf') format('truetype');
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Noto Sans"),
+    url("../fonts/NunitoSans-Regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Nunito Sans';
-    font-style: normal;
-    font-weight: bold;
-    src: local('Noto Sans'), url('../fonts/NunitoSans-Bold.ttf') format('truetype');
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-weight: bold;
+  src: local("Noto Sans"),
+    url("../fonts/NunitoSans-Bold.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Mulish';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Noto Sans'), url('../fonts/Mulish-Regular.ttf') format('truetype');
+  font-family: "Mulish";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Noto Sans"), url("../fonts/Mulish-Regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Mulish';
-    font-style: normal;
-    font-weight: bold;
-    src: local('Noto Sans'), url('../fonts/Mulish-Bold.ttf') format('truetype');
+  font-family: "Mulish";
+  font-style: normal;
+  font-weight: bold;
+  src: local("Noto Sans"), url("../fonts/Mulish-Bold.ttf") format("truetype");
+}
+
+.modal-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.6);
+  top: 0;
+  left: 0;
+  z-index: 999999;
+  display: flex;
+  justify-content: center;
+  padding-top: 20%;
+}
+
+.modal-box {
+  width: 50%;
+  height: fit-content;
+  background: #fff;
+  position: sticky;
+  padding: 2rem;
+  text-align: left;
+  h1 {
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: solid 2px rgba(11, 0, 56, 0.2);
+  }
 }

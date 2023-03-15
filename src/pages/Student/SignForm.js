@@ -7,7 +7,7 @@ const SignForm = (props) => {
   if (props.add) {
     return (
       <div className="sign-form-modal-container">
-        <form className="modal-box">
+        <form className="modal-box-signform">
           <h1>Sign</h1>
           <div className="sign-table">
             <p>Sign Table</p>
