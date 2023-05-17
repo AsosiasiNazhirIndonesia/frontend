@@ -411,7 +411,7 @@ const ManageCertificate = (props) => {
           sc_address: institution.sc_address,
           token_id: "111111111111111111111111111111111111111111111111", //tokenId, (default tokenid before minting)
           receiver_name: receiverName.value,
-          certificate_type_id: certificateType.value,
+          certificate_type_id: selectedCertType.value,
           certificate_signers,
         });
 
