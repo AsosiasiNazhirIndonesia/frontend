@@ -21,8 +21,9 @@ const LandingPage = (props) => {
     return (
         <div className="landing-page">
             <div className="first-section">
-                <img src={logo} />
-                <h1>ASOSIASI NAZHIR INDONESIA - DIGITAL CERTIFICATE</h1>
+                <img src={logo} /><br/>
+                <h1>ASOSIASI NAZHIR INDONESIA<br/>DIGITAL CERTIFICATE</h1>
+                <br/>
                 <button className="signin-btn" onClick={() => history.push("/signin")}>Sign In</button>
                 {/* <button className="search-btn" onClick={() => executeScroll()}>Search Certificate</button> */}
             </div>

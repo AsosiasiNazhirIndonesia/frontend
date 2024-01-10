@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const HOST = "http://localhost:3001";
+export const HOST = "http://blockchainworks.id:3001";
 
 const API = {};
 
@@ -299,7 +299,7 @@ API.uploadFileToIPFS = async (file, tokenId) => {
     const tempFormData = new FormData();
     tempFormData.append("file", file, file.name);
     tempFormData.append("filename", tokenId + ".png");
-    const url = `http://localhost:5000/upload`;
+    const url = `http://blockchainworks.id:5000/upload`;
     const tempResult = (await axios.post(url, tempFormData)).data;
 
     const content =

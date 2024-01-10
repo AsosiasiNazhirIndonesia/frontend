@@ -343,7 +343,8 @@ const ViewCertificate = (props) => {
                     sc_address: certificate.sc_address,
                     token_id: tokenId,
                     receiver_name: certificate.receiver_name,
-                    is_accepted: certificate.is_accepted
+                    is_accepted: String(certificate.is_accepted),
+                    certificate_type_id: certificate.certificate_type_id
                     });
           
                     createNotification({
@@ -415,7 +416,8 @@ const ViewCertificate = (props) => {
             sc_address: certificate.sc_address,
             token_id: tokenId,
             receiver_name: certificate.receiver_name,
-            is_accepted: String(true)
+            is_accepted: String(true),
+            certificate_type_id: certificate.certificate_type_id
             });
   
             createNotification({
@@ -461,7 +463,7 @@ const ViewCertificate = (props) => {
     const dateArr = certificate.date.split("-");
     //To Do : change ip address, add token id
     window.open(
-      `https://www.linkedin.com/profile/add?startTask=Telkom%20Blockchain%20Based%20Digital%20Certificate&name=${certificate.name}&organizationId=75615928&issueYear=${dateArr[2]}&issueMonth=${dateArr[1]}&expirationYear=0&expirationMonth=0&certUrl=http%3A%2F%2F103.172.204.60%2F%3Fcontract_address%3D${certificate.sc_address}`
+      `https://www.linkedin.com/profile/add?startTask=Spasi%20Blockchain%20Based%20Digital%20Certificate&name=${certificate.name}&organizationId=75615928&issueYear=${dateArr[2]}&issueMonth=${dateArr[1]}&expirationYear=0&expirationMonth=0&certUrl=http%3A%2F%2F103.172.204.60%2F%3Fcontract_address%3D${certificate.sc_address}`
     );
   };
 
@@ -525,7 +527,7 @@ const ViewCertificate = (props) => {
             buttonText="View"
             onClick={async () => {
               window.open(
-                `https://testnets.opensea.io/assets/goerli/${certificate.sc_address}/${certificate.token_id}`,
+                `https://testnets.opensea.io/assets/sepolia/${certificate.sc_address}/${certificate.token_id}`,
                 "__blank"
               );
             }}
