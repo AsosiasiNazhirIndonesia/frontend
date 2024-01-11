@@ -27,7 +27,7 @@ CertificateSet.verify = async (address, constructorArguements) => {
   try {
     console.log("try to verifying contract");
     var data = new FormData();
-    data.append("apikey", "K9YR1H15TT4PHY9AXM7DZM38N6HCVA6PEV");
+    data.append("apikey", "R7AIKW4GKX8NEZS8AKUF97RGXPPE4CWE6I");
     data.append("module", "contract");
     data.append("action", "verifysourcecode");
     data.append("contractaddress", address);
