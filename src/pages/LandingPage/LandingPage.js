@@ -21,16 +21,15 @@ const LandingPage = (props) => {
     return (
         <div className="landing-page">
             <div className="first-section">
-                <img src={logo} /><br/>
-                <h1>ASOSIASI NAZHIR INDONESIA<br/>DIGITAL CERTIFICATE</h1>
+                <h1>BLOCKCHAIN DIGITAL CERTIFICATE</h1><br/>
                 <br/>
                 <button className="signin-btn" onClick={() => history.push("/signin")}>Sign In</button>
                 {/* <button className="search-btn" onClick={() => executeScroll()}>Search Certificate</button> */}
             </div>
             {/* <div className="second-section" ref={myRef}>
                 <SearchCertificate contractAddress={contractAddress} tokenId={tokenId}/>
-            </div> */}
-            <Footer/>
+            </div> 
+            <Footer/>*/}
         </div>
     );
 }

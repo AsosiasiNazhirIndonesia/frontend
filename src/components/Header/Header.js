@@ -50,7 +50,7 @@ const Header = (props) => {
               history.push(`/dashboard/${admin?.admin_id ? "ADMIN" : "USER"}`)
             }
           >
-            <img alt="logo-white" src={aniLogoWhite}></img>
+            {/* <img alt="logo-white" src={aniLogoWhite}></img> */}
           </div>
         </div>
         <div className="header-right">

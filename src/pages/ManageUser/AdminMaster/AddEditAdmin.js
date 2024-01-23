@@ -359,7 +359,7 @@ const AddEditAdmin = (props) => {
         ) : (
           <></>
         )}
-        <div className="upload-photo">
+        {/* <div className="upload-photo">
           <p>Upload Logo</p>
           {!photo ? (
             <>
@@ -383,7 +383,7 @@ const AddEditAdmin = (props) => {
           ) : (
             <span>{originalFileName}</span>
           )}
-        </div>
+        </div> */}
       </form>
       <div className="save-btn">
         <SubmitButton

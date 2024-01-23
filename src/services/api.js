@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const HOST = "http://10.0.1.1:3001";
+export const HOST = "http://blockchainworks.id:3001";
 
 const API = {};
 
