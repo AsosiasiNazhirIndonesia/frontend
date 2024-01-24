@@ -65,7 +65,7 @@ const SearchCertifcate = (props) => {
         <InputField
           type="text"
           name="search-input"
-          placeholder="Masukkan Contract Address"
+          placeholder="Contract Address"
           value={scAddress}
           onChange={(e) => {
             setScAddress({
@@ -81,7 +81,7 @@ const SearchCertifcate = (props) => {
         <InputField
           type="text"
           name="search-input"
-          placeholder="Masukan NFT Id"
+          placeholder="NFT Id"
           value={tokenId}
           onChange={(e) => {
             setTokenId({

@@ -223,7 +223,7 @@ const AddEditUser = (props) => {
           <InputField
             type="text"
             name="name"
-            placeholder="Masukan Nama Lengkap"
+            placeholder="Full Name"
             value={name}
             onChange={onChange}
           />
@@ -235,7 +235,7 @@ const AddEditUser = (props) => {
           <InputField
             type="text"
             name="publickey"
-            placeholder="Masukan Public Key"
+            placeholder="Public Key"
             value={publicKey}
             onChange={onChange}
           />
@@ -247,7 +247,7 @@ const AddEditUser = (props) => {
           <InputField
             type="text"
             name="email"
-            placeholder="Masukan Email Aktif"
+            placeholder="Active Email"
             value={email}
             onChange={onChange}
           />
@@ -259,7 +259,7 @@ const AddEditUser = (props) => {
           <InputField
             type="text"
             name="address"
-            placeholder="Masukan Alamat"
+            placeholder="Active Address"
             value={address}
             onChange={onChange}
           />
@@ -271,7 +271,7 @@ const AddEditUser = (props) => {
           <InputField
             type="text"
             name="phonenumber"
-            placeholder="Masukan Nomor Telepon Aktif"
+            placeholder="Active Phone Number"
             value={phoneNumber}
             onChange={onChange}
           />

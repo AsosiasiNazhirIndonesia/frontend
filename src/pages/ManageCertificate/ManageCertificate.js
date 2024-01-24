@@ -114,15 +114,15 @@ const ManageCertificate = (props) => {
   }, [selectedCertType]);
 
   const handleSelectCertType = () => {
-    if (selectedCertType?.label?.toLowerCase()?.includes("kelulusan")) {
-      history.push(
-        `/dashboard/${actor}?menu=manage-certificate&create_certificate_step=1`
-      );
-    } else if (
-      selectedCertType?.label?.toLowerCase()?.includes("keanggotaan")
-    ) {
+    if (selectedCertType?.label?.toLowerCase()?.includes("keanggotaan")) {
       history.push(
         `/dashboard/${actor}?menu=manage-certificate&create_certificate_member_step=1`
+      );
+    } 
+    else 
+    {
+      history.push(
+        `/dashboard/${actor}?menu=manage-certificate&create_certificate_step=1`
       );
     }
   };

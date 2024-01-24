@@ -15,7 +15,7 @@ const AddEditInstitution = (props) => {
             <InputField
               type="text"
               name="institution-name-input"
-              placeholder="Masukan Nama Institusi"
+              placeholder="Institution Name"
               value={props.getInputValue("institutionName")}
               onChange={(e) =>
                 props.setInputValue("institutionName", e.target.value)
@@ -29,7 +29,7 @@ const AddEditInstitution = (props) => {
             <InputField
               type="text"
               name="institution-email-input"
-              placeholder="Masukan Email Institusi"
+              placeholder="Institution Email"
               value={props.getInputValue("email")}
               onChange={(e) => props.setInputValue("email", e.target.value)}
             />
@@ -41,7 +41,7 @@ const AddEditInstitution = (props) => {
             <InputField
               type="text"
               name="institution-phoneNumber-input"
-              placeholder="Masukan Nomor Telepon Institusi"
+              placeholder="Institution Phone Number"
               value={props.getInputValue("phoneNumber")}
               onChange={(e) =>
                 props.setInputValue("phoneNumber", e.target.value)
@@ -55,7 +55,7 @@ const AddEditInstitution = (props) => {
             <InputField
               type="text"
               name="institution-address"
-              placeholder="Masukan Alamat Institusi"
+              placeholder="Institution Address"
               value={props.getInputValue("address")}
               onChange={(e) => props.setInputValue("address", e.target.value)}
             />
@@ -101,8 +101,8 @@ const AddEditInstitution = (props) => {
             </p>
             <InputField
               type="text"
-              name="institution-name-input"
-              placeholder="Masukan Nama Institusi"
+              name="Institution Name"
+              placeholder="Institution Name"
               value={props.getInputValue("institutionName")}
               onChange={(e) =>
                 props.setInputValue("institutionName", e.target.value)
@@ -116,7 +116,7 @@ const AddEditInstitution = (props) => {
             <InputField
               type="text"
               name="institution-email-input"
-              placeholder="Masukan Email Institusi"
+              placeholder="Institution Email"
               value={props.getInputValue("email")}
               onChange={(e) => props.setInputValue("email", e.target.value)}
             />
@@ -128,7 +128,7 @@ const AddEditInstitution = (props) => {
             <InputField
               type="text"
               name="institution-phoneNumber-input"
-              placeholder="Masukan Nomor Telepon Institusi"
+              placeholder="Institution Phone Number"
               value={props.getInputValue("phoneNumber")}
               onChange={(e) =>
                 props.setInputValue("phoneNumber", e.target.value)
@@ -142,7 +142,7 @@ const AddEditInstitution = (props) => {
             <InputField
               type="text"
               name="institution-address"
-              placeholder="Masukan Alamat Institusi"
+              placeholder="Institution Address"
               value={props.getInputValue("address")}
               onChange={(e) => props.setInputValue("address", e.target.value)}
             />

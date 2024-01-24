@@ -24,7 +24,7 @@
     margin: 0;
 
     .template-header {
-        height: 20%;
+        height: 40%;
         color: black;
         font-size: 28px;
         font-weight: 600px;
@@ -38,13 +38,12 @@
 
     .template-content {
         flex-grow: 1;
-
         display: flex;
         flex-direction: column;
         justify-content: center;
         text-align: center;
         padding: 25px;
-        height: 60%;
+        height: 40%;
 
         .present-to {
             color: #00254d;
