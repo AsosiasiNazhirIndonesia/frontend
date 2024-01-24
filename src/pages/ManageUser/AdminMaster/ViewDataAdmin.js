@@ -24,14 +24,14 @@ const ViewDataAdmin = (props) => {
           <p className="title-phoneNumber">Phone Number :</p>
           <span className="phoneNumber">{props.selectedAdmin.phone_number}</span>
         </div>
-        <div>
+        {/* <div>
           <p className="title-photo">Photo :</p>
           <img src={props.selectedAdmin.photo ? `${HOST}/api/files/${props.selectedAdmin.photo}` : '#'} alt="photo profile"></img>
-        </div>
+        </div> */}
       </form>
       <form className="form-role-information">
         <div>
-          <p className="title-role">Super Admin :</p>
+          <p className="title-role">Admin Level :</p>
           <span className="role">{props.selectedAdmin.admin_role}</span>
         </div>
       </form>

@@ -41,7 +41,7 @@ CertificateSet.verify = async (address, constructorArguements) => {
 
     var config = {
       method: "post",
-      url: "https://api-sepolia.etherscan.io/api",
+      url: "https://api-goerli.etherscan.io/api",
       headers: {
         ...data.getHeaders(),
       },

@@ -527,7 +527,7 @@ const ViewCertificate = (props) => {
             buttonText="View"
             onClick={async () => {
               window.open(
-                `https://testnets.opensea.io/assets/sepolia/${certificate.sc_address}/${certificate.token_id}`,
+                `https://testnets.opensea.io/assets/goerli/${certificate.sc_address}/${certificate.token_id}`,
                 "__blank"
               );
             }}

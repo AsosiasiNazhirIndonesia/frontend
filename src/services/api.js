@@ -285,6 +285,7 @@ API.getCertificateTypeById = async (certificateTypeId) => {
 API.uploadFile = async (file) => {
   try {
     const formData = new FormData();
+    console.dir(formData);
     formData.append("file", file, file.name);
     const url = `${HOST}/api/files`;
     const result = (await axios.post(url, formData)).data;

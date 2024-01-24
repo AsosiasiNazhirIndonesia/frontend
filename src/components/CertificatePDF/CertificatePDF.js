@@ -43,9 +43,9 @@ export default (props) => {
           <span>{props.certificateTitle}</span>
         </div>
         <div className="template-content">
-          <span className="certificate-no">Nomor Sertifikat: {props.certificateNo}</span>
+          <span className="certificate-no">Certificate Number: {props.certificateNo}</span>
           <span className="present-to">
-            <b>Diberikan Kepada:</b>
+            <b>Awarded To:</b>
           </span>
           <span className="name">{props.receiverName}</span>
           <div className="description" dangerouslySetInnerHTML={{__html: props.certificateDescription}}></div>

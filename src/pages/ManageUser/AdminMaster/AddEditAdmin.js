@@ -178,16 +178,18 @@ const AddEditAdmin = (props) => {
       };
       await API.createUser(userRequest);
       
+      const institution = await API.getInstitutionById(
+        selectedInstitution.institution_id
+      );
+      const institutionContractAddress = institution.sc_address;
+      const certificateSet = CertificateSet.getNewInstance(
+        institutionContractAddress
+      );
+      const accounts = await web3.eth.getAccounts();
+
       if (name.value === 'creator')
           {
-            const institution = await API.getInstitutionById(
-              selectedInstitution.institution_id
-            );
-            const institutionContractAddress = institution.sc_address;
-            const certificateSet = CertificateSet.getNewInstance(
-              institutionContractAddress
-            );
-            const accounts = await web3.eth.getAccounts();
+
             const tx = certificateSet.methods.transferOwnership(publicKey.value);
 
             createNotification({
@@ -195,14 +197,31 @@ const AddEditAdmin = (props) => {
               value:
                 "Please check your metamask and stay on this page until contract ownership is transferred to New Admin",
             });
-
+    
             const res = await tx.send({
               from: accounts[0],
               gas: 3000000,
               gasPrice: "30000000000",
             });
           }
-          
+      else
+      {
+
+        const minters = [publicKey.value]; 
+        const tx = certificateSet.methods.setMinters(minters);
+
+        createNotification({
+          type: "Set as Minter...",
+          value:
+            "Please check your metamask and stay on this page until New Admin has been set as Minter",
+        });
+
+        const res = await tx.send({
+          from: accounts[0],
+          gas: 3000000,
+          gasPrice: "30000000000",
+        });
+      }
       const newUser = await API.getUserByPublicKey(publicKey.value);
       const request = {
         admin_id: newUser.user_id,

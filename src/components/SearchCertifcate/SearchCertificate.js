@@ -61,7 +61,7 @@ const SearchCertifcate = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.searchCertificate}>
-        <h4>Cari Sertifikat</h4>
+        <h4>Certificate Search</h4>
         <InputField
           type="text"
           name="search-input"
