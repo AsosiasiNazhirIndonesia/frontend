@@ -109,13 +109,13 @@ const Profile = (props) => {
               </div>
             </div>
           </div>
-          {certificates.length > 0 ?
+          {/* {certificates.length > 0 ?
           <div className="certificates-user">
             <TableCertificate
               certificates={certificates}
               actor={actor}
             />
-          </div> : <></>}
+          </div> : <></>} */}
         </div>
       </div>
     </React.Fragment>

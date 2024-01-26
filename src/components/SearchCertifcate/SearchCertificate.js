@@ -26,6 +26,21 @@ const SearchCertifcate = (props) => {
   const [certificateId, setCertificateId] = useState(null);
 
   const getCertificateId = async (address, tokenId) => {
+    let status =
+      address && tokenId !== ""
+        ? INPUT_STATUS.VALID
+        : INPUT_STATUS.INVALID;
+    let errorMessage =
+      status === INPUT_STATUS.INVALID ? `Contract Address and NFT Id are required` : "";
+    if ( status !== "")
+    {
+      createNotification({
+        type: "error",
+        value: errorMessage,
+      });
+      return;
+    }
+
     setCertificateId(null);
     if (!address || address === "") {
       return;
@@ -62,6 +77,10 @@ const SearchCertifcate = (props) => {
     <div className={styles.container}>
       <div className={styles.searchCertificate}>
         <h4>Certificate Search</h4>
+
+        <p>
+            Contract Address <font color="red">*</font>
+        </p>
         <InputField
           type="text"
           name="search-input"
@@ -78,6 +97,9 @@ const SearchCertifcate = (props) => {
           }}
         />
         <div className="mt-2" />
+        <p>
+            NFT ID <font color="red">*</font>
+        </p>
         <InputField
           type="text"
           name="search-input"

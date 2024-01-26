@@ -409,7 +409,7 @@ const ManageCertificate = (props) => {
           score: certificateScore.value,
           date: certificateDate.value,
           sc_address: institution.sc_address,
-          token_id: "111111111111111111111111111111111111111111111111", //tokenId, (default tokenid before minting)
+          token_id: "--- not yet minted ---", //tokenId, (default tokenid before minting)
           receiver_name: receiverName.value,
           certificate_type_id: selectedCertType.value,
           certificate_signers,

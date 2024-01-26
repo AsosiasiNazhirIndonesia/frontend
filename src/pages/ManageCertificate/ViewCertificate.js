@@ -292,7 +292,7 @@ const ViewCertificate = (props) => {
   
         let method;
 
-        if (tokenId === '111111111111111111111111111111111111111111111111')
+        if (tokenId === '--- not yet minted ---')
         
         {
 
