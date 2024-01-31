@@ -8,10 +8,8 @@ API.getUserByPublicKey = async (publicKey) => {
   try {
     const url = `${HOST}/api/users/public_key/${publicKey}`;
     const result = (await axios.get(url)).data;
-    console.log('aweawe', result)
     return result.data;
   } catch (e) {
-    console.log('aweawe eerr', e)
     throw getErrorMessage(e);
   }
 };
@@ -103,6 +101,7 @@ API.addCertificate = async (request) => {
     const result = (await axios.post(url, request)).data;
     return result.data;
   } catch (e) {
+    console.log("error add cert",e);
     throw getErrorMessage(e);
   }
 };
@@ -300,7 +299,7 @@ API.uploadFileToIPFS = async (file, tokenId) => {
     const tempFormData = new FormData();
     tempFormData.append("file", file, file.name);
     tempFormData.append("filename", tokenId + ".png");
-    const url = `http://10.0.1.1:5000/upload`;
+    const url = `http://blockchainworks.id:5000/upload`;
     const tempResult = (await axios.post(url, tempFormData)).data;
 
     const content =

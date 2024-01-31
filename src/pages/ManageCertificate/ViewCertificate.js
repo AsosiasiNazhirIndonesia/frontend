@@ -292,7 +292,7 @@ const ViewCertificate = (props) => {
   
         let method;
 
-        if (tokenId === '--- not yet minted ---')
+        if (tokenId === '0')
         
         {
 
@@ -344,7 +344,8 @@ const ViewCertificate = (props) => {
                     token_id: tokenId,
                     receiver_name: certificate.receiver_name,
                     is_accepted: String(certificate.is_accepted),
-                    certificate_type_id: certificate.certificate_type_id
+                    certificate_type_id: certificate.certificate_type_id,
+                    status: certificate.status
                     });
           
                     createNotification({
@@ -417,7 +418,8 @@ const ViewCertificate = (props) => {
             token_id: tokenId,
             receiver_name: certificate.receiver_name,
             is_accepted: String(true),
-            certificate_type_id: certificate.certificate_type_id
+            certificate_type_id: certificate.certificate_type_id,
+            status: 2
             });
   
             createNotification({
@@ -467,10 +469,6 @@ const ViewCertificate = (props) => {
     );
   };
 
-  console.log("##################################################");
-  console.log(certificateStatus);
-  console.log(allowToSigning);
-
   return (
     <div className={styles.container}>
       <div className={styles.documentContainer}>
@@ -513,7 +511,7 @@ const ViewCertificate = (props) => {
           ) : (
             <></>
           )}
-          {!isReceiver ? (
+          {!isReceiver && admin.name === 'creator' ? (
             <SubmitButton
               buttonText="Upload"
               onClick={async () => {
@@ -527,7 +525,7 @@ const ViewCertificate = (props) => {
             buttonText="View"
             onClick={async () => {
               window.open(
-                `https://testnets.opensea.io/assets/goerli/${certificate.sc_address}/${certificate.token_id}`,
+                `https://testnets.opensea.io/assets/sepolia/${certificate.sc_address}/${certificate.token_id}`,
                 "__blank"
               );
             }}

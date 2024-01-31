@@ -26,13 +26,15 @@ const SearchCertifcate = (props) => {
   const [certificateId, setCertificateId] = useState(null);
 
   const getCertificateId = async (address, tokenId) => {
+
     let status =
       address && tokenId !== ""
         ? INPUT_STATUS.VALID
         : INPUT_STATUS.INVALID;
     let errorMessage =
       status === INPUT_STATUS.INVALID ? `Contract Address and NFT Id are required` : "";
-    if ( status !== "")
+      
+    if ( status !== "VALID")
     {
       createNotification({
         type: "error",
@@ -45,7 +47,6 @@ const SearchCertifcate = (props) => {
     if (!address || address === "") {
       return;
     }
-
     setProcessing(true);
     const certificate = await API.getCertificateByScAddressAndTokenId(
       address,

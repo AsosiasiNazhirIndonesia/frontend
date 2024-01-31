@@ -37,7 +37,7 @@ export default (props) => {
           <td>{documentName}</td>
           <td>{sendTo}</td>
           <td>{signaturedBy}</td>
-          <td>{certificateStatus[scAddress+tokenId]}</td>
+          <td>{CERTIFICATE_STATUS[status]}</td>
           <td>
             <Link
               style={{ color: "black" }}
