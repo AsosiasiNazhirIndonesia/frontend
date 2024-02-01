@@ -303,7 +303,7 @@ API.uploadFileToIPFS = async (file, tokenId) => {
     const tempResult = (await axios.post(url, tempFormData)).data;
 
     const content =
-      '{"image": "ipfs://' + tempResult + '}'; // + "/" + tokenId + '.png"}';
+      '{"image": "ipfs://' + tempResult + '/"}'; // + tokenId + '.png"}';
     var blob = new Blob([content], { type: "text/plain" });
     var jsonFile = new File([blob], tokenId, { type: "text/plain" });
 
