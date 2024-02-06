@@ -1,125 +1,157 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { Redirect, useParams, withRouter } from "react-router-dom";
 import Header from "../../components/Header/Header";
+import SearchCertificate from "../../components/SearchCertifcate/SearchCertificate";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import { ACTOR, ACTOR_TOKEN } from "../../constants/component.constant";
+import {
+  setActorType,
+  setAdmin,
+  setUser,
+} from "../../modules/actions/actor.action";
+import ManageCertificate from "../ManageCertificate/ManageCertificate";
+import InstitutionMaster from "../ManageUser/InstitutionMaster/InstitutionMaster";
+import UserMaster from "../ManageUser/UserMaster/UserMaster";
+import API from "../../services/api";
+import jwt from "jsonwebtoken";
 import "./ProfilePage.scss";
-import avatar from "../../assets/images/avatar.svg";
-import { withRouter } from "react-router-dom";
-import { ACTOR } from "../../constants/component.constant";
-import API, { HOST } from "../../services/api";
-import TableCertificate from "../../components/Table/TableCertificate";
+import { history } from "../../store";
+import AdminMaster from "../ManageUser/AdminMaster/AdminMaster";
+import CertificateTypeMaster from "../ManageCertificate/CertificateTypeMaster/CertificateTypeMaster";
+import ProfilePageContent from "./ProfilePageContent";
 
-const Profile = (props) => {
-  const [actor, setActor] = useState({});
-  const actorType = new URLSearchParams(props.location.search).get(
+const Dashboard = (props) => {
+
+  const actor = new URLSearchParams(props.location.search).get(
     "actor_type"
   );
-  const actorPubKey = new URLSearchParams(props.location.search).get(
-    "actor_public_key"
-  );
-  const [certificates, setCertificates] = useState([]);
+  const menu = new URLSearchParams(props.location.search).get("menu");
 
-  const getAllCertificates = async (actor, offset, limit) => {
-    let results = [];
-    if (actorType == ACTOR.USER) {
-      results = await API.getCertificatesByUser(actor.user_id, offset, limit);
-    } else if (actorType === ACTOR.ADMIN) {
-      results = await API.getCertificatesByAdmin(actor.admin_id, offset, limit);
+  const getToken = () => {
+    let token = localStorage.getItem(ACTOR_TOKEN.DIGICERT_USER_TOKEN);
+    if (actor === ACTOR.ADMIN) {
+      token = localStorage.getItem(ACTOR_TOKEN.DIGICERT_ADMIN_TOKEN);
     }
-    
-    const newCertificates = [];
-    const composeApprovers = (approvers) => {
-      let names = '';
-      for(const approver of approvers) {
-        names = names + ` ,${approver.User.name}`;
-      }
 
-      return names.substring(2, names.length);
-    }
-    
-    for (const result of results) {
-      newCertificates.push({
-        id: result.certificate_id,
-        date: result.date,
-        documentName: result.name,
-        sendTo: result.User.name,
-        signaturedBy: composeApprovers(result.CertificateSigners),
-        status: "",
-        scAddress: result.sc_address,
-        tokenId: result.token_id,
-      });
-    }
-    if (newCertificates.length > 0) {
-      setCertificates(newCertificates);
-    }
-  }
+    return token;
+  };
 
-  const getActor = async () => {
-    let newActor;
-    if (actorType === ACTOR.ADMIN) {
-      newActor = await API.getAdminByPublicKey(actorPubKey);
-    } else if (actorType === ACTOR.USER) {
-      newActor = await API.getUserByPublicKey(actorPubKey); 
+  const getActorDetails = async () => {
+    const token = getToken();
+    if (!token) {
+      history.push("/");
+      return;
     }
-    setActor(newActor);
-    if (newActor) {
-      getAllCertificates(newActor, 0, 20);
+    const decodedToken = jwt.decode(token);
+    if (actor === ACTOR.ADMIN) {
+      await props.getAdmin(decodedToken.public_key);
+    } else if (actor === ACTOR.USER) {
+      await props.getUser(decodedToken.public_key);
     }
   };
 
   useEffect(() => {
-    getActor();
-  }, [actorPubKey]);
+    getActorDetails();
+  }, []);
 
+  const resolveContent = () => {
+    // switch (menu) {
+    //   case "institution-master":
+    //     return <InstitutionMaster />;
+    //   case "user-master":
+    //     return <UserMaster />;
+    //   case "admin-master":
+    //     return <AdminMaster />;
+    //   case "certificate-type-master":
+    //     return <CertificateTypeMaster />;
+    //   case "manage-certificate":
+    //     return <ManageCertificate />;
+    //   default:
+        return <ProfilePageContent />;
+    // }
+  };
 
+  const resolveActor = () => {
+    let actorObj;
+
+    if (actor === ACTOR.ADMIN && props.admin) {
+      actorObj = props.admin;
+    } else if (actor === ACTOR.USER && props.admin) {
+      actorObj = props.user;
+    }
+
+    return actorObj;
+  };
+
+  const logout = () => {
+    switch (actor) {
+      case ACTOR.ADMIN:
+        localStorage.removeItem(ACTOR_TOKEN.DIGICERT_ADMIN_TOKEN);
+        props.logoutAdmin();
+        break;
+      case ACTOR.USER:
+        localStorage.removeItem(ACTOR_TOKEN.DIGICERT_USER_TOKEN);
+        props.logoutUser();
+        break;
+      default:
+        break;
+    }
+
+    history.push("/");
+  };
+
+  if (!actor) {
+    return <Redirect to="/dashboard/USER" />;
+  }
 
   return (
-    <React.Fragment>
-      <Header />
-      <div className="profile-page">
-        <div className="title">
-          <h2>My Profile</h2>
-        </div>
-        <div className="details">
-          <div className="user-data">
-            <img
-              src={actor && actor.photo ? `${HOST}/api/files/${actor.photo}` : avatar}
-            />
-            <div className="biodata">
-              <h3>Biodata</h3>
-              <div className="biodata-details">
-                <div className="table-row">
-                  <div className="colOne">Nama:</div>
-                  <div className="colTwo">{actor ? actor.name : ''}</div>
-                </div>
-                <div className="table-row">
-                  <div className="colOne">Public Key:</div>
-                  <div className="colTwo">{actor ? actor.public_key : ''}</div>
-                </div>
-                <div className="table-row">
-                  <div className="colOne">Phone Number:</div>
-                  <div className="colTwo">{actor ? actor.phone_number : ''}</div>
-                </div>
-                <div className="table-row">
-                  <div className="colOne">Email:</div>
-                  <div className="colTwo">{actor ? actor.email : ''}</div>
-                </div>
-                <div className="table-row">
-                  <div className="colOne">Address:</div>
-                  <div className="colTwo">{actor ? actor.address : ''}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* {certificates.length > 0 ?
-          <div className="certificates-user">
-            <TableCertificate
-              certificates={certificates}
-              actor={actor}
-            />
-          </div> : <></>} */}
-        </div>
+    <div className="dashboard">
+      <Header type={actor} actor={resolveActor()} logout={logout} />
+      <div className="dashboard-body">
+        <Sidebar menu={menu} actor={actor} />
+        <div className="dashboard-content">{resolveContent()}</div>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 
-export default React.memo(withRouter(Profile));
+const mapStateToProps = (state) => ({
+  user: state.getIn(["actor", "user"]).toJS(),
+  admin: state.getIn(["actor", "admin"]).toJS(),
+  type: state.getIn(["actor", "type"]),
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    async getUser(publicKey) {
+      try {
+        dispatch(setActorType(ACTOR.USER));
+        dispatch(setUser(await API.getUserByPublicKey(publicKey)));
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+    },
+    async getAdmin(publicKey) {
+      try {
+        dispatch(setActorType(ACTOR.ADMIN));
+        dispatch(setAdmin(await API.getAdminByPublicKey(publicKey)));
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+    },
+    logoutUser() {
+      setUser({});
+    },
+    logoutAdmin() {
+      setAdmin({});
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(React.memo(withRouter(Dashboard)));

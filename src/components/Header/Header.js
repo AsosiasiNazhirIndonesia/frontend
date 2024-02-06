@@ -1,26 +1,26 @@
 import "./Header.scss";
-import logo from "../../assets/images/logo.svg";
-import aniLogoWhite from "../../assets/images/ani-logo-white.png";
-import avatar from "../../assets/images/avatar.svg";
+// import logo from "../../assets/images/logo.svg";
+// import aniLogoWhite from "../../assets/images/ani-logo-white.png";
+// import avatar from "../../assets/images/avatar.svg";
 import iconMore from "../../assets/icons/circle-chevron-down.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { useMemo, useState } from "react";
 import { history } from "../../store";
 import { ACTOR } from "../../constants/component.constant";
-import SubmitButton from "../elements/SubmitButton/SubmitButton";
-import { HOST } from "../../services/api";
+// import SubmitButton from "../elements/SubmitButton/SubmitButton";
+// import { HOST } from "../../services/api";
 import { useSelector } from "react-redux";
 
 const Header = (props) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const admin = useSelector((state) => state.getIn(["actor", "admin"]).toJS());
 
-  const profilePhoto = useMemo(() => {
-    return props.actor && props.actor.photo
-      ? `${HOST}/api/files/${props.actor.photo}`
-      : avatar;
-  }, [props.actor]);
+  // const profilePhoto = useMemo(() => {
+  //   return props.actor && props.actor.photo
+  //     ? `${HOST}/api/files/${props.actor.photo}`
+  //     : avatar;
+  // }, [props.actor]);
 
   const profileName = useMemo(() => {
     return props.actor && props.actor.name ? props.actor.name : "User";
@@ -56,7 +56,7 @@ const Header = (props) => {
         <div className="header-right">
           {props.actor ? (
             <div className="profile">
-              <img className="avatar" src={profilePhoto} alt="profile" />
+              {/* <img className="avatar" src={profilePhoto} alt="profile" /> */}
               <div className="right">
                 <span className="name">{profileName}</span>
                 <div className="role">{profileRole}</div>
