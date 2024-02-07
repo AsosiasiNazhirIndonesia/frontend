@@ -6,6 +6,8 @@ import { withRouter } from "react-router-dom";
 import { ACTOR } from "../../constants/component.constant";
 import API, { HOST } from "../../services/api";
 import TableCertificate from "../../components/Table/TableCertificate";
+import SubmitButton from "../../components/elements/SubmitButton/SubmitButton";
+import { history } from "../../store";
 
 const Profile = (props) => {
   const [actor, setActor] = useState({});
@@ -106,7 +108,14 @@ const Profile = (props) => {
                   <div className="colTwo">{actor ? actor.address : ''}</div>
                 </div>
               </div>
+              
             </div>
+          </div>
+          <div className="btn-back">
+            <SubmitButton
+              buttonText="Back"
+              onClick={() => history.push("/dashboard/USER")}
+            />
           </div>
           {/* {certificates.length > 0 ?
           <div className="certificates-user">

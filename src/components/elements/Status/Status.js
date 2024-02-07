@@ -9,7 +9,7 @@ const Status = ({ value }) => {
       return "status-progress";
     } else if (value === "DROPPED") {
       return "status-progress";
-    } else if (value === "PUBLISHED") {
+    } else if (value === "Published") {
       return "status-progress";
     }
   }, [value]);

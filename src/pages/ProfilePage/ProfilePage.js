@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect, useParams, withRouter } from "react-router-dom";
 import Header from "../../components/Header/Header";
-import SearchCertificate from "../../components/SearchCertifcate/SearchCertificate";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { ACTOR, ACTOR_TOKEN } from "../../constants/component.constant";
 import {
@@ -111,6 +110,7 @@ const Dashboard = (props) => {
       <div className="dashboard-body">
         <Sidebar menu={menu} actor={actor} />
         <div className="dashboard-content">{resolveContent()}</div>
+        
       </div>
     </div>
   );
