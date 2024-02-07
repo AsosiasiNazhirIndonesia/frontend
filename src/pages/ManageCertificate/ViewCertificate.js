@@ -345,7 +345,7 @@ const ViewCertificate = (props) => {
                     receiver_name: certificate.receiver_name,
                     is_accepted: String(certificate.is_accepted),
                     certificate_type_id: certificate.certificate_type_id,
-                    status: certificate.status
+                    status: 2
                     });
           
                     createNotification({
