@@ -114,7 +114,7 @@ const Profile = (props) => {
           <div className="btn-back">
             <SubmitButton
               buttonText="Back"
-              onClick={() => history.push("/dashboard/USER")}
+              onClick={() => history.push("/dashboard/" + (actorType == ACTOR.USER ? "USER" : "ADMIN"))}
             />
           </div>
           {/* {certificates.length > 0 ?
